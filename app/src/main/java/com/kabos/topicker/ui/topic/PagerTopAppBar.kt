@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kabos.topicker.ui.theme.TopickerTheme
 
-
 @Composable
 fun PagerTopAppBar(
     modifier: Modifier = Modifier,
