@@ -13,8 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
 import com.kabos.topicker.ui.topic.TopicPager
+import com.kabos.topicker.ui.topic.TopicPagerContent
 
 class MainActivity : ComponentActivity() {
 
@@ -22,6 +24,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val content = listOf(
+                TopicUiState("面白い話", Color.Cyan),
+                TopicUiState("悲しい話", Color.Green),
+                TopicUiState("たらればの話", Color.Yellow)
+            )
+
             TopickerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -29,14 +37,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val pagerState = rememberPagerState()
-                    TopicPager(
+                    TopicPagerContent(
                         pagerState = pagerState,
-                        pageCount = 10,
-                        modifier = Modifier,
-                        pagerColors = listOf(Color.Blue, Color.Cyan)
-                    ) { page ->
-                        Text(text = "page is $page")
-                    }
+                        contents = content
+                    )
                 }
             }
         }

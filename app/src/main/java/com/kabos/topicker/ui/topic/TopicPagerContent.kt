@@ -6,15 +6,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -50,8 +49,16 @@ fun TopicPagerContent(
                 Spacer(modifier = Modifier.height(120.dp))
                 TopicCard(text = contents[page].title)
                 Spacer(modifier = Modifier.height(30.dp))
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(Icons.Default.ThumbUp, contentDescription = "いいね")
+                Row() {
+                    Button(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Default.ArrowForward , contentDescription = "スキップ")
+                        Text(text = "スキップ")
+                    }
+                    Spacer(modifier = Modifier.width(24.dp))
+                    Button(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Default.ThumbUp, contentDescription = "いいね")
+                        Text(text = "会話した")
+                    }
                 }
             }
         }
