@@ -1,7 +1,5 @@
 package com.kabos.topicker.ui.topic
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -24,7 +22,7 @@ import com.kabos.topicker.ui.theme.TopickerTheme
 
 @ExperimentalPagerApi
 @Composable
-fun TopicPagerContent(
+fun TopicPagerScreen(
     pagerState: PagerState,
     contents: List<TopicUiState>
 ) {
@@ -96,7 +94,7 @@ fun PreviewTopicCard() {
 @ExperimentalPagerApi
 @Preview
 @Composable
-fun PreviewTopicPagerContent() {
+fun PreviewTopicPagerScreen() {
     val pagerState = rememberPagerState()
     val content = listOf(
         TopicUiState("面白い話", Color.Cyan),
@@ -104,6 +102,6 @@ fun PreviewTopicPagerContent() {
         TopicUiState("たらればの話", Color.Yellow)
     )
     TopickerTheme {
-        TopicPagerContent(pagerState = pagerState, contents = content)
+        TopicPagerScreen(pagerState = pagerState, contents = content)
     }
 }

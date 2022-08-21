@@ -16,7 +16,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
 import com.kabos.topicker.ui.topic.TopicPager
-import com.kabos.topicker.ui.topic.TopicPagerContent
+import com.kabos.topicker.ui.topic.TopicPagerScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val pagerState = rememberPagerState()
-                    TopicPagerContent(
+                    TopicPagerScreen(
                         pagerState = pagerState,
                         contents = content
                     )
