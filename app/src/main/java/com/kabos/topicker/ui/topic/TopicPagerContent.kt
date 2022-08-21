@@ -31,7 +31,7 @@ fun TopicPagerContent(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-        PagerTopAppBar(
+        TopicPagerAppBar(
             modifier = Modifier
                 .wrapContentSize()
                 .statusBarsPadding()
