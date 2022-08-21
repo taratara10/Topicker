@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -43,6 +45,26 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    def DIMENSION_API = "api"
+    flavorDimensions DIMENSION_API
+    productFlavors {
+        mock {
+            dimension DIMENSION_API
+        }
+        dev {
+            dimension DIMENSION_API
+        }
+    }
+
+    sourceSets {
+        mock {
+            java.srcDirs("src/mock/java")
+        }
+        dev {
+            java.srcDirs("src/entity/java")
+        }
+    }
 }
 
 dependencies {
@@ -62,4 +84,7 @@ dependencies {
 
     implementation "com.google.accompanist:accompanist-pager:0.26.1-alpha"
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    implementation "com.google.dagger:hilt-android:2.42"
+    kapt "com.google.dagger:hilt-android-compiler:2.42"
 }

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.kabos.topicker.ui.theme.TopickerTheme
 
 @Composable
-fun PagerTopAppBar(
+fun TopicPagerAppBar(
     modifier: Modifier = Modifier,
     contentColor: Color = Color.White,
 ) {
@@ -46,8 +46,8 @@ fun PagerTopAppBar(
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun PreviewPagerTopAppBar() {
+fun PreviewTopicPagerAppBar() {
     TopickerTheme {
-        PagerTopAppBar(contentColor = Color.Black)
+        TopicPagerAppBar(contentColor = Color.Black)
     }
 }
