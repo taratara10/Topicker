@@ -45,6 +45,26 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    def DIMENSION_API = "api"
+    flavorDimensions DIMENSION_API
+    productFlavors {
+        mock {
+            dimension DIMENSION_API
+        }
+        dev {
+            dimension DIMENSION_API
+        }
+    }
+
+    sourceSets {
+        mock {
+            java.srcDirs("src/mock/java")
+        }
+        dev {
+            java.srcDirs("src/entity/java")
+        }
+    }
 }
 
 dependencies {
