@@ -17,7 +17,9 @@ import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
 import com.kabos.topicker.ui.topic.TopicPager
 import com.kabos.topicker.ui.topic.TopicPagerContent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalPagerApi::class)
