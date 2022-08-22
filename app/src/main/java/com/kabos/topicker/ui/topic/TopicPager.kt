@@ -197,16 +197,17 @@ fun PagerState.shouldHideBubble(isDragged: Boolean): Boolean = derivedStateOf {
     b
 }.value
 
-// todo out of index で危険なので修正する
 @OptIn(ExperimentalPagerApi::class)
 fun PagerState.getCircleColor(circleColors: List<Color>): Color {
+    /** offset は-1~0が左スワイプ、0~1が右スワイプ */
     val index = if (currentPageOffset < 0) {
         currentPage - 1
-    } else nextSwipeablePageIndex
+    } else {
+        nextSwipeablePageIndex
+    }
     return circleColors[index]
 }
 
-// todo out of index で危険なので修正する
 @OptIn(ExperimentalPagerApi::class)
 fun PagerState.getNextSwipeableCircleColor(circleColors: List<Color>): Color {
     return circleColors[nextSwipeablePageIndex]

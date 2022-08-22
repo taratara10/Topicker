@@ -3,6 +3,7 @@ package com.kabos.topicker
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -11,13 +12,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import com.kabos.topicker.model.domain.ConversationState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
-import com.kabos.topicker.ui.topic.TopicPager
 import com.kabos.topicker.ui.topic.TopicPagerScreen
+import com.kabos.topicker.ui.topic.TopicViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -26,11 +34,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val content = listOf(
-                TopicUiState("面白い話", Color.Cyan),
-                TopicUiState("悲しい話", Color.Green),
-                TopicUiState("たらればの話", Color.Yellow)
-            )
 
             TopickerTheme {
                 // A surface container using the 'background' color from the theme
@@ -39,25 +42,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val pagerState = rememberPagerState()
-                    TopicPagerScreen(
-                        pagerState = pagerState,
-                        contents = content
-                    )
+                    TopicPagerScreen(pagerState = pagerState)
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    TopickerTheme {
-        Greeting("Android")
-    }
-}
