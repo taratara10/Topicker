@@ -48,7 +48,7 @@ fun TopicPagerScreen(
         ) { page ->
             TopicContent(
                 uiState = topics[page],
-                onClickConversation = { /*TODO*/ },
+                onClickConversation = { viewModel.addTopic() },
                 onClickSkip = { /*TODO*/ })
         }
     }

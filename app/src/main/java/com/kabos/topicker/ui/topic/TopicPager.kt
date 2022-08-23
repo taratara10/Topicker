@@ -85,7 +85,8 @@ fun TopicPager(
                     swipeProgress = pagerState.currentPageOffset,
                     easing = CubicBezierEasing(1f, 0f, .92f, .62f),
                     minRadius = circleMinRadius,
-                    maxRadius = circleMaxRadius
+                    maxRadius = circleMaxRadius,
+                    isLastPage = pagerState.isLastPage()
                 )
                 drawBackgroundCircle(
                     radius = radius,
@@ -158,19 +159,21 @@ fun DrawScope.drawCircleWithIcon(
 
 /**
  * 背景の円の相似変換の計算
+ * 最後のページの時は円を消す
  * @param swipeProgress [PagerState.currentPageOffset]の-1f~1fの値を入れる想定
  * */
 fun calculateBackgroundCircleDimensions(
     swipeProgress: Float,
     easing: Easing,
     minRadius: Dp,
-    maxRadius: Dp
+    maxRadius: Dp,
+    isLastPage: Boolean,
 ): Pair<Dp, Dp> {
     // -1f~0fの左スワイプを0f~1f, 0f~1fの右スワイプを1f~2fに変換
     val swipeValue = lerp(0f, 2f, swipeProgress.absoluteValue)
     // radiusとcenterXのmin,max値を連動させることで、円の接線を中心に固定して動かせる
     val radius = lerp(
-        minRadius,
+        if (!isLastPage) minRadius else 0.dp,
         maxRadius,
         easing.transform(swipeValue)
     )
@@ -187,14 +190,8 @@ fun calculateBackgroundCircleDimensions(
 
 @OptIn(ExperimentalPagerApi::class)
 fun PagerState.shouldHideBubble(isDragged: Boolean): Boolean = derivedStateOf {
-    var b = false
-    if (isDragged) {
-        b = true
-    }
-    if (currentPageOffset.absoluteValue > 0.1) {
-        b = true
-    }
-    b
+    val isDragging = (isDragged || currentPageOffset.absoluteValue > 0.1)
+    isDragging || isLastPage()
 }.value
 
 @OptIn(ExperimentalPagerApi::class)
@@ -213,6 +210,11 @@ fun PagerState.getNextSwipeableCircleColor(circleColors: List<Color>): Color {
     return circleColors[nextSwipeablePageIndex]
 }
 
+@OptIn(ExperimentalPagerApi::class)
+fun PagerState.isLastPage(): Boolean = derivedStateOf {
+    ((currentPage + 1) == pageCount)
+}.value
+
 /**
  * 次のページのIndexを取得する
  * 最後のページだった場合、そのページの値を返す
@@ -221,7 +223,7 @@ fun PagerState.getNextSwipeableCircleColor(circleColors: List<Color>): Color {
  * */
 @OptIn(ExperimentalPagerApi::class)
 private val PagerState.nextSwipeablePageIndex
-    get() = if ((currentPage + 1) == pageCount) currentPage - 1 else currentPage + 1
+    get() = if (isLastPage()) currentPage - 1 else currentPage + 1
 
 /**
  * Floatの線形補間
