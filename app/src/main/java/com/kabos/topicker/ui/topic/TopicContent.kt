@@ -10,7 +10,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,16 +22,10 @@ import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.draw.scale
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
-import com.kabos.topicker.ui.theme.BlueGray100
-import com.kabos.topicker.ui.theme.Yellow100
 
 @Composable
 fun TopicContent(
@@ -51,6 +44,7 @@ fun TopicContent(
         Row() {
             ScalableButton(
                 onClick = { onClickSkip() },
+                isEnabled = (uiState.conversationState == ConversationState.Skip),
                 text = "スキップ",
                 activeColor = Color(0xFFFFD600),
                 activeTextColor = Color.Black
@@ -59,6 +53,7 @@ fun TopicContent(
 
             ScalableButton(
                 onClick = { onClickConversation() },
+                isEnabled = (uiState.conversationState == ConversationState.Complete),
                 text = "会話した",
             )
         }
@@ -132,6 +127,7 @@ fun HeartAnimation(
 @Composable
 fun ScalableButton(
     onClick: () -> Unit,
+    isEnabled: Boolean = false,
     text: String,
     activeColor: Color = Color(0xFF35898F),
     activeTextColor: Color = Color.White,
@@ -142,18 +138,16 @@ fun ScalableButton(
     val interactionSource = MutableInteractionSource()
     val coroutineScope = rememberCoroutineScope()
     val scale = remember { Animatable(1f) }
-    var enabled by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
             .scale(scale = scale.value)
             .background(
-                color = if (enabled) activeColor else Color.LightGray,
+                color = if (isEnabled) activeColor else Color.LightGray,
                 shape = RoundedCornerShape(size = 12f)
             )
             .clickable(interactionSource = interactionSource, indication = null) {
                 onClick()
-                enabled = !enabled
                 coroutineScope.launch {
                     scale.animateTo(
                         scaleDown,
@@ -169,7 +163,7 @@ fun ScalableButton(
         Text(
             text = text,
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-            color = if (enabled) activeTextColor else Color.White,
+            color = if (isEnabled) activeTextColor else Color.White,
             fontWeight = FontWeight.Medium
         )
     }
@@ -179,7 +173,10 @@ fun ScalableButton(
 @Composable
 fun PreviewButton() {
     TopickerTheme {
-//        ScalableButton("Button")
+        ScalableButton(
+            onClick = {},
+            text = "Button"
+        )
     }
 }
 
@@ -197,6 +194,7 @@ fun PreviewTopicCard() {
 fun PreviewTopicContent() {
     TopickerTheme {
         val state = TopicUiState(
+            id = 1,
             title = "〇〇な話",
             color = Color.LightGray,
             conversationState = ConversationState.UnSelected
