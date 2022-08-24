@@ -6,6 +6,7 @@ import com.kabos.topicker.ui.theme.colors
 
 // TODO pageStateでは？？？
 data class TopicUiState(
+    val id: Int,
     val title: String,
     val color: Color,
     val conversationState: ConversationState
@@ -13,6 +14,7 @@ data class TopicUiState(
    companion object {
        fun of(topic: Topic): TopicUiState =
            TopicUiState(
+               id = topic.id,
                title = topic.title,
                color = colors.random(),
                conversationState = ConversationState.UnSelected,
