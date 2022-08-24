@@ -2,6 +2,7 @@ package com.kabos.topicker.model.domain
 
 import androidx.compose.ui.graphics.Color
 import com.kabos.topicker.model.data.Topic
+import com.kabos.topicker.ui.theme.colors
 
 // TODO pageStateでは？？？
 data class TopicUiState(
@@ -25,5 +26,3 @@ sealed class ConversationState {
     object Skip : ConversationState()
 }
 
-// TODO 仮置き
-val colors = listOf(Color.Cyan, Color.Green, Color.Yellow, Color.Blue, Color.DarkGray, Color.Magenta)
