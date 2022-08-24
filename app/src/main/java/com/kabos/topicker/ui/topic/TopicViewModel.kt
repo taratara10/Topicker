@@ -10,6 +10,8 @@ import com.kabos.topicker.model.data.Topic
 import com.kabos.topicker.model.domain.ConversationState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.repository.TopicRepository
+import com.kabos.topicker.ui.theme.DeepOrange100
+import com.kabos.topicker.ui.theme.LightBlue100
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,8 +29,8 @@ class TopicViewModel @Inject constructor(
 
     private val _topics: MutableStateFlow<List<TopicUiState>> = MutableStateFlow(
         listOf(
-            TopicUiState("initial", Color.LightGray, ConversationState.UnSelected),
-            TopicUiState("Second", Color.Magenta, ConversationState.UnSelected),
+            TopicUiState("initial", LightBlue100, ConversationState.UnSelected),
+            TopicUiState("Second", DeepOrange100, ConversationState.UnSelected),
         )
     )
     val topics: StateFlow<List<TopicUiState>> = _topics
