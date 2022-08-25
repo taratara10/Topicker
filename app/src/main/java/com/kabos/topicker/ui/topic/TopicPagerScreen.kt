@@ -26,11 +26,13 @@ fun TopicPagerScreen(
     pagerState: PagerState,
     viewModel: TopicViewModel = viewModel()
 ) {
+
+    val topics by viewModel.topicUiState.collectAsState()
+
     SideEffect {
         Timber.d("--ss TopicPagerScreen Recomposition")
+        Timber.d("--ss ${topics.size}")
     }
-
-    val topics by viewModel.topics.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -49,7 +51,7 @@ fun TopicPagerScreen(
             TopicContent(
                 uiState = topics[page],
                 onClickConversation = { viewModel.addTopic() },
-                onClickSkip = { /*TODO*/ })
+                onClickSkip = { viewModel.updateConversationState() })
         }
     }
 }
