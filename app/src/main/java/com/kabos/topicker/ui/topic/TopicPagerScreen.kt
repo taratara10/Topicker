@@ -32,7 +32,6 @@ fun TopicPagerScreen(
 
     val topics by viewModel.topics.collectAsState()
 
-
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -47,66 +46,24 @@ fun TopicPagerScreen(
             modifier = Modifier.fillMaxSize(),
             pagerColors = topics.map { it.color }
         ) { page ->
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(120.dp))
-                TopicCard(text = topics[page].title)
-                Spacer(modifier = Modifier.height(30.dp))
-                Row() {
-                    Button(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Default.ArrowForward, contentDescription = "スキップ")
-                        Text(text = "スキップ")
-                    }
-                    Spacer(modifier = Modifier.width(24.dp))
-                    Button(onClick = {
-                        viewModel.addTopic()
-                    }) {
-                        Icon(Icons.Default.ThumbUp, contentDescription = "いいね")
-                        Text(text = "会話した")
-                    }
-                }
-            }
+            TopicContent(
+                uiState = topics[page],
+                onClickConversation = { viewModel.addTopic() },
+                onClickSkip = { /*TODO*/ })
         }
     }
 }
 
-
-@Composable
-fun TopicCard(text: String) {
-    Card(
-        elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp),
-        modifier = Modifier
-            .wrapContentHeight(Alignment.CenterVertically)
-            .padding(horizontal = 24.dp)
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = text,
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center,
-            maxLines = 1,
-            modifier = Modifier.padding(vertical = 48.dp)
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewTopicCard() {
-    TopickerTheme {
-        TopicCard(text = "おもしろい話")
-    }
-}
-
-@ExperimentalPagerApi
-@Preview
-@Composable
-fun PreviewTopicPagerScreen() {
-    val pagerState = rememberPagerState()
-    TopickerTheme {
-        TopicPagerScreen(pagerState = pagerState)
-    }
-}
+//
+//@ExperimentalPagerApi
+//@Preview
+//@Composable
+//fun PreviewTopicPagerScreen() {
+//    val pagerState = rememberPagerState()
+//    TopickerTheme {
+//        TopicPagerScreen(
+//            pagerState = pagerState,
+//            viewModel = viewModel()
+//        )
+//    }
+//}
