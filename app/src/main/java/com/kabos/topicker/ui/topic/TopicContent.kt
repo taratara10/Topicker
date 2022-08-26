@@ -1,6 +1,8 @@
 package com.kabos.topicker.ui.topic
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,9 +25,12 @@ import com.kabos.topicker.ui.theme.TopickerTheme
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import kotlinx.coroutines.launch
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import kotlinx.coroutines.delay
 
 @Composable
 fun TopicContent(
@@ -38,12 +43,41 @@ fun TopicContent(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        var isFire by remember {
+            mutableStateOf(false)
+        }
+
+        // animateOffsetAsStateもあるよ！
+        val positionX by animateDpAsState(
+            targetValue = if (!isFire) 50.dp else 0.dp,
+            animationSpec = tween(1000)
+        )
+        val positionY by animateDpAsState(
+            targetValue = if (!isFire) 400.dp else 0.dp,
+            animationSpec = tween(1000)
+        )
+        val rotate by animateFloatAsState(
+            targetValue = if (!isFire) 20f else 0f,
+            animationSpec = tween(1000)
+        )
+        LaunchedEffect(Unit) {
+            delay(1000)
+            isFire = true
+        }
+
         Spacer(modifier = Modifier.height(120.dp))
-        TopicCard(text = uiState.title)
+        TopicCard(
+            text = uiState.title,
+            positionX = positionX,
+            positionY = positionY,
+            rotate = rotate
+        )
         Spacer(modifier = Modifier.height(30.dp))
         Row() {
             ScalableButton(
-                onClick = { onClickSkip() },
+                onClick = {
+                    onClickSkip()
+                },
                 isEnabled = (uiState.conversationState == ConversationState.Skip),
                 text = "スキップ",
                 activeColor = Color(0xFFFFD600),
@@ -62,7 +96,12 @@ fun TopicContent(
 
 
 @Composable
-fun TopicCard(text: String) {
+fun TopicCard(
+    text: String,
+    positionX: Dp = 0.dp,
+    positionY: Dp = 0.dp,
+    rotate: Float = 0f
+) {
     Card(
         elevation = 10.dp,
         shape = RoundedCornerShape(10.dp),
@@ -70,6 +109,8 @@ fun TopicCard(text: String) {
             .wrapContentHeight(Alignment.CenterVertically)
             .padding(horizontal = 24.dp)
             .fillMaxWidth()
+            .offset(x = -positionX, y = -positionY)
+            .rotate(rotate)
     ) {
         Text(
             text = text,
