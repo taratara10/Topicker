@@ -30,11 +30,11 @@ class TopicViewModel @Inject constructor(
     val topicUiState: StateFlow<List<TopicUiState>> = _topicUiState
 
     init {
-
         viewModelScope.launch {
             topicRepository.topics
                 .collect { topics ->
                     _topicUiState.value = topics.map { TopicUiState.of(it) }
+                    Timber.d("--ss collect ${topics.map { it.title }}/ ${topics.map { it.mainColor }}")
                 }
         }
     }

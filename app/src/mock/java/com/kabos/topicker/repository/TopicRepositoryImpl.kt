@@ -8,24 +8,25 @@ import java.lang.Math.random
 class TopicRepositoryImpl(): TopicRepository {
 
     private val _topics: MutableStateFlow<List<Topic>> = MutableStateFlow(listOf(
-        Topic(random().toInt(),"sample1", ""),
-        Topic(random().toInt(),"sample2", ""),
+        Topic(1,"sample1", ""),
+        Topic(2,"sample2", ""),
     ))
     override val topics: StateFlow<List<Topic>>
         = _topics
 
     override suspend fun getTopic(): Topic {
+        val id = (1..10).random()
         val topics = listOf(
-            Topic(random().toInt(),"sample1", ""),
-            Topic(random().toInt(),"sample2", ""),
-            Topic(random().toInt(),"sample3", ""),
-            Topic(random().toInt(),"sample4", ""),
-            Topic(random().toInt(),"sample5", ""),
-            Topic(random().toInt(),"sample6", ""),
-            Topic(random().toInt(),"sample7", ""),
-            Topic(random().toInt(),"sample8", ""),
-            Topic(random().toInt(),"sample9", ""),
-            Topic(random().toInt(),"sample10", ""),
+            Topic(id,"sample1", ""),
+            Topic(id,"sample2", ""),
+            Topic(id,"sample3", ""),
+            Topic(id,"sample4", ""),
+            Topic(id,"sample5", ""),
+            Topic(id,"sample6", ""),
+            Topic(id,"sample7", ""),
+            Topic(id,"sample8", ""),
+            Topic(id,"sample9", ""),
+            Topic(id,"sample10", ""),
         )
         return topics.random()
     }
