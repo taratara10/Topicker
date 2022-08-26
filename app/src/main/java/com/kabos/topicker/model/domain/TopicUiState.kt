@@ -2,7 +2,7 @@ package com.kabos.topicker.model.domain
 
 import androidx.compose.ui.graphics.Color
 import com.kabos.topicker.model.data.Topic
-import com.kabos.topicker.ui.theme.colors
+import com.kabos.topicker.ui.theme.*
 
 // TODO pageStateでは？？？
 data class TopicUiState(
@@ -16,9 +16,25 @@ data class TopicUiState(
            TopicUiState(
                id = topic.id,
                title = topic.title,
-               color = colors.random(),
+               color = toColor(topic.id),
                conversationState = ConversationState.UnSelected,
            )
+
+       fun toColor(id: Int): Color {
+           return when (id) {
+               1 -> LightBlue100
+               2 -> Blue100
+               3 -> Indigo100
+               4 -> DeepOrange100
+               5 -> DeepPurple100
+               6 -> Pink100
+               7 -> Red100
+               8 -> Cyan100
+               9 -> Green100
+               10 -> Lime100
+               else -> Color.White
+           }
+       }
    }
 }
 
