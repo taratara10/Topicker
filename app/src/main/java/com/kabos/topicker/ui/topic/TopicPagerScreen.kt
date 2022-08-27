@@ -40,7 +40,8 @@ fun TopicPagerScreen(
             pagerState = pagerState,
             pageCount = topics.size,
             modifier = Modifier.fillMaxSize(),
-            pagerColors = topics.map { it.color }
+            pagerColors = topics.map { it.color },
+            onLastPage = { viewModel.addTopic() }
         ) { page ->
             TopicContent(
                 uiState = topics[page],
