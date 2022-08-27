@@ -4,11 +4,12 @@ package com.kabos.topicker.ui.topic
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
-import androidx.compose.runtime.Composable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -41,7 +42,8 @@ fun PreviewTopicPager() {
             pagerState = pagerState,
             pageCount = 10,
             modifier = Modifier.fillMaxSize(),
-            pagerColors = color
+            pagerColors = color,
+            onLastPage = {}
         ) { page ->
             Text(text = "page is $page")
         }
@@ -59,6 +61,7 @@ fun TopicPager(
     circleBottomPadding: Dp = 140.dp,
     pagerColors: List<Color>,
     vector: ImageVector = Icons.Default.ArrowForward,
+    onLastPage: () -> Unit,
     content: @Composable PagerScope.(Int) -> Unit
 ) {
     // circleWithIcon用のパラメーター
@@ -104,6 +107,7 @@ fun TopicPager(
             }
         ) { page ->
             content(page)
+            if ((page + 1) == pageCount) onLastPage()
         }
     }
 }

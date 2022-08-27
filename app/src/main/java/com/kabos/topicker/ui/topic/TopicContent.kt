@@ -10,10 +10,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.kabos.topicker.R
 import com.kabos.topicker.model.domain.ConversationState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
@@ -35,8 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TopicContent(
     uiState: TopicUiState,
-    onClickConversation: () -> Unit,
-    onClickSkip: () -> Unit,
+    onClickFavorite: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -77,24 +78,7 @@ fun TopicContent(
             rotate = rotate
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Row() {
-            ScalableButton(
-                onClick = {
-                    onClickSkip()
-                },
-                isEnabled = (uiState.conversationState == ConversationState.Skip),
-                text = "スキップ",
-                activeColor = Color(0xFFFFD600),
-                activeTextColor = Color.Black
-            )
-            Spacer(modifier = Modifier.width(32.dp))
-
-            ScalableButton(
-                onClick = { onClickConversation() },
-                isEnabled = (uiState.conversationState == ConversationState.Complete),
-                text = "会話した",
-            )
-        }
+        FavoriteButton(onClick = { onClickFavorite()})
     }
 }
 
@@ -127,47 +111,38 @@ fun TopicCard(
 }
 
 @Composable
-fun HeartAnimation(
-    enabledColor: Color = Color.Red,
-    disabledColor: Color = Color.LightGray,
+fun FavoriteButton(
+    selected: Boolean = false,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    val interactionSource = MutableInteractionSource()
-    val coroutineScope = rememberCoroutineScope()
-
-    var enabled by remember {
-        mutableStateOf(false)
+    // TODO このremember, hoisted で不要になるかも
+    var isSelected: Boolean by remember {
+        mutableStateOf(selected)
     }
 
-    val scale = remember {
-        Animatable(1f)
-    }
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.favorite))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        isPlaying = isSelected,
+        restartOnPlay = true,
+    )
 
-    Icon(
-        imageVector = Icons.Outlined.Favorite,
-        contentDescription = "Like the product",
-        tint = if (enabled) enabledColor else disabledColor,
+    LottieAnimation(
+        composition = composition,
+        progress = { if (!isSelected) 0f else progress },
         modifier = modifier
-            .scale(scale = scale.value)
+            .height(96.dp)
             .clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                enabled = !enabled
-                coroutineScope.launch {
-                    scale.animateTo(
-                        0.8f,
-                        animationSpec = tween(100),
-                    )
-                    scale.animateTo(
-                        1f,
-                        animationSpec = tween(100),
-                    )
-                }
-            }
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }
+        ) {
+            onClick()
+            isSelected = !isSelected
+        }
     )
 }
+
 
 @Composable
 fun ScalableButton(
@@ -246,7 +221,7 @@ fun PreviewTopicContent() {
         )
         TopicContent(
             uiState = state,
-            onClickConversation = { /*TODO*/ },
-            onClickSkip = { /*TODO*/ })
+            onClickFavorite = {}
+        )
     }
 }
