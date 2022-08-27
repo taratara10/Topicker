@@ -78,7 +78,10 @@ fun TopicContent(
             rotate = rotate
         )
         Spacer(modifier = Modifier.height(30.dp))
-        FavoriteButton(onClick = { onClickFavorite()})
+        FavoriteButton(
+            selected = (uiState.conversationState == ConversationState.Favorite),
+            onClick = { onClickFavorite() },
+        )
     }
 }
 
@@ -142,7 +145,6 @@ fun FavoriteButton(
         }
     )
 }
-
 
 @Composable
 fun ScalableButton(
