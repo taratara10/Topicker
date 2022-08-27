@@ -1,22 +1,15 @@
 package com.kabos.topicker.ui.topic
 
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kabos.topicker.model.data.Topic
-import com.kabos.topicker.model.domain.ConversationState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.repository.TopicRepository
-import com.kabos.topicker.ui.theme.DeepOrange100
-import com.kabos.topicker.ui.theme.LightBlue100
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Math.random
 import javax.inject.Inject
 
 @Stable
@@ -43,9 +36,7 @@ class TopicViewModel @Inject constructor(
         topicRepository.addTopic()
     }
 
-    fun updateConversationState() {
-        // repositoryへリソースを更新したい
-        // viewModelでリストをもつと、管理が大変、repositoryからFlowで流れてきてほしい。
+    fun updateConversationState(id: Int, isFavorite: Boolean) = viewModelScope.launch{
+        topicRepository.updateConversationState(id, isFavorite)
     }
-
 }

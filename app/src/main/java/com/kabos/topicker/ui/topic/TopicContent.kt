@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TopicContent(
     uiState: TopicUiState,
-    onClickFavorite: () -> Unit,
+    onClickFavorite: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -78,10 +78,12 @@ fun TopicContent(
             rotate = rotate
         )
         Spacer(modifier = Modifier.height(30.dp))
-        FavoriteButton(onClick = { onClickFavorite()})
+        FavoriteButton(
+            isFavorite = (uiState.conversationState == ConversationState.Favorite),
+            onClick = { isFavorite -> onClickFavorite(uiState.id, isFavorite) },
+        )
     }
 }
-
 
 @Composable
 fun TopicCard(
@@ -112,37 +114,27 @@ fun TopicCard(
 
 @Composable
 fun FavoriteButton(
-    selected: Boolean = false,
-    onClick: () -> Unit,
+    isFavorite: Boolean = false,
+    onClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO このremember, hoisted で不要になるかも
-    var isSelected: Boolean by remember {
-        mutableStateOf(selected)
-    }
-
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.favorite))
     val progress by animateLottieCompositionAsState(
         composition = composition,
-        isPlaying = isSelected,
+        isPlaying = isFavorite,
         restartOnPlay = true,
     )
-
     LottieAnimation(
         composition = composition,
-        progress = { if (!isSelected) 0f else progress },
+        progress = { if (!isFavorite) 0f else progress },
         modifier = modifier
             .height(96.dp)
             .clickable(
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() }
-        ) {
-            onClick()
-            isSelected = !isSelected
-        }
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) { onClick(!isFavorite) }
     )
 }
-
 
 @Composable
 fun ScalableButton(
@@ -221,7 +213,7 @@ fun PreviewTopicContent() {
         )
         TopicContent(
             uiState = state,
-            onClickFavorite = {}
+            onClickFavorite = { _, _ -> }
         )
     }
 }

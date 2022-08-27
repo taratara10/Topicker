@@ -8,4 +8,12 @@ data class Topic(
     val title: String,
     val mainColor: String,
     val conversationState: ConversationState = ConversationState.UnSelected,
-)
+) {
+    fun updateConversationState(state: ConversationState): Topic =
+        Topic(
+            id = id,
+            title = title,
+            mainColor = mainColor,
+            conversationState = state,
+        )
+}
