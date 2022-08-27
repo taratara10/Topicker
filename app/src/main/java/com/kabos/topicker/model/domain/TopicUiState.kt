@@ -10,6 +10,7 @@ data class TopicUiState(
     val title: String,
     val color: Color,
     val conversationState: ConversationState
+    
 ) {
    companion object {
        fun of(topic: Topic): TopicUiState =
@@ -40,7 +41,6 @@ data class TopicUiState(
 
 sealed class ConversationState {
     object UnSelected : ConversationState()
-    object Complete : ConversationState()
-    object Skip : ConversationState()
+    object Favorite : ConversationState()
 }
 
