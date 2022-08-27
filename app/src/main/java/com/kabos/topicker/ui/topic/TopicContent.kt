@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TopicContent(
     uiState: TopicUiState,
-    onClickFavorite: () -> Unit,
+    onClickFavorite: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -80,7 +80,7 @@ fun TopicContent(
         Spacer(modifier = Modifier.height(30.dp))
         FavoriteButton(
             selected = (uiState.conversationState == ConversationState.Favorite),
-            onClick = { onClickFavorite() },
+            onClick = { isFavorite ->  onClickFavorite(uiState.id, isFavorite) },
         )
     }
 }
@@ -116,7 +116,7 @@ fun TopicCard(
 @Composable
 fun FavoriteButton(
     selected: Boolean = false,
-    onClick: () -> Unit,
+    onClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // TODO このremember, hoisted で不要になるかも
@@ -137,12 +137,12 @@ fun FavoriteButton(
         modifier = modifier
             .height(96.dp)
             .clickable(
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() }
-        ) {
-            onClick()
-            isSelected = !isSelected
-        }
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                isSelected = !isSelected
+                onClick(isSelected)
+            }
     )
 }
 
@@ -223,7 +223,7 @@ fun PreviewTopicContent() {
         )
         TopicContent(
             uiState = state,
-            onClickFavorite = {}
+            onClickFavorite = { _,_ -> }
         )
     }
 }
