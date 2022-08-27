@@ -6,31 +6,31 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kabos.topicker.model.domain.ConversationState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.runtime.*
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
-import kotlinx.coroutines.launch
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun TopicContent(
@@ -43,6 +43,8 @@ fun TopicContent(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // TODO viewPagerはcomposeScopeが破棄されるっぽいので、Flowで持ちたい
+        // 発火した瞬間を検知して更新したい updateUIState
         var isFire by remember {
             mutableStateOf(false)
         }
@@ -60,6 +62,8 @@ fun TopicContent(
             targetValue = if (!isFire) 20f else 0f,
             animationSpec = tween(1000)
         )
+
+        // TODO これだと、addですぐ発火してアニメーションが見えない
         LaunchedEffect(Unit) {
             delay(1000)
             isFire = true
