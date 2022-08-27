@@ -12,6 +12,6 @@ interface TopicRepository {
 
     suspend fun addTopic()
 
-    suspend fun updateConversationState(id: Int)
+    suspend fun updateConversationState(id: Int, isFavorite: Boolean)
 
 }
