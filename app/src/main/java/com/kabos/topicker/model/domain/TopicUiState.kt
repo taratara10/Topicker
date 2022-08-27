@@ -18,7 +18,7 @@ data class TopicUiState(
                id = topic.id,
                title = topic.title,
                color = toColor(topic.id),
-               conversationState = ConversationState.UnSelected,
+               conversationState = topic.conversationState,
            )
 
        fun toColor(id: Int): Color {

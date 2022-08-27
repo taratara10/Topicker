@@ -42,8 +42,9 @@ class TopicRepositoryImpl() : TopicRepository {
         val updateList = topics.value.map { item ->
             if (item.id == id) {
                 item.updateConversationState(conversationState)
+            } else {
+                item
             }
-            item
         }
         updateTopics(updateList)
     }

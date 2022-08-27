@@ -79,12 +79,11 @@ fun TopicContent(
         )
         Spacer(modifier = Modifier.height(30.dp))
         FavoriteButton(
-            selected = (uiState.conversationState == ConversationState.Favorite),
-            onClick = { isFavorite ->  onClickFavorite(uiState.id, isFavorite) },
+            isFavorite = (uiState.conversationState == ConversationState.Favorite),
+            onClick = { isFavorite -> onClickFavorite(uiState.id, isFavorite) },
         )
     }
 }
-
 
 @Composable
 fun TopicCard(
@@ -115,34 +114,25 @@ fun TopicCard(
 
 @Composable
 fun FavoriteButton(
-    selected: Boolean = false,
+    isFavorite: Boolean = false,
     onClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO このremember, hoisted で不要になるかも
-    var isSelected: Boolean by remember {
-        mutableStateOf(selected)
-    }
-
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.favorite))
     val progress by animateLottieCompositionAsState(
         composition = composition,
-        isPlaying = isSelected,
+        isPlaying = isFavorite,
         restartOnPlay = true,
     )
-
     LottieAnimation(
         composition = composition,
-        progress = { if (!isSelected) 0f else progress },
+        progress = { if (!isFavorite) 0f else progress },
         modifier = modifier
             .height(96.dp)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
-            ) {
-                isSelected = !isSelected
-                onClick(isSelected)
-            }
+            ) { onClick(!isFavorite) }
     )
 }
 
@@ -223,7 +213,7 @@ fun PreviewTopicContent() {
         )
         TopicContent(
             uiState = state,
-            onClickFavorite = { _,_ -> }
+            onClickFavorite = { _, _ -> }
         )
     }
 }
