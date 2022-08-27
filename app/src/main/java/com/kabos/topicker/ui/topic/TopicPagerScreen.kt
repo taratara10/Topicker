@@ -1,23 +1,17 @@
 package com.kabos.topicker.ui.topic
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
-import com.kabos.topicker.ui.theme.TopickerTheme
 import timber.log.Timber
 
 @ExperimentalPagerApi
@@ -50,22 +44,7 @@ fun TopicPagerScreen(
         ) { page ->
             TopicContent(
                 uiState = topics[page],
-                onClickConversation = { viewModel.addTopic() },
-                onClickSkip = { viewModel.updateConversationState() })
+                onClickFavorite = { viewModel.updateConversationState() })
         }
     }
 }
-
-//
-//@ExperimentalPagerApi
-//@Preview
-//@Composable
-//fun PreviewTopicPagerScreen() {
-//    val pagerState = rememberPagerState()
-//    TopickerTheme {
-//        TopicPagerScreen(
-//            pagerState = pagerState,
-//            viewModel = viewModel()
-//        )
-//    }
-//}
