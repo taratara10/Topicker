@@ -33,7 +33,7 @@ class TopicRepositoryImpl() : TopicRepository {
     }
 
     override suspend fun addTopic() {
-        updateTopics(_topics.value + getTopic())
+        _topics.emit(_topics.value + getTopic())
     }
 
     override suspend fun updateConversationState(id: Int, isFavorite: Boolean) {
@@ -46,11 +46,6 @@ class TopicRepositoryImpl() : TopicRepository {
                 item
             }
         }
-        updateTopics(updateList)
-    }
-
-    /** StateFlowでDiffをとってくれるので、新しいListをぶち込む **/
-    private fun updateTopics(topics: List<Topic>) {
-        _topics.value = topics
+        _topics.emit(updateList)
     }
 }
