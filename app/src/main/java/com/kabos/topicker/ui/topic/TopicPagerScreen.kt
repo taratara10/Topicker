@@ -45,6 +45,7 @@ fun TopicPagerScreen(
         ) { page ->
             TopicContent(
                 uiState = topics[page],
+                isPageDisplaying = (pagerState.currentPage == page),
                 onClickFavorite = { id, isFavorite ->
                     viewModel.updateConversationState(id, isFavorite)
                 })

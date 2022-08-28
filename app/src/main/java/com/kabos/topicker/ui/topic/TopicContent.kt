@@ -27,16 +27,18 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.kabos.topicker.R
 import com.kabos.topicker.model.domain.ConversationState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@ExperimentalPagerApi
 @Composable
 fun TopicContent(
     uiState: TopicUiState,
+    isPageDisplaying: Boolean,
     onClickFavorite: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -44,31 +46,28 @@ fun TopicContent(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // TODO viewPagerはcomposeScopeが破棄されるっぽいので、Flowで持ちたい
-        // 発火した瞬間を検知して更新したい updateUIState
-        var isFire by remember {
+        var isDisplayed: Boolean by remember {
             mutableStateOf(false)
+        }
+
+        // ページが表示されたら、カードのアニメーションを発火させる
+        if (isPageDisplaying) {
+            isDisplayed = true
         }
 
         // animateOffsetAsStateもあるよ！
         val positionX by animateDpAsState(
-            targetValue = if (!isFire) 50.dp else 0.dp,
+            targetValue = if (isDisplayed) 0.dp else 50.dp,
             animationSpec = tween(1000)
         )
         val positionY by animateDpAsState(
-            targetValue = if (!isFire) 400.dp else 0.dp,
+            targetValue = if (isDisplayed) 0.dp else 400.dp,
             animationSpec = tween(1000)
         )
         val rotate by animateFloatAsState(
-            targetValue = if (!isFire) 20f else 0f,
+            targetValue = if (isDisplayed) 0f else 20f,
             animationSpec = tween(1000)
         )
-
-        // TODO これだと、addですぐ発火してアニメーションが見えない
-        LaunchedEffect(Unit) {
-            delay(1000)
-            isFire = true
-        }
 
         Spacer(modifier = Modifier.height(120.dp))
         TopicCard(
@@ -201,6 +200,7 @@ fun PreviewTopicCard() {
     }
 }
 
+@ExperimentalPagerApi
 @Preview(showBackground = true)
 @Composable
 fun PreviewTopicContent() {
@@ -213,6 +213,7 @@ fun PreviewTopicContent() {
         )
         TopicContent(
             uiState = state,
+            isPageDisplaying = true,
             onClickFavorite = { _, _ -> }
         )
     }
