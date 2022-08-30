@@ -10,6 +10,7 @@ data class User(
     @PrimaryKey
     val uuid: String = UUID.randomUUID().toString(),
 
+    // TODO 運用方法きめる
     @ColumnInfo
     val favorite: Int = 0
 

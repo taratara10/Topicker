@@ -19,7 +19,6 @@ object RepositoryModule {
     @Provides
     fun provideTopicRepository(
         firestore: FirebaseFirestore,
-        userDao: UserDao,
     ): TopicRepository =
         TopicRepositoryImpl(firestore)
 

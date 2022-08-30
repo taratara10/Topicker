@@ -21,12 +21,13 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    // todo 仮実装
     fun getUser() = viewModelScope.launch {
         runCatching {
             val result = userRepository.getUser()
             Timber.d("--user success $result")
         }.onFailure {
-            Timber.e("--user $it")
+            createUser()
         }
     }
 }
