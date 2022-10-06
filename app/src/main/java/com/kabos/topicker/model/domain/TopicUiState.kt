@@ -22,7 +22,7 @@ data class TopicUiState(
            )
 
        fun toColor(id: Int): Color {
-           return when (id) {
+           return when (id % 10) {
                1 -> LightBlue100
                2 -> Blue100
                3 -> Indigo100
@@ -32,7 +32,6 @@ data class TopicUiState(
                7 -> Red100
                8 -> Cyan100
                9 -> Green100
-               10 -> Lime100
                else -> Color.White
            }
        }
