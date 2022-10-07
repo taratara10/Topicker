@@ -1,6 +1,7 @@
 package com.kabos.topicker.model.domain
 
 import androidx.compose.ui.graphics.Color
+import com.kabos.topicker.model.data.ConversationState
 import com.kabos.topicker.model.data.Topic
 import com.kabos.topicker.ui.theme.*
 
@@ -36,10 +37,5 @@ data class TopicUiState(
            }
        }
    }
-}
-
-sealed class ConversationState {
-    object UnSelected : ConversationState()
-    object Favorite : ConversationState()
 }
 

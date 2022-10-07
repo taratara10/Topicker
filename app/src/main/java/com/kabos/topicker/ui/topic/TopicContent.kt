@@ -29,7 +29,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.kabos.topicker.R
-import com.kabos.topicker.model.domain.ConversationState
+import com.kabos.topicker.model.data.ConversationState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
 import kotlinx.coroutines.launch

@@ -1,6 +1,9 @@
 package com.kabos.topicker.util.extension
 
 import com.google.firebase.firestore.DocumentSnapshot
+import com.kabos.topicker.model.data.ConversationState
+import com.kabos.topicker.model.data.Topic
+import timber.log.Timber
 
 fun DocumentSnapshot.optString(field: String, defaultValue: String): String =
     getString(field) ?: defaultValue
@@ -13,3 +16,17 @@ fun DocumentSnapshot.getList(field: String): List<String> {
 
 fun DocumentSnapshot.optInt(field: String, defaultValue: Int) =
     getLong(field)?.toInt() ?: defaultValue
+
+fun DocumentSnapshot.toTopic(): Topic? {
+    return try {
+        Topic(
+            id = getLong("id")?.toInt()!!,
+            title = "${getString("title")!!}話",
+            mainColor = "",
+            conversationState = ConversationState.UnSelected,
+        )
+    } catch (e: Exception) {
+        Timber.e("toTopic convert error. $data")
+        null
+    }
+}
