@@ -1,8 +1,8 @@
 package com.kabos.topicker.util.extension
 
 import com.google.firebase.firestore.DocumentSnapshot
-import com.kabos.topicker.model.data.ConversationState
-import com.kabos.topicker.model.data.Topic
+import com.kabos.model.ConversationState
+import com.kabos.model.Topic
 import timber.log.Timber
 
 fun DocumentSnapshot.optString(field: String, defaultValue: String): String =

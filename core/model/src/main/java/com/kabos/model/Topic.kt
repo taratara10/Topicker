@@ -1,4 +1,4 @@
-package com.kabos.topicker.model.data
+package com.kabos.model
 
 // todo colorのmapperをどっかで書きたい String -> Color
 data class Topic(

@@ -1,8 +1,8 @@
 package com.kabos.topicker.model.domain
 
 import androidx.compose.ui.graphics.Color
-import com.kabos.topicker.model.data.ConversationState
-import com.kabos.topicker.model.data.Topic
+import com.kabos.model.ConversationState
+import com.kabos.model.Topic
 import com.kabos.topicker.ui.theme.*
 
 // TODO pageStateでは？？？

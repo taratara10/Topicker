@@ -1,8 +1,8 @@
 package com.kabos.topicker.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kabos.topicker.model.data.ConversationState
-import com.kabos.topicker.model.data.Topic
+import com.kabos.model.ConversationState
+import com.kabos.model.Topic
 import com.kabos.topicker.util.extension.toTopic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

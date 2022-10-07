@@ -1,6 +1,6 @@
 package com.kabos.topicker.repository
 
-import com.kabos.topicker.model.data.Topic
+import com.kabos.model.Topic
 import kotlinx.coroutines.flow.StateFlow
 
 interface TopicRepository {
@@ -8,7 +8,7 @@ interface TopicRepository {
     val topics: StateFlow<List<Topic>>
 
     // TODO Topicを取得するためのクエリパラメーターを追加したい
-    suspend fun getTopic():Topic
+    suspend fun getTopic(): Topic
 
     suspend fun addTopic()
 
