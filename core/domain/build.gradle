@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.kabos.data'
+    namespace 'com.kabos.domain'
     compileSdk 32
 
     defaultConfig {
@@ -28,39 +28,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    def DIMENSION_API = "api"
-    flavorDimensions DIMENSION_API
-    productFlavors {
-        mock {
-            dimension DIMENSION_API
-        }
-        dev {
-            dimension DIMENSION_API
-        }
-    }
-
-    sourceSets {
-        mock {
-            java.srcDirs("src/mock/java")
-        }
-        dev {
-            java.srcDirs("src/main/java")
-        }
-    }
 }
 
 dependencies {
     implementation project(":core:model")
-    implementation project(":core:domain")
 
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
     testImplementation 'junit:junit:4.13.2'
-
-    implementation platform('com.google.firebase:firebase-bom:30.3.1')
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
-
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-
-    // firebaseでawait()するやつ
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1"
 }

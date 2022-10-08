@@ -64,7 +64,7 @@ android {
             java.srcDirs("src/mock/java")
         }
         dev {
-            java.srcDirs("src/entity/java")
+            java.srcDirs("src/main/java")
         }
     }
 }
@@ -72,6 +72,7 @@ android {
 dependencies {
     implementation project(":core:model")
     implementation project(":core:data")
+    implementation project(":core:domain")
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation "androidx.compose.ui:ui:1.2.1"
@@ -99,8 +100,5 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:30.3.1')
     implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
-
-    // firebaseでawait()するやつ
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1"
 
 }

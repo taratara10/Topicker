@@ -1,4 +1,4 @@
-package com.kabos.topicker.util.extension
+package com.kabos.data.extension
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.kabos.model.ConversationState

@@ -1,5 +1,6 @@
-package com.kabos.topicker.repository
+package com.kabos.data.repository_impl
 
+import com.kabos.domain.repository.UserRepository
 import com.kabos.model.User
 import java.util.*
 

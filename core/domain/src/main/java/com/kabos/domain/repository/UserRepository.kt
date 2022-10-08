@@ -1,4 +1,4 @@
-package com.kabos.topicker.repository
+package com.kabos.domain.repository
 
 import com.kabos.model.User
 
