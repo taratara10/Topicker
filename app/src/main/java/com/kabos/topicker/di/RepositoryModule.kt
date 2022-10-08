@@ -1,8 +1,8 @@
 package com.kabos.topicker.di
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kabos.data.repository_impl.TopicRepositoryImpl
 import com.kabos.data.repository_impl.UserRepositoryImpl
-import com.kabos.data.repositoy_impl.TopicRepositoryImpl
 import com.kabos.domain.repository.TopicRepository
 import com.kabos.domain.repository.UserRepository
 import dagger.Module
