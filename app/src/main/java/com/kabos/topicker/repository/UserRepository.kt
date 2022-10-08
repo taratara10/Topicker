@@ -1,6 +1,6 @@
 package com.kabos.topicker.repository
 
-import com.kabos.topicker.model.entity.User
+import com.kabos.model.User
 
 interface UserRepository {
 

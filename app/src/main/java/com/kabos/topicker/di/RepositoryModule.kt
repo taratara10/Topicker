@@ -1,7 +1,6 @@
 package com.kabos.topicker.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kabos.topicker.model.dao.UserDao
 import com.kabos.topicker.repository.TopicRepository
 import com.kabos.topicker.repository.TopicRepositoryImpl
 import com.kabos.topicker.repository.UserRepository
@@ -25,7 +24,6 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideUserRepository(
-        userDao: UserDao,
     ): UserRepository =
-        UserRepositoryImpl(userDao)
+        UserRepositoryImpl()
 }
