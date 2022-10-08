@@ -48,35 +48,34 @@ android {
         }
     }
 
-    def DIMENSION_API = "api"
-    flavorDimensions DIMENSION_API
+    // flavor setting
+    def DIMENSION_DEFAULT = "default"
+    flavorDimensions DIMENSION_DEFAULT
     productFlavors {
         mock {
-            dimension DIMENSION_API
+            dimension DIMENSION_DEFAULT
         }
         dev {
-            dimension DIMENSION_API
+            dimension DIMENSION_DEFAULT
+        }
+        prd {
+            dimension DIMENSION_DEFAULT
         }
     }
 
-    sourceSets {
-        mock {
-            java.srcDirs("src/mock/java")
-        }
-        dev {
-            java.srcDirs("src/entity/java")
-        }
-    }
 }
 
 dependencies {
+    implementation project(":core:model")
+    implementation project(":core:data")
+    implementation project(":core:domain")
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation "androidx.compose.ui:ui:1.2.1"
-    implementation "androidx.compose.material:material:1.3.0-beta01"
+    implementation "androidx.compose.material:material:1.3.0-rc01"
     implementation "androidx.compose.ui:ui-tooling-preview:1.2.1"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.activity:activity-compose:1.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -96,13 +95,6 @@ dependencies {
     implementation "com.airbnb.android:lottie-compose:5.2.0"
 
     implementation platform('com.google.firebase:firebase-bom:30.3.1')
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.2.2'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
 
-    // firebaseでawait()するやつ
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1"
-
-    // room
-    implementation "androidx.room:room-runtime:2.4.3"
-    implementation "androidx.room:room-ktx:2.4.3"
-    kapt "androidx.room:room-compiler:2.4.3"
 }

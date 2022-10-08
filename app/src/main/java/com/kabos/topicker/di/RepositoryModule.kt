@@ -1,11 +1,10 @@
 package com.kabos.topicker.di
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kabos.topicker.model.dao.UserDao
-import com.kabos.topicker.repository.TopicRepository
-import com.kabos.topicker.repository.TopicRepositoryImpl
-import com.kabos.topicker.repository.UserRepository
-import com.kabos.topicker.repository.UserRepositoryImpl
+import com.kabos.data.repository_impl.TopicRepositoryImpl
+import com.kabos.data.repository_impl.UserRepositoryImpl
+import com.kabos.domain.repository.TopicRepository
+import com.kabos.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +24,6 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideUserRepository(
-        userDao: UserDao,
     ): UserRepository =
-        UserRepositoryImpl(userDao)
+        UserRepositoryImpl()
 }

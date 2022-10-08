@@ -1,0 +1,50 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.kabos.data'
+    compileSdk 32
+
+    def DIMENSION_DEFAULT = "default"
+    flavorDimensions DIMENSION_DEFAULT
+    productFlavors {
+        mock {
+            dimension DIMENSION_DEFAULT
+        }
+        dev {
+            dimension DIMENSION_DEFAULT
+        }
+        prd {
+            dimension DIMENSION_DEFAULT
+        }
+    }
+
+    sourceSets {
+        mock {
+            java.srcDirs("src/mock/java")
+        }
+        dev {
+            java.srcDirs("src/main/java")
+        }
+        prd {
+            java.srcDirs("src/main/java")
+        }
+    }
+}
+
+dependencies {
+    implementation project(":core:model")
+    implementation project(":core:domain")
+
+    testImplementation 'junit:junit:4.13.2'
+
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // firebaseでawait()するやつ
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1"
+}
