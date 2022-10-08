@@ -2,6 +2,7 @@ package com.kabos.data.repository_impl
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kabos.data.extension.toTopic
+import com.kabos.domain.repository.TopicRepository
 import com.kabos.model.ConversationState
 import com.kabos.model.Topic
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 
 class TopicRepositoryImpl(
     private val firestore: FirebaseFirestore
-) : com.kabos.domain.repository.TopicRepository {
+) : TopicRepository {
     companion object {
         const val TOPICS = "topics"
         val RANGE = 0..360

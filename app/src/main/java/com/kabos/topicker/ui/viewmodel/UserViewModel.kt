@@ -12,7 +12,7 @@ import javax.inject.Inject
 @Stable
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val userRepository: com.kabos.domain.repository.UserRepository
+    private val userRepository: UserRepository
 ): ViewModel(){
 
     fun createUser() = viewModelScope.launch {
