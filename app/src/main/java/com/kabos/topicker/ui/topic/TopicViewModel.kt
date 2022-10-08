@@ -3,8 +3,8 @@ package com.kabos.topicker.ui.topic
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.domain.repository.TopicRepository
+import com.kabos.topicker.model.domain.TopicUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @Stable
 @HiltViewModel
 class TopicViewModel @Inject constructor(
-    private val topicRepository: com.kabos.domain.repository.TopicRepository
+    private val topicRepository: TopicRepository
 ) : ViewModel() {
 
     // TODO Result.Loading入れとくのが望ましいな

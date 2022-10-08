@@ -48,25 +48,21 @@ android {
         }
     }
 
-    def DIMENSION_API = "api"
-    flavorDimensions DIMENSION_API
+    // flavor setting
+    def DIMENSION_DEFAULT = "default"
+    flavorDimensions DIMENSION_DEFAULT
     productFlavors {
         mock {
-            dimension DIMENSION_API
+            dimension DIMENSION_DEFAULT
         }
         dev {
-            dimension DIMENSION_API
+            dimension DIMENSION_DEFAULT
+        }
+        prd {
+            dimension DIMENSION_DEFAULT
         }
     }
 
-    sourceSets {
-        mock {
-            java.srcDirs("src/mock/java")
-        }
-        dev {
-            java.srcDirs("src/main/java")
-        }
-    }
 }
 
 dependencies {
