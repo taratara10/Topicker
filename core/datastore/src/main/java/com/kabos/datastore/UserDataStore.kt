@@ -14,6 +14,7 @@ import java.util.*
 class UserDataStore(
     private val userPreferences: DataStore<Preferences>,
 ) {
+    /**  uuidをユーザーを一意に識別する値として、共通的に利用する */
     private val UUID_KEY = stringPreferencesKey("uuid")
 
     suspend fun getUuid(): Flow<String> {

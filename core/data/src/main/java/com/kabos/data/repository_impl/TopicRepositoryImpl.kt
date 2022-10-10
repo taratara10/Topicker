@@ -2,15 +2,18 @@ package com.kabos.data.repository_impl
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kabos.data.extension.toTopic
+import com.kabos.datastore.UserDataStore
 import com.kabos.domain.repository.TopicRepository
 import com.kabos.model.ConversationState
 import com.kabos.model.Topic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.tasks.await
 
 class TopicRepositoryImpl(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val userDataStore: UserDataStore,
 ) : TopicRepository {
     companion object {
         const val TOPICS = "topics"
@@ -51,5 +54,9 @@ class TopicRepositoryImpl(
             }
         }
         _topics.emit(updateList)
+    }
+
+    private suspend fun getUuid(): String {
+        return userDataStore.getUuid().single()
     }
 }
