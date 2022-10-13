@@ -4,6 +4,7 @@ package com.kabos.model
 data class Topic(
     val id: Int,
     val title: String,
+    val isFavorite: Boolean,
     val mainColor: String, // todo これいる？
     val conversationState: ConversationState = ConversationState.UnSelected,
 ) {
@@ -12,6 +13,7 @@ data class Topic(
         Topic(
             id = id,
             title = title,
+            isFavorite = false,
             mainColor = mainColor,
             conversationState = state,
         )

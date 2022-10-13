@@ -23,6 +23,7 @@ fun DocumentSnapshot.toTopic(): Topic? {
         Topic(
             id = getInt("id")!!,
             title = "${getString("title")!!}話",
+            isFavorite = false,
             mainColor = "",
             conversationState = ConversationState.UnSelected,
         )

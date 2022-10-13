@@ -9,10 +9,7 @@ interface TopicRepository {
     // TODO should wrap Result like a sugar?
     val topics: StateFlow<List<Topic>>
 
-    // TODO Topicを取得するためのクエリパラメーターを追加したい
-    suspend fun getTopic(): Topic
-
-    suspend fun addTopic()
+    suspend fun getTopic(id: Int): Topic?
 
     suspend fun updateConversationState(id: Int, isFavorite: Boolean)
 

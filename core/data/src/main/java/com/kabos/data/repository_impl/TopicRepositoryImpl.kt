@@ -30,22 +30,17 @@ class TopicRepositoryImpl(
         get() = _topics
     private val _topics: MutableStateFlow<List<Topic>> = MutableStateFlow(
         listOf(
-            Topic(1, "sample1", ""),
-            Topic(2, "sample2", ""),
+            Topic(1, "sample1", false, ""),
+            Topic(2, "sample2", false, ""),
         )
     )
 
-    // todo 仮置き 適切にハンドリングする
-    override suspend fun getTopic(): Topic {
+    override suspend fun getTopic(id: Int): Topic? {
         return firestore.collection(TOPICS)
-            .document(RANGE.random().toString())
+            .document(id.toString())
             .get()
             .await()
-            .toTopic()!!
-    }
-
-    override suspend fun addTopic() {
-        _topics.emit(_topics.value + getTopic())
+            .toTopic()
     }
 
     override suspend fun updateConversationState(id: Int, isFavorite: Boolean) {
