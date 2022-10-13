@@ -76,6 +76,14 @@ class TopicRepositoryImpl(
         awaitClose { channel.close() }
     }
 
+    override suspend fun addOwnTopic(ownTopic: OwnTopic) {
+        firestore.collection(USERS)
+            .document(getUuid())
+            .collection(OWN_TOPICS)
+            .document(ownTopic.topicId.toString())
+            .set(ownTopic)
+    }
+
     private suspend fun getUuid(): String {
         return userDataStore.getUuid().single()
     }

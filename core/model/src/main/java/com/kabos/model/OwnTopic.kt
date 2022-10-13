@@ -5,8 +5,10 @@ package com.kabos.model
  *
  * @param topicId [Topic]を参照するid
  * @param isFavorite お気に入りに指定しているか
+ * firestoreでは、prefixにisを含む場合、JvmFieldをつける
  * */
 data class OwnTopic(
     val topicId: Int,
+    @field:JvmField
     val isFavorite: Boolean,
-) 
+)

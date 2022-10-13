@@ -18,4 +18,5 @@ interface TopicRepository {
 
     suspend fun getOwnTopics(): Flow<List<OwnTopic>>
 
+    suspend fun addOwnTopic(ownTopic: OwnTopic)
 }
