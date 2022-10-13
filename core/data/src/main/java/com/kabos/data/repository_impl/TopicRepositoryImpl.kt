@@ -85,6 +85,6 @@ class TopicRepositoryImpl(
     }
 
     private suspend fun getUuid(): String {
-        return userDataStore.getUuid().single()
+        return userDataStore.getUuid().first()
     }
 }
