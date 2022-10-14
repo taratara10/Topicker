@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kabos.domain.repository.TopicRepository
+import com.kabos.domain.usecase.TopicUseCase
 import com.kabos.topicker.model.domain.TopicUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,28 +16,31 @@ import javax.inject.Inject
 @Stable
 @HiltViewModel
 class TopicViewModel @Inject constructor(
-    private val topicRepository: TopicRepository
+    private val topicRepository: TopicRepository,
+    private val topicUseCase: TopicUseCase
 ) : ViewModel() {
 
-    // TODO Result.Loading入れとくのが望ましいな
     private val _topicUiState: MutableStateFlow<List<TopicUiState>> = MutableStateFlow(listOf())
     val topicUiState: StateFlow<List<TopicUiState>> = _topicUiState
 
     init {
         viewModelScope.launch {
-            topicRepository.topics
-                .collect { topics ->
-                    _topicUiState.value = topics.map { TopicUiState.of(it) }
-                    Timber.d("--ss collect ${topics.map { it.title }}/ ${topics.map { it.mainColor }}")
-                }
+            topicUseCase.screenTopics.collect { topics ->
+                _topicUiState.value = topics.map { TopicUiState.of(it) }
+                    Timber.d("--ss initializer collect ${topics.map { it.title }}/ ${topics.map { it.mainColor }}")
+            }
         }
     }
 
     fun addTopic() = viewModelScope.launch {
-        topicRepository.addTopic()
+        topicUseCase.addScreenTopics()
     }
 
     fun updateConversationState(id: Int, isFavorite: Boolean) = viewModelScope.launch{
         topicRepository.updateConversationState(id, isFavorite)
+    }
+
+    fun getOwnTopic() =viewModelScope.launch {
+        topicUseCase.addScreenTopics()
     }
 }

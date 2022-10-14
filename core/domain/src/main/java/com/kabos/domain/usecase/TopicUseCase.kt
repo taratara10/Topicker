@@ -6,9 +6,6 @@ import com.kabos.model.Topic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 class TopicUseCase(
     private val topicRepository: TopicRepository,
@@ -19,20 +16,17 @@ class TopicUseCase(
         val RANGE = 0..360
     }
 
-    private val _screenTopics: MutableStateFlow<List<Topic>> = MutableStateFlow(listOf())
+    private val leadTopic = listOf(
+        Topic(1, "sample1", false, ""),
+        Topic(2, "sample2", false, ""),
+    )
+
+    private val _screenTopics: MutableStateFlow<List<Topic>> = MutableStateFlow(leadTopic)
     val screenTopics: StateFlow<List<Topic>> = _screenTopics
 
-    // todo 初期sample入れないとクラッシュしそう
     private var _ownTopics: StateFlow<List<OwnTopic>> = MutableStateFlow(listOf())
     val ownTopics: StateFlow<List<OwnTopic>> = _ownTopics
 
-    init {
-        ioScope.launch {
-            _ownTopics = topicRepository.getOwnTopics().stateIn(ioScope)
-            // いる？
-            _ownTopics.collect()
-        }
-    }
 
     /**
      * 画面にランダムなtopicを追加する
