@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class TopicUseCase(
     private val topicRepository: TopicRepository,
-    private val externalScope: CoroutineScope
+    private val ioScope: CoroutineScope
 ) {
     companion object {
         /** topicのid範囲 ver1.0では360個 */
@@ -27,8 +27,8 @@ class TopicUseCase(
     val ownTopics: StateFlow<List<OwnTopic>> = _ownTopics
 
     init {
-        externalScope.launch {
-            _ownTopics = topicRepository.getOwnTopics().stateIn(externalScope)
+        ioScope.launch {
+            _ownTopics = topicRepository.getOwnTopics().stateIn(ioScope)
             // いる？
             _ownTopics.collect()
         }
