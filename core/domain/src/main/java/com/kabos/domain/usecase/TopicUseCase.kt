@@ -19,8 +19,8 @@ class TopicUseCase(
     }
 
     private val leadTopic = listOf(
-        Topic(1, "sample1", false, ""),
-        Topic(2, "sample2", false, ""),
+        Topic(1, "sample1", false),
+        Topic(2, "sample2", false),
     )
 
     private val _screenTopics: MutableStateFlow<List<Topic>> = MutableStateFlow(leadTopic)

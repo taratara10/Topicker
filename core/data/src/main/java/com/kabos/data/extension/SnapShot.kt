@@ -1,7 +1,6 @@
 package com.kabos.data.extension
 
 import com.google.firebase.firestore.DocumentSnapshot
-import com.kabos.model.ConversationState
 import com.kabos.model.OwnTopic
 import com.kabos.model.Topic
 import timber.log.Timber
@@ -24,8 +23,6 @@ fun DocumentSnapshot.toTopic(): Topic? {
             id = getInt("id")!!,
             title = "${getString("title")!!}話",
             isFavorite = false,
-            mainColor = "",
-            conversationState = ConversationState.UnSelected,
         )
     } catch (e: Exception) {
         Timber.e("toTopic convert error. $data")

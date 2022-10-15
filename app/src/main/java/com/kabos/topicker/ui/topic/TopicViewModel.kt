@@ -25,7 +25,7 @@ class TopicViewModel @Inject constructor(
         viewModelScope.launch {
             topicUseCase.screenTopics.collect { topics ->
                 _topicUiState.value = topics.map { TopicUiState.of(it) }
-                    Timber.d("--ss initializer collect ${topics.map { it.title }}/ ${topics.map { it.mainColor }}")
+                    Timber.d("--ss initializer collect ${topics.map { it.title }}}")
             }
         }
     }
@@ -36,9 +36,5 @@ class TopicViewModel @Inject constructor(
 
     fun updateConversationState(id: Int, isFavorite: Boolean) = viewModelScope.launch{
         topicUseCase.updateFavoriteState(id, isFavorite)
-    }
-
-    fun getOwnTopic() =viewModelScope.launch {
-        topicUseCase.addScreenTopics()
     }
 }
