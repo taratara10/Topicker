@@ -43,9 +43,12 @@ class TopicUseCase(
      * ownTopicに含まれていない場合、収集済みとしてownTopicに追加する
      * */
     suspend fun addScreenTopics() {
-        val topic = topicRepository.getTopicById(RANGE.random()) ?: return
+        var topic = topicRepository.getTopicById(RANGE.random()) ?: return
         if (!isOwnTopicsContain(topic)) {
             topicRepository.addOwnTopic(OwnTopic(topic.id, false))
+        } else {
+            val sameIdOwnTopic = ownTopics.value.find { it.topicId == topic.id } ?: return
+            topic = topic.updateFavorite(sameIdOwnTopic.isFavorite)
         }
         _screenTopics.emit(_screenTopics.value + topic)
     }
