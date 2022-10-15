@@ -1,62 +1,71 @@
 package com.kabos.data.repository_impl
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kabos.data.extension.toOwnTopic
 import com.kabos.data.extension.toTopic
 import com.kabos.datastore.UserDataStore
 import com.kabos.domain.repository.TopicRepository
-import com.kabos.model.ConversationState
+import com.kabos.model.OwnTopic
 import com.kabos.model.Topic
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.cancellation.CancellationException
 
 class TopicRepositoryImpl(
     private val firestore: FirebaseFirestore,
     private val userDataStore: UserDataStore,
 ) : TopicRepository {
+
     companion object {
         const val TOPICS = "topics"
-        val RANGE = 0..360
+        const val USERS = "users"
+        const val OWN_TOPICS = "ownTopics"
     }
 
-    private val _topics: MutableStateFlow<List<Topic>> = MutableStateFlow(
-        listOf(
-            Topic(1, "sample1", ""),
-            Topic(2, "sample2", ""),
-        )
-    )
-
-    override val topics: StateFlow<List<Topic>>
-        get() = _topics
-
-    // todo 仮置き 適切にハンドリングする
-    override suspend fun getTopic(): Topic {
+    override suspend fun getTopicById(id: Int): Topic? {
         return firestore.collection(TOPICS)
-            .document(RANGE.random().toString())
+            .document(id.toString())
             .get()
             .await()
-            .toTopic()!!
+            .toTopic()
     }
 
-    override suspend fun addTopic() {
-        _topics.emit(_topics.value + getTopic())
-    }
+    override suspend fun getOwnTopics(): Flow<List<OwnTopic>> = callbackFlow {
+        firestore.collection(USERS)
+            .document(getUuid())
+            .collection(OWN_TOPICS)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    cancel(CancellationException(error))
+                }
 
-    override suspend fun updateConversationState(id: Int, isFavorite: Boolean) {
-        val conversationState =
-            if (isFavorite) ConversationState.Favorite else ConversationState.UnSelected
-        val updateList = topics.value.map { item ->
-            if (item.id == id) {
-                item.updateConversationState(conversationState)
-            } else {
-                item
+                val result = snapshot?.documents?.mapNotNull { it.toOwnTopic() } ?: listOf()
+                trySend(result)
             }
-        }
-        _topics.emit(updateList)
+        awaitClose { channel.close() }
+    }
+
+    override suspend fun addOwnTopic(ownTopic: OwnTopic) {
+        firestore.collection(USERS)
+            .document(getUuid())
+            .collection(OWN_TOPICS)
+            .document(ownTopic.topicId.toString())
+            .set(ownTopic)
     }
 
     private suspend fun getUuid(): String {
-        return userDataStore.getUuid().single()
+        return userDataStore.getUuid().first()
+    }
+
+    override suspend fun updateOwnTopicsFavoriteState(topicId: Int, isFavorite: Boolean) {
+        firestore.collection(USERS)
+            .document(getUuid())
+            .collection(OWN_TOPICS)
+            .document(topicId.toString())
+            .update("isFavorite", isFavorite)
     }
 }

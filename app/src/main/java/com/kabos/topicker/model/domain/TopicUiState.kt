@@ -1,25 +1,23 @@
 package com.kabos.topicker.model.domain
 
 import androidx.compose.ui.graphics.Color
-import com.kabos.model.ConversationState
 import com.kabos.model.Topic
 import com.kabos.topicker.ui.theme.*
 
-// TODO pageStateでは？？？
+// TODO pageStateでは？？？ これいらなくね？？？？
 data class TopicUiState(
     val id: Int,
     val title: String,
+    val isFavorite: Boolean,
     val color: Color,
-    val conversationState: ConversationState
-
 ) {
    companion object {
        fun of(topic: Topic): TopicUiState =
            TopicUiState(
                id = topic.id,
                title = topic.title,
+               isFavorite = topic.isFavorite,
                color = toColor(topic.id),
-               conversationState = topic.conversationState,
            )
 
        fun toColor(id: Int): Color {

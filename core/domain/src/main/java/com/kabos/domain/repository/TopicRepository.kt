@@ -1,17 +1,19 @@
 package com.kabos.domain.repository
 
+import com.kabos.model.OwnTopic
 import com.kabos.model.Topic
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 interface TopicRepository {
-    // TODO should wrap Result like a sugar?
-    val topics: StateFlow<List<Topic>>
 
-    // TODO Topicを取得するためのクエリパラメーターを追加したい
-    suspend fun getTopic(): Topic
+    suspend fun getTopicById(id: Int): Topic?
 
-    suspend fun addTopic()
+    /**
+     * @return ユーザーが閲覧済みのトピックすべて
+     * */
+    suspend fun getOwnTopics(): Flow<List<OwnTopic>>
 
-    suspend fun updateConversationState(id: Int, isFavorite: Boolean)
+    suspend fun addOwnTopic(ownTopic: OwnTopic)
 
+    suspend fun updateOwnTopicsFavoriteState(topicId: Int, isFavorite: Boolean)
 }

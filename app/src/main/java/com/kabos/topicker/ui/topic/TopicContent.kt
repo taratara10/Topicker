@@ -29,7 +29,6 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.kabos.topicker.R
-import com.kabos.model.ConversationState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.theme.TopickerTheme
 import kotlinx.coroutines.launch
@@ -78,7 +77,7 @@ fun TopicContent(
         )
         Spacer(modifier = Modifier.height(30.dp))
         FavoriteButton(
-            isFavorite = (uiState.conversationState == ConversationState.Favorite),
+            isFavorite = uiState.isFavorite,
             onClick = { isFavorite -> onClickFavorite(uiState.id, isFavorite) },
         )
     }
@@ -208,8 +207,8 @@ fun PreviewTopicContent() {
         val state = TopicUiState(
             id = 1,
             title = "〇〇な話",
+            isFavorite = false,
             color = Color.LightGray,
-            conversationState = ConversationState.UnSelected
         )
         TopicContent(
             uiState = state,

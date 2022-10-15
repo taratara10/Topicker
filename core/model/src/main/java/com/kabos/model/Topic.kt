@@ -1,23 +1,15 @@
 package com.kabos.model
 
-// todo colorのmapperをどっかで書きたい String -> Color
 data class Topic(
     val id: Int,
     val title: String,
-    val mainColor: String, // todo これいる？
-    val conversationState: ConversationState = ConversationState.UnSelected,
+    val isFavorite: Boolean,
 ) {
-
-    fun updateConversationState(state: ConversationState): Topic =
+    fun updateFavorite(isFavorite: Boolean): Topic =
         Topic(
             id = id,
             title = title,
-            mainColor = mainColor,
-            conversationState = state,
+            isFavorite = isFavorite,
         )
 }
 
-sealed class ConversationState {
-    object UnSelected : ConversationState()
-    object Favorite : ConversationState()
-}
