@@ -3,7 +3,6 @@ package com.kabos.topicker.ui.topic
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kabos.domain.repository.TopicRepository
 import com.kabos.domain.usecase.TopicUseCase
 import com.kabos.topicker.model.domain.TopicUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +15,6 @@ import javax.inject.Inject
 @Stable
 @HiltViewModel
 class TopicViewModel @Inject constructor(
-    private val topicRepository: TopicRepository,
     private val topicUseCase: TopicUseCase
 ) : ViewModel() {
 
@@ -37,7 +35,7 @@ class TopicViewModel @Inject constructor(
     }
 
     fun updateConversationState(id: Int, isFavorite: Boolean) = viewModelScope.launch{
-        topicRepository.updateConversationState(id, isFavorite)
+        topicUseCase.updateFavoriteState(id, isFavorite)
     }
 
     fun getOwnTopic() =viewModelScope.launch {
