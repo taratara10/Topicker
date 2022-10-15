@@ -30,7 +30,6 @@ class TopicUseCase(
     val ownTopics: StateFlow<List<OwnTopic>> = _ownTopics
 
     init {
-        // todo mergeできないかな
         ioScope.launch {
             topicRepository.getOwnTopics().stateIn(ioScope).collect {
                 _ownTopics.value = it
@@ -57,5 +56,8 @@ class TopicUseCase(
 
     suspend fun updateFavoriteState(topicId: Int, isFavorite: Boolean) {
         topicRepository.updateOwnTopicsFavoriteState(topicId, isFavorite)
+        _screenTopics.emit(_screenTopics.value.map {
+            if (it.id == topicId) it.updateFavorite(isFavorite) else it
+        })
     }
 }

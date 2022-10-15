@@ -8,14 +8,13 @@ data class Topic(
     val mainColor: String, // todo これいる？
     val conversationState: ConversationState = ConversationState.UnSelected,
 ) {
-
-    fun updateConversationState(state: ConversationState): Topic =
+    fun updateFavorite(isFavorite: Boolean): Topic =
         Topic(
             id = id,
             title = title,
-            isFavorite = false,
+            isFavorite = isFavorite,
             mainColor = mainColor,
-            conversationState = state,
+            conversationState = conversationState
         )
 }
 

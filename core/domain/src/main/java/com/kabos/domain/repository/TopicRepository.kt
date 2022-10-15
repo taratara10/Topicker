@@ -8,6 +8,9 @@ interface TopicRepository {
 
     suspend fun getTopicById(id: Int): Topic?
 
+    /**
+     * @return ユーザーが閲覧済みのトピックすべて
+     * */
     suspend fun getOwnTopics(): Flow<List<OwnTopic>>
 
     suspend fun addOwnTopic(ownTopic: OwnTopic)
