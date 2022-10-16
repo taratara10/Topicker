@@ -17,10 +17,72 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
 import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.ui.common.FavoriteButton
 import com.kabos.topicker.ui.theme.TopickerTheme
+import timber.log.Timber
+
+@ExperimentalPagerApi
+@Composable
+fun TopicRoute(
+    modifier: Modifier = Modifier,
+    viewModel: TopicViewModel = hiltViewModel(),
+    navigateToCollection: () -> Unit,
+) {
+    val pagerState = rememberPagerState()
+    val topics by viewModel.topicUiState.collectAsState()
+
+    TopicScreen(
+        pagerState = pagerState,
+        topics = topics,
+        onLastPage = { viewModel.addTopic() },
+        onClickFavorite = { id, isFavorite ->
+            viewModel.updateConversationState(id, isFavorite)
+        }
+    )
+
+}
+
+@ExperimentalPagerApi
+@Composable
+fun TopicScreen(
+    pagerState: PagerState,
+    topics: List<TopicUiState>,
+    onLastPage: () -> Unit,
+    onClickFavorite:(Int, Boolean) -> Unit,
+) {
+    SideEffect {
+        Timber.d("--ss TopicPagerScreen Recomposition")
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        TopAppBar(
+            modifier = Modifier
+                .wrapContentSize()
+                .statusBarsPadding()
+        )
+        TopicPager(
+            pagerState = pagerState,
+            pageCount = topics.size,
+            modifier = Modifier.fillMaxSize(),
+            pagerColors = topics.map { it.color },
+            onLastPage = { onLastPage() }
+        ) { page ->
+            TopicContent(
+                uiState = topics[page],
+                isPageDisplaying = (pagerState.currentPage == page),
+                onClickFavorite = { id, isFavorite ->
+                    onClickFavorite(id, isFavorite)
+                })
+        }
+    }
+}
 
 @ExperimentalPagerApi
 @Composable
