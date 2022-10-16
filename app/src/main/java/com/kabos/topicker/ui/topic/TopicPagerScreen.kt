@@ -20,7 +20,8 @@ import timber.log.Timber
 @Composable
 fun TopicRoute(
     modifier: Modifier = Modifier,
-    viewModel: TopicViewModel = hiltViewModel()
+    viewModel: TopicViewModel = hiltViewModel(),
+    navigateToCollection: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
     val topics by viewModel.topicUiState.collectAsState()

@@ -11,8 +11,10 @@ object TopicNavigation: TopickerNavigationDestination {
 }
 
 @ExperimentalPagerApi
-fun NavGraphBuilder.topicGraph() {
+fun NavGraphBuilder.topicGraph(navigateToCollection: () -> Unit) {
     composable(route = TopicNavigation.route) {
-        TopicRoute()
+        TopicRoute(
+            navigateToCollection = navigateToCollection
+        )
     }
 }
