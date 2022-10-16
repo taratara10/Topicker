@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -29,7 +29,7 @@ import timber.log.Timber
 @Composable
 fun CollectionRoute(
     modifier: Modifier = Modifier,
-    viewModel: TopicViewModel = viewModel()
+    viewModel: TopicViewModel = hiltViewModel()
 ) {
     // todo 仮置き
     val topics by viewModel.topicUiState.collectAsState()

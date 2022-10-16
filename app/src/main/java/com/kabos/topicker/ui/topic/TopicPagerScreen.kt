@@ -9,7 +9,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
@@ -20,7 +20,7 @@ import timber.log.Timber
 @Composable
 fun TopicRoute(
     modifier: Modifier = Modifier,
-    viewModel: TopicViewModel = viewModel()
+    viewModel: TopicViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
     val topics by viewModel.topicUiState.collectAsState()

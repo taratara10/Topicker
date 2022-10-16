@@ -5,7 +5,7 @@ import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 @HiltAndroidApp
-class TopickerApp : Application() {
+class TopickerApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         configureTimber()
