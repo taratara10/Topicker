@@ -12,20 +12,40 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
+import com.kabos.topicker.model.domain.TopicUiState
 import timber.log.Timber
+
+@ExperimentalPagerApi
+@Composable
+fun TopicRoute(
+    modifier: Modifier = Modifier,
+    viewModel: TopicViewModel = viewModel()
+) {
+    val pagerState = rememberPagerState()
+    val topics by viewModel.topicUiState.collectAsState()
+
+    TopicPagerScreen(
+        pagerState = pagerState,
+        topics = topics,
+        onLastPage = { viewModel.addTopic() },
+        onClickFavorite = { id, isFavorite ->
+            viewModel.updateConversationState(id, isFavorite)
+        }
+    )
+
+}
 
 @ExperimentalPagerApi
 @Composable
 fun TopicPagerScreen(
     pagerState: PagerState,
-    viewModel: TopicViewModel = viewModel()
+    topics: List<TopicUiState>,
+    onLastPage: () -> Unit,
+    onClickFavorite:(Int, Boolean) -> Unit,
 ) {
-
-    val topics by viewModel.topicUiState.collectAsState()
-
     SideEffect {
         Timber.d("--ss TopicPagerScreen Recomposition")
-        Timber.d("--ss ${topics.size}")
     }
 
     Box(
@@ -41,13 +61,13 @@ fun TopicPagerScreen(
             pageCount = topics.size,
             modifier = Modifier.fillMaxSize(),
             pagerColors = topics.map { it.color },
-            onLastPage = { viewModel.addTopic() }
+            onLastPage = { onLastPage() }
         ) { page ->
             TopicContent(
                 uiState = topics[page],
                 isPageDisplaying = (pagerState.currentPage == page),
                 onClickFavorite = { id, isFavorite ->
-                    viewModel.updateConversationState(id, isFavorite)
+                    onClickFavorite(id, isFavorite)
                 })
         }
     }
