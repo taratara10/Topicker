@@ -1,9 +1,7 @@
 package com.kabos.topicker.ui.collection
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -11,31 +9,38 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.model.Topic
 import com.kabos.topicker.R
 import com.kabos.topicker.ui.theme.TopickerTheme
+import com.kabos.topicker.ui.topic.TopicViewModel
 import timber.log.Timber
 
 @Composable
 fun CollectionRoute(
     modifier: Modifier = Modifier,
+    viewModel: TopicViewModel = viewModel()
 ) {
+    // todo 仮置き
+    val topics by viewModel.topicUiState.collectAsState()
+
     CollectionScreen(
-        topics = listOf()
+        topics = topics.map { Topic(it.id, it.title, it.isFavorite) }
     )
 }
 
 @Composable
-fun CollectionScreen(
+internal fun CollectionScreen(
     topics: List<Topic>,
     modifier: Modifier = Modifier,
 ) {
@@ -60,7 +65,7 @@ fun CollectionScreen(
 
 @Preview
 @Composable
-fun PreviewCollectionScreen() {
+private fun PreviewCollectionScreen() {
     TopickerTheme {
         val sample = listOf(
             Topic(1,"sample 1", false),
@@ -72,7 +77,7 @@ fun PreviewCollectionScreen() {
 
 
 @Composable
-fun CollectionCard(
+private fun CollectionCard(
     text: String,
     isFavorite: Boolean,
     onClick:() -> Unit,
@@ -83,29 +88,35 @@ fun CollectionCard(
         shape = RoundedCornerShape(10.dp),
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick() }
             .padding(horizontal = 16.dp)
+            .clickable { onClick() }
     ) {
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            maxLines = 1,
-            modifier = Modifier
-                .wrapContentWidth(Alignment.Start)
-                .padding(start = 8.dp)
-                .padding(vertical = 8.dp),
-        )
-        FavoriteIcon(
-            isFavorite = isFavorite,
-            modifier = Modifier
-                .wrapContentWidth(Alignment.End)
-                .padding(8.dp)
-        )
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                maxLines = 1,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .wrapContentWidth(Alignment.Start)
+                    .padding(start = 8.dp)
+                    .padding(vertical = 8.dp),
+            )
+            FavoriteIcon(
+                isFavorite = isFavorite,
+                modifier = Modifier
+                    .wrapContentWidth(Alignment.End)
+                    .padding(8.dp)
+            )
+        }
     }
 }
 
 @Composable
-fun FavoriteIcon(
+private fun FavoriteIcon(
     isFavorite: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -114,12 +125,15 @@ fun FavoriteIcon(
         composition = composition,
         progress = { if (isFavorite) 1f else 0f },
         modifier = modifier
+            .height(32.dp)
+            .width(32.dp)
+            .wrapContentWidth(Alignment.End)
     )
 }
 
 @Preview
 @Composable
-fun PreviewCollectionCard() {
+private fun PreviewCollectionCard() {
     TopickerTheme {
         CollectionCard(text = "test test", isFavorite = true, onClick = {})
     }
