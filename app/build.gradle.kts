@@ -1,106 +1,112 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
-    compileSdk 33
+    compileSdk = 33
 
     defaultConfig {
-        applicationId "com.kabos.topicker"
-        minSdk 26
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        applicationId = "com.kabos.topicker"
+        minSdk = 26
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
-            useSupportLibrary true
+            useSupportLibrary = true
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
+
     buildFeatures {
-        compose true
+        compose = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion '1.3.0'
+        kotlinCompilerExtensionVersion = "1.3.0"
     }
+
     packagingOptions {
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 
-    // flavor setting
-    def DIMENSION_DEFAULT = "default"
-    flavorDimensions DIMENSION_DEFAULT
+    flavorDimensions.add("appType")
     productFlavors {
-        mock {
-            dimension DIMENSION_DEFAULT
+        create("_mock") {
+            dimension = "appType"
+            applicationIdSuffix = ".mock"
+            versionNameSuffix = "-mock"
         }
-        dev {
-            dimension DIMENSION_DEFAULT
+        create("_dev") {
+            dimension = "appType"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
         }
-        prd {
-            dimension DIMENSION_DEFAULT
+        create("_prd") {
+            dimension = "appType"
         }
     }
-
 }
 
 dependencies {
-    implementation project(":core:model")
-    implementation project(":core:data")
-    implementation project(":core:domain")
-    implementation project(":core:datastore")
+    implementation(project(":core:model"))
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:datastore"))
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation "androidx.compose.ui:ui:1.2.1"
-    implementation "androidx.compose.material:material:1.3.0-rc01"
-    implementation "androidx.compose.ui:ui-tooling-preview:1.2.1"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.activity:activity-compose:1.6.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.2.1"
-    debugImplementation "androidx.compose.ui:ui-tooling:1.2.1"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:1.2.1"
+    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.compose.ui:ui:1.2.1")
+    implementation("androidx.compose.material:material:1.3.0-rc01")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.2.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation("androidx.activity:activity-compose:1.6.0")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.1")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.2.1")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.1")
 
-    implementation "com.google.accompanist:accompanist-pager:0.26.1-alpha"
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation("com.google.accompanist:accompanist-pager:0.26.1-alpha")
+    implementation("com.jakewharton.timber:timber:4.7.1")
 
-    implementation "com.google.dagger:hilt-android:2.42"
-    kapt "com.google.dagger:hilt-android-compiler:2.42"
+    implementation("com.google.dagger:hilt-android:2.42")
+    kapt("com.google.dagger:hilt-android-compiler:2.42")
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
-    implementation "androidx.compose.runtime:runtime-livedata:1.2.1"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.2.1")
 
-    implementation "com.airbnb.android:lottie-compose:5.2.0"
+    implementation("com.airbnb.android:lottie-compose:5.2.0")
 
-    implementation platform('com.google.firebase:firebase-bom:30.3.1')
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
+    implementation(platform("com.google.firebase:firebase-bom:30.3.1"))
+    implementation("com.google.firebase:firebase-firestore-ktx:24.3.1")
 
     // dataStore
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-    implementation "androidx.navigation:navigation-compose:2.5.2"
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation("androidx.navigation:navigation-compose:2.5.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 }
