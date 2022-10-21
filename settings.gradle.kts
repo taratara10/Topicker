@@ -13,8 +13,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Topicker"
-include ':app'
-include ':core:model'
-include ':core:data'
-include ':core:domain'
-include ':core:datastore'
+include(":app")
+include(":core:model")
+include(":core:data")
+include(":core:domain")
+include(":core:datastore")
