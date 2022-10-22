@@ -1,8 +1,7 @@
-package com.kabos.data.repositoy_impl
+package com.kabos.data.repository_impl
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kabos.domain.repository.TopicRepository
-import com.kabos.model.ConversationState
+import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.model.Topic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

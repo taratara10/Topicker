@@ -1,10 +1,12 @@
 plugins {
     kotlin("android")
     id("com.android.library")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.kabos.data"
+    namespace = "com.kabos.topicker.core.data"
     compileSdk = 33
 
     flavorDimensions.add("appType")
@@ -45,4 +47,7 @@ dependencies {
     implementation(libs.firebase.await)
 
     implementation(libs.timber)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.kapt)
 }

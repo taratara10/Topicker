@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.kabos.topicker.navigation.TopicNavHost
-import com.kabos.topicker.ui.theme.TopickerTheme
+import com.kabos.topicker.core.design.theme.TopickerTheme
 
 @ExperimentalPagerApi
 @Composable

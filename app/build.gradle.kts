@@ -1,8 +1,8 @@
 plugins {
     kotlin("android")
     id("com.android.application")
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -74,6 +74,10 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:design"))
+
+    implementation(project(":feature:topic"))
+    implementation(project(":feature:collection"))
 
     testImplementation(libs.bundles.test.base)
     androidTestImplementation(libs.bundles.test.android)
@@ -81,15 +85,9 @@ dependencies {
 
     implementation(libs.bundles.androidx.base)
     implementation(libs.bundles.androidx.compose)
-    implementation(libs.compose.lottie)
     implementation(libs.timber)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.kapt)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.firestore)
-
-    implementation(libs.datastore)
 
 }
