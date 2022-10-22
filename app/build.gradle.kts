@@ -75,36 +75,20 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:datastore"))
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.compose.ui:ui:1.2.1")
-    implementation("androidx.compose.material:material:1.3.0-rc01")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.6.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.1")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.2.1")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.1")
+    testImplementation(libs.test.junit)
+    androidTestImplementation(libs.bundles.test.android)
+    debugImplementation(libs.bundles.debug.compose)
 
-    implementation("com.google.accompanist:accompanist-pager:0.26.1-alpha")
-    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation(libs.bundles.androidx.base)
+    implementation(libs.bundles.androidx.compose)
+    implementation(libs.compose.lottie)
+    implementation(libs.timber)
 
-    implementation("com.google.dagger:hilt-android:2.42")
-    kapt("com.google.dagger:hilt-android-compiler:2.42")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.kapt)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-    implementation("androidx.compose.runtime:runtime-livedata:1.2.1")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
 
-    implementation("com.airbnb.android:lottie-compose:5.2.0")
 
-    implementation(platform("com.google.firebase:firebase-bom:30.3.1"))
-    implementation("com.google.firebase:firebase-firestore-ktx:24.4.0")
-
-    // dataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-
-    implementation("androidx.navigation:navigation-compose:2.5.2")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 }
