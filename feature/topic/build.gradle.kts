@@ -1,6 +1,8 @@
 plugins {
     kotlin("android")
     id("com.android.library")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -26,4 +28,7 @@ dependencies {
     implementation(libs.bundles.androidx.compose)
     implementation(libs.compose.lottie)
     implementation(libs.timber)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.kapt)
 }

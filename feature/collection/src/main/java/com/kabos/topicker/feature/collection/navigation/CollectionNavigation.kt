@@ -3,7 +3,7 @@ package com.kabos.topicker.feature.collection.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.kabos.domain.navigation.TopickerNavigationDestination
-import com.kabos.topicker.feature.topic.collection.CollectionRoute
+import com.kabos.topicker.feature.collection.CollectionRoute
 
 object CollectionDestination: TopickerNavigationDestination {
     override val route = "collection_route"
