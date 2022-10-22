@@ -1,4 +1,4 @@
-package com.kabos.topicker.ui.theme
+package com.kabos.topicker.core.design.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

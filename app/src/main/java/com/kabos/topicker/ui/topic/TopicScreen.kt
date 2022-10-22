@@ -22,8 +22,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.kabos.topicker.model.domain.TopicUiState
-import com.kabos.topicker.ui.common.FavoriteButton
-import com.kabos.topicker.ui.theme.TopickerTheme
+import com.kabos.topicker.core.design.component.FavoriteButton
+import com.kabos.topicker.core.design.component.TopAppBar
+import com.kabos.topicker.core.design.theme.TopickerTheme
 import timber.log.Timber
 
 @ExperimentalPagerApi

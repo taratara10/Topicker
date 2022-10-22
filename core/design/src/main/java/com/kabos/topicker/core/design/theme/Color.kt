@@ -1,4 +1,4 @@
-package com.kabos.topicker.ui.theme
+package com.kabos.topicker.core.design.theme
 
 import androidx.compose.ui.graphics.Color
 

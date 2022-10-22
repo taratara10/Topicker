@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:design"))
 
     testImplementation(libs.bundles.test.base)
     androidTestImplementation(libs.bundles.test.android)

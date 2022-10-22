@@ -1,4 +1,4 @@
-package com.kabos.topicker.ui.topic
+package com.kabos.topicker.core.design.component
 
 import android.content.res.Configuration
 import androidx.compose.material.Icon
@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kabos.topicker.ui.theme.TopickerTheme
+import com.kabos.topicker.core.design.theme.TopickerTheme
 
 @Composable
 fun TopAppBar(

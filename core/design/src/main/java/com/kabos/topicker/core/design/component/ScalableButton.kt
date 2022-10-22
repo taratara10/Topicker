@@ -1,4 +1,4 @@
-package com.kabos.topicker.ui.common
+package com.kabos.topicker.core.design.component
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kabos.topicker.ui.theme.TopickerTheme
+import com.kabos.topicker.core.design.theme.TopickerTheme
 import kotlinx.coroutines.launch
 
 

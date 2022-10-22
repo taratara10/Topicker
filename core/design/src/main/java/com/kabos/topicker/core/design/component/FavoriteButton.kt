@@ -1,4 +1,4 @@
-package com.kabos.topicker.ui.common
+package com.kabos.topicker.core.design.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,8 +13,8 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.kabos.topicker.R
-import com.kabos.topicker.ui.theme.TopickerTheme
+import com.kabos.topicker.core.design.R
+import com.kabos.topicker.core.design.theme.TopickerTheme
 
 @Composable
 fun FavoriteButton(
