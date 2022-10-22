@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kabos.data"
+    namespace = "com.kabos.topicker.core.data"
     compileSdk = 33
 
     flavorDimensions.add("appType")
