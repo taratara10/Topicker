@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kabos.model"
+    namespace = "com.kabos.topicker.core.model"
     compileSdk = 33
 }
 
