@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kabos.topicker.feature.topic"
+    namespace = "com.kabos.topicker.feature.collection"
     compileSdk = 33
 
     buildFeatures {

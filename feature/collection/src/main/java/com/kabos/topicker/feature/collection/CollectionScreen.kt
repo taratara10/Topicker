@@ -1,4 +1,4 @@
-package com.kabos.topicker.ui.collection
+package com.kabos.topicker.feature.topic.collection
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
