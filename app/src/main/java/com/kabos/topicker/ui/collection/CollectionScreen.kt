@@ -21,7 +21,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.model.Topic
-import com.kabos.topicker.R
+import com.kabos.topicker.core.design.R
 import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.ui.topic.TopicViewModel
 import timber.log.Timber
