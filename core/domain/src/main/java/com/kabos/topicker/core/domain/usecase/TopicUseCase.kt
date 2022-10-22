@@ -1,6 +1,6 @@
 package com.kabos.domain.usecase
 
-import com.kabos.domain.repository.TopicRepository
+import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.model.OwnTopic
 import com.kabos.model.Topic
 import kotlinx.coroutines.CoroutineScope

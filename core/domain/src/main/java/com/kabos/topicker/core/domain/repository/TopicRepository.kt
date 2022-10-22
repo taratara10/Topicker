@@ -1,4 +1,4 @@
-package com.kabos.domain.repository
+package com.kabos.topicker.core.domain.repository
 
 import com.kabos.model.OwnTopic
 import com.kabos.model.Topic

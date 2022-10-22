@@ -1,4 +1,4 @@
-package com.kabos.topicker.model.domain
+package com.kabos.topicker.feature.topic.collection
 
 import androidx.compose.ui.graphics.Color
 import com.kabos.model.Topic

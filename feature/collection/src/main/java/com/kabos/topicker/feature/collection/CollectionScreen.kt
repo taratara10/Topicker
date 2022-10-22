@@ -9,31 +9,28 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.model.Topic
 import com.kabos.topicker.core.design.R
 import com.kabos.topicker.core.design.theme.TopickerTheme
-import com.kabos.topicker.ui.topic.TopicViewModel
 import timber.log.Timber
 
 @Composable
 fun CollectionRoute(
     modifier: Modifier = Modifier,
-    viewModel: TopicViewModel = hiltViewModel()
+//    viewModel: TopicViewModel = hiltViewModel()
 ) {
     // todo 仮置き
-    val topics by viewModel.topicUiState.collectAsState()
-
+//    val topics by viewModel.topicUiState.collectAsState()
+    val topics = listOf<Topic>()
     CollectionScreen(
         topics = topics.map { Topic(it.id, it.title, it.isFavorite) }
     )

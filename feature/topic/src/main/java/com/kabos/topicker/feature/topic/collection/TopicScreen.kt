@@ -1,4 +1,4 @@
-package com.kabos.topicker.ui.topic
+package com.kabos.topicker.feature.topic.collection
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -21,7 +21,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.kabos.topicker.model.domain.TopicUiState
 import com.kabos.topicker.core.design.component.FavoriteButton
 import com.kabos.topicker.core.design.component.TopAppBar
 import com.kabos.topicker.core.design.theme.TopickerTheme

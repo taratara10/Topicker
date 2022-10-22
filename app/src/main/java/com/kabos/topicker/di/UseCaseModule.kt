@@ -1,6 +1,6 @@
 package com.kabos.topicker.di
 
-import com.kabos.domain.repository.TopicRepository
+import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.domain.usecase.TopicUseCase
 import dagger.Module
 import dagger.Provides

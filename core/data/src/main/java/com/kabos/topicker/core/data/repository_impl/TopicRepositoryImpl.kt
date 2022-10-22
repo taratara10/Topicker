@@ -4,7 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.kabos.data.extension.toOwnTopic
 import com.kabos.data.extension.toTopic
 import com.kabos.datastore.UserDataStore
-import com.kabos.domain.repository.TopicRepository
+import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.model.OwnTopic
 import com.kabos.model.Topic
 import kotlinx.coroutines.cancel

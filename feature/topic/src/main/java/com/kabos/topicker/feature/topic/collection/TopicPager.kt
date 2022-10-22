@@ -1,6 +1,6 @@
 @file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
 
-package com.kabos.topicker.ui.topic
+package com.kabos.topicker.feature.topic.collection
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
