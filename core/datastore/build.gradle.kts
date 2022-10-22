@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kabos.datastore"
+    namespace = "com.kabos.topicker.core.datastore"
     compileSdk = 33
 }
 
