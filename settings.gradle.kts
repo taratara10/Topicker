@@ -90,6 +90,7 @@ dependencyResolutionManagement {
             /** firebase */
             alias("firebase-bom").to("com.google.firebase:firebase-bom:30.3.1")
             alias("firebase-firestore").to("com.google.firebase:firebase-firestore-ktx:24.4.0")
+            alias("firebase-await").to("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 
             /** lottie */
             alias("compose-lottie").to("com.airbnb.android:lottie-compose:5.2.0")
@@ -100,12 +101,16 @@ dependencyResolutionManagement {
             /** Timber */
             alias("timber").to("com.jakewharton.timber:timber:4.7.1")
 
+            /** coroutines */
+            alias("coroutines").to("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
             /** Test */
             alias("test-junit").to("junit:junit:4.13.2")
             alias("androidx-test-junit").to("androidx.test.ext:junit:1.1.3")
             alias("androidx-test-compose")
                 .to("androidx.compose.ui", "ui-test-junit4")
                 .versionRef("compose")
+            bundle("test-base", listOf("test-junit"))
             bundle("test-android", listOf("androidx-test-junit", "androidx-test-compose"))
 
             /** debug */

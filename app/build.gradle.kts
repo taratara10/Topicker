@@ -75,7 +75,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:datastore"))
 
-    testImplementation(libs.test.junit)
+    testImplementation(libs.bundles.test.base)
     androidTestImplementation(libs.bundles.test.android)
     debugImplementation(libs.bundles.debug.compose)
 
@@ -90,5 +90,6 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
 
+    implementation(libs.datastore)
 
 }

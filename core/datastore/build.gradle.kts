@@ -27,9 +27,8 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.5.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    testImplementation(libs.test.junit)
+    androidTestImplementation(libs.bundles.test.android)
 
-    // dataStore
-    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+    implementation(libs.datastore)
 }
