@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.kabos.domain"
+    namespace = "com.kabos.topicker.core.domain"
     compileSdk = 33
 }
 
