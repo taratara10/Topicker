@@ -1,4 +1,4 @@
-package com.kabos.topicker.di
+package com.kabos.topicker.core.datastore.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -7,10 +7,6 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.firestoreSettings
-import com.google.firebase.ktx.Firebase
 import com.kabos.datastore.UserDataStore
 import dagger.Module
 import dagger.Provides
@@ -24,16 +20,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object DataSourceModule {
-    @Singleton
-    @Provides
-    fun provideFirestore(): FirebaseFirestore =
-        Firebase.firestore.apply {
-            firestoreSettings = firestoreSettings {
-                //オフラインキャッシュの有効化
-                isPersistenceEnabled = true
-            }
-        }
+object DataStoreModule {
 
     @Singleton
     @Provides

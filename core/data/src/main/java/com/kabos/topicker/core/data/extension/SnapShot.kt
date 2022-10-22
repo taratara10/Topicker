@@ -1,4 +1,4 @@
-package com.kabos.data.extension
+package com.kabos.topicker.core.data.extension
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.kabos.model.OwnTopic

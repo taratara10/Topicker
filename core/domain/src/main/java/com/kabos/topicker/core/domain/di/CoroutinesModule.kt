@@ -1,4 +1,4 @@
-package com.kabos.topicker.di
+package com.kabos.topicker.core.domain.di
 
 import dagger.Module
 import dagger.Provides
