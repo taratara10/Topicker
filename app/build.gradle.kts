@@ -31,12 +31,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 
     buildFeatures {
@@ -57,12 +57,10 @@ android {
     productFlavors {
         create("_mock") {
             dimension = "appType"
-            applicationIdSuffix = ".mock"
             versionNameSuffix = "-mock"
         }
         create("_dev") {
             dimension = "appType"
-            applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
         }
         create("_prd") {
@@ -77,7 +75,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:datastore"))
 
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.compose.ui:ui:1.2.1")
     implementation("androidx.compose.material:material:1.3.0-rc01")
     implementation("androidx.compose.ui:ui-tooling-preview:1.2.1")
@@ -102,7 +100,7 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:5.2.0")
 
     implementation(platform("com.google.firebase:firebase-bom:30.3.1"))
-    implementation("com.google.firebase:firebase-firestore-ktx:24.3.1")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.4.0")
 
     // dataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
