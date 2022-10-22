@@ -4,6 +4,7 @@ pluginManagement {
         google()
         mavenCentral()
     }
+
 }
 
 /**
@@ -19,12 +20,12 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+
     /**
      * project共通でライブラリのバージョンを管理する
      * */
     versionCatalogs {
         create("libs") {
-
             /**
              * version
              * */
@@ -121,6 +122,7 @@ dependencyResolutionManagement {
                 .to("androidx.compose.ui", "ui-test-manifest")
                 .versionRef("compose")
             bundle("debug-compose", listOf("debug-compose-tooling", "debug-compose-manifest"))
+
         }
     }
 }
