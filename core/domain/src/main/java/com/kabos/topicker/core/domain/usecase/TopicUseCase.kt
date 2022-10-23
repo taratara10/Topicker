@@ -19,48 +19,64 @@ class TopicUseCase(
     }
 
     private val leadTopic = listOf(
-        Topic(1, "sample1", false),
-        Topic(2, "sample2", false),
+        OwnTopic(1, "sample1", false),
+        OwnTopic(2, "sample2", false),
     )
 
-    private val _screenTopics: MutableStateFlow<List<Topic>> = MutableStateFlow(leadTopic)
-    val screenTopics: StateFlow<List<Topic>> = _screenTopics
+    private val _screenTopics: MutableStateFlow<List<OwnTopic>> = MutableStateFlow(leadTopic)
+    val screenTopics: StateFlow<List<OwnTopic>> = _screenTopics
 
     private val _ownTopics: MutableStateFlow<List<OwnTopic>> = MutableStateFlow(listOf())
     val ownTopics: StateFlow<List<OwnTopic>> = _ownTopics
 
     init {
         ioScope.launch {
-            topicRepository.getOwnTopics().stateIn(ioScope).collect {
-                _ownTopics.value = it
+            topicRepository.getOwnTopics().stateIn(ioScope).collect { ownTopics ->
+                _ownTopics.value = ownTopics
+                _screenTopics.emit(reflectStatus(screenTopics.value, ownTopics))
             }
         }
     }
 
     /**
-     * 画面にランダムなtopicを追加する
-     * ownTopicに含まれている場合、その情報を付与して画面に追加する
-     * ownTopicに含まれていない場合、収集済みとしてownTopicに追加する
+     * [ownTopics]の更新内容を[screenTopics]に反映したリストを作る
      * */
-    suspend fun addScreenTopics() {
-        var topic = topicRepository.getTopicById(RANGE.random()) ?: return
-        if (!isOwnTopicsContain(topic)) {
-            topicRepository.addOwnTopic(OwnTopic(topic.id, topic.title, false))
-        } else {
-            val sameIdOwnTopic = ownTopics.value.find { it.topicId == topic.id } ?: return
-            topic = topic.updateFavorite(sameIdOwnTopic.isFavorite)
+    private fun reflectStatus(screenTopics: List<OwnTopic>, allOwnTopics: List<OwnTopic>): List<OwnTopic> {
+        return screenTopics.map { screenTopic ->
+            allOwnTopics.find { it.topicId == screenTopic.topicId } ?: screenTopic
         }
-        _screenTopics.emit(_screenTopics.value + topic)
     }
 
-    private fun isOwnTopicsContain(topic: Topic): Boolean {
-        return ownTopics.value.find { it.topicId == topic.id } != null
+    /**
+     * 画面にランダムなtopicを追加する
+     * ownTopicに登録されていない場合、収集済みとしてownTopicに追加する
+     * */
+    suspend fun addScreenTopics() {
+        val topic =
+            topicRepository.getTopicById(RANGE.random()) ?: throw Exception("Cannot add topics")
+
+        val registeredOwnTopic: OwnTopic? = ownTopics.value.find { it.topicId == topic.id }
+
+        val ownTopic: OwnTopic =
+            if (registeredOwnTopic != null) {
+                registeredOwnTopic
+            } else {
+                val newOwnTopic = topic.toOwnTopic()
+                topicRepository.addOwnTopic(newOwnTopic)
+                newOwnTopic
+            }
+
+        _screenTopics.emit(_screenTopics.value + ownTopic)
     }
 
     suspend fun updateFavoriteState(topicId: Int, isFavorite: Boolean) {
         topicRepository.updateOwnTopicsFavoriteState(topicId, isFavorite)
-        _screenTopics.emit(_screenTopics.value.map {
-            if (it.id == topicId) it.updateFavorite(isFavorite) else it
-        })
     }
+
+    private fun Topic.toOwnTopic(): OwnTopic =
+        OwnTopic(
+            topicId = id,
+            title = title,
+            isFavorite = isFavorite
+        )
 }

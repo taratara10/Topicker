@@ -4,11 +4,11 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kabos.topicker.core.domain.usecase.TopicUseCase
+import com.kabos.topicker.core.model.OwnTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @Stable
@@ -17,14 +17,13 @@ class TopicViewModel @Inject constructor(
     private val topicUseCase: TopicUseCase
 ) : ViewModel() {
 
-    private val _topicUiState: MutableStateFlow<List<TopicUiState>> = MutableStateFlow(listOf())
-    val topicUiState: StateFlow<List<TopicUiState>> = _topicUiState
+    private val _topicUiState: MutableStateFlow<TopicUiState> = MutableStateFlow(TopicUiState())
+    val topicUiState: StateFlow<TopicUiState> = _topicUiState
 
     init {
         viewModelScope.launch {
             topicUseCase.screenTopics.collect { topics ->
-                _topicUiState.value = topics.map { TopicUiState.of(it) }
-                    Timber.d("--ss initializer collect ${topics.map { it.title }}}")
+                _topicUiState.emit(TopicUiState(topics))
             }
         }
     }
@@ -37,3 +36,10 @@ class TopicViewModel @Inject constructor(
         topicUseCase.updateFavoriteState(id, isFavorite)
     }
 }
+
+/**
+ * @param screenTopics 画面に表示するトピック
+ * */
+data class TopicUiState(
+    val screenTopics: List<OwnTopic> = listOf()
+)

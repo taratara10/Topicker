@@ -14,3 +14,16 @@ data class OwnTopic(
     @field:JvmField
     val isFavorite: Boolean,
 )
+
+val previewOwnTopics = listOf(
+    OwnTopic(1, "sample1", false),
+    OwnTopic(2, "sample2", false),
+    OwnTopic(3, "sample3", false),
+    OwnTopic(4, "sample4", false),
+    OwnTopic(5, "sample5", false),
+    OwnTopic(6, "sample6", false),
+    OwnTopic(7, "sample7", false),
+    OwnTopic(8, "sample8", false),
+    OwnTopic(9, "sample9", false),
+    OwnTopic(10, "sample10", false),
+)

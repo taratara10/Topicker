@@ -22,8 +22,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.kabos.topicker.core.design.component.FavoriteButton
-import com.kabos.topicker.core.design.component.TopAppBar
-import com.kabos.topicker.core.design.theme.TopickerTheme
+import com.kabos.topicker.core.design.component.TopicAppBar
+import com.kabos.topicker.core.design.theme.*
+import com.kabos.topicker.core.model.OwnTopic
 import timber.log.Timber
 
 @ExperimentalPagerApi
@@ -34,11 +35,11 @@ fun TopicRoute(
     navigateToCollection: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
-    val topics by viewModel.topicUiState.collectAsState()
+    val uiState by viewModel.topicUiState.collectAsState()
 
     TopicScreen(
         pagerState = pagerState,
-        topics = topics,
+        topics = uiState.screenTopics,
         onLastPage = { viewModel.addTopic() },
         onClickFavorite = { id, isFavorite ->
             viewModel.updateConversationState(id, isFavorite)
@@ -51,7 +52,7 @@ fun TopicRoute(
 @Composable
 fun TopicScreen(
     pagerState: PagerState,
-    topics: List<TopicUiState>,
+    topics: List<OwnTopic>,
     onLastPage: () -> Unit,
     onClickFavorite:(Int, Boolean) -> Unit,
 ) {
@@ -62,7 +63,7 @@ fun TopicScreen(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-        TopAppBar(
+        TopicAppBar(
             modifier = Modifier
                 .wrapContentSize()
                 .statusBarsPadding()
@@ -71,11 +72,11 @@ fun TopicScreen(
             pagerState = pagerState,
             pageCount = topics.size,
             modifier = Modifier.fillMaxSize(),
-            pagerColors = topics.map { it.color },
+            pagerColors = topics.map { toColor(it.topicId) },
             onLastPage = { onLastPage() }
         ) { page ->
             TopicContent(
-                uiState = topics[page],
+                ownTopic = topics[page],
                 isPageDisplaying = (pagerState.currentPage == page),
                 onClickFavorite = { id, isFavorite ->
                     onClickFavorite(id, isFavorite)
@@ -84,10 +85,26 @@ fun TopicScreen(
     }
 }
 
+// TODO 仮置き
+private fun toColor(id: Int): Color {
+    return when (id % 10) {
+        1 -> LightBlue100
+        2 -> Blue100
+        3 -> Indigo100
+        4 -> DeepOrange100
+        5 -> DeepPurple100
+        6 -> Pink100
+        7 -> Red100
+        8 -> Cyan100
+        9 -> Green100
+        else -> Color.White
+    }
+}
+
 @ExperimentalPagerApi
 @Composable
 fun TopicContent(
-    uiState: TopicUiState,
+    ownTopic: OwnTopic,
     isPageDisplaying: Boolean,
     onClickFavorite: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -121,15 +138,15 @@ fun TopicContent(
 
         Spacer(modifier = Modifier.height(120.dp))
         TopicCard(
-            text = uiState.title,
+            text = ownTopic.title,
             positionX = positionX,
             positionY = positionY,
             rotate = rotate
         )
         Spacer(modifier = Modifier.height(30.dp))
         FavoriteButton(
-            isFavorite = uiState.isFavorite,
-            onClick = { isFavorite -> onClickFavorite(uiState.id, isFavorite) },
+            isFavorite = ownTopic.isFavorite,
+            onClick = { isFavorite -> onClickFavorite(ownTopic.topicId, isFavorite) },
         )
     }
 }
@@ -174,14 +191,13 @@ fun PreviewTopicCard() {
 @Composable
 fun PreviewTopicContent() {
     TopickerTheme {
-        val state = TopicUiState(
-            id = 1,
+        val sample = OwnTopic(
+            topicId = 1,
             title = "〇〇な話",
             isFavorite = false,
-            color = Color.LightGray,
         )
         TopicContent(
-            uiState = state,
+            ownTopic = sample,
             isPageDisplaying = true,
             onClickFavorite = { _, _ -> }
         )
