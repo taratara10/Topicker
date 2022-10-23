@@ -55,10 +55,6 @@ android {
 
     flavorDimensions.add("appType")
     productFlavors {
-        create("_mock") {
-            dimension = "appType"
-            versionNameSuffix = "-mock"
-        }
         create("_dev") {
             dimension = "appType"
             versionNameSuffix = "-dev"

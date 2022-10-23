@@ -9,30 +9,6 @@ android {
     namespace = "com.kabos.topicker.core.data"
     compileSdk = 33
 
-    flavorDimensions.add("appType")
-    productFlavors {
-        create("_mock") {
-            dimension = "appType"
-        }
-        create("_dev") {
-            dimension = "appType"
-        }
-        create("_prd") {
-            dimension = "appType"
-        }
-    }
-
-    with(sourceSets) {
-        getByName("_mock") {
-            java.srcDirs("src/mock/java")
-        }
-        getByName("_dev") {
-            java.srcDirs("src/main/java")
-        }
-        getByName("_prd") {
-            java.srcDirs("src/main/java")
-        }
-    }
 }
 
 dependencies {
