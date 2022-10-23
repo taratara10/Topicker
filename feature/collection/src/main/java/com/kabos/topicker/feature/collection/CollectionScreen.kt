@@ -21,6 +21,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.topicker.core.design.R
+import com.kabos.topicker.core.design.component.TopicAppBar
 import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.model.OwnTopic
 import timber.log.Timber
@@ -42,32 +43,39 @@ internal fun CollectionScreen(
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyListState()
-    LazyColumn(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        state = scrollableState
-    ) {
-        items(topics) { topic ->
-            CollectionCard(
-                text = topic.title,
-                isFavorite = topic.isFavorite,
-                onClick = {
-                    Timber.d("topicId = ${topic.topicId}")
-                },
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+
+    Column(modifier = modifier.statusBarsPadding()) {
+        TopicAppBar()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = scrollableState
+        ) {
+            items(topics) { topic ->
+                CollectionCard(
+                    text = topic.title,
+                    isFavorite = topic.isFavorite,
+                    onClick = {
+                        Timber.d("topicId = ${topic.topicId}")
+                    },
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
         }
     }
+
 }
 
-@Preview
+@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 private fun PreviewCollectionScreen() {
-    TopickerTheme {
-        val sample = listOf(
-            OwnTopic(1,"sample 1", false),
-            OwnTopic(2,"sample 2", true)
-        )
+    val sample = listOf(
+        OwnTopic(1, "sample 1", false),
+        OwnTopic(2, "sample 2", true)
+    )
+    TopickerTheme(darkTheme = false) {
         CollectionScreen(topics = sample)
     }
 }
@@ -77,7 +85,7 @@ private fun PreviewCollectionScreen() {
 private fun CollectionCard(
     text: String,
     isFavorite: Boolean,
-    onClick:() -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
