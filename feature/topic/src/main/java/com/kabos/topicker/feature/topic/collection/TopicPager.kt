@@ -5,6 +5,7 @@ package com.kabos.topicker.feature.topic.collection
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -45,7 +46,7 @@ fun PreviewTopicPager() {
             pagerColors = color,
             onLastPage = {}
         ) { page ->
-            Text(text = "page is $page")
+            Text(text = "page is $page", modifier = Modifier.fillMaxHeight())
         }
     }
 }
