@@ -9,65 +9,73 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.kabos.model.Topic
 import com.kabos.topicker.core.design.R
+import com.kabos.topicker.core.design.component.TopicAppBar
 import com.kabos.topicker.core.design.theme.TopickerTheme
+import com.kabos.topicker.core.model.OwnTopic
 import timber.log.Timber
 
 @Composable
 fun CollectionRoute(
     modifier: Modifier = Modifier,
-//    viewModel: TopicViewModel = hiltViewModel()
+    viewModel: CollectionViewModel = hiltViewModel()
 ) {
-    // todo 仮置き
-//    val topics by viewModel.topicUiState.collectAsState()
-    val topics = listOf<Topic>()
+    val uiState by viewModel.collectionUiState.collectAsState()
     CollectionScreen(
-        topics = topics.map { Topic(it.id, it.title, it.isFavorite) }
+        topics = uiState.ownTopics
     )
 }
 
 @Composable
 internal fun CollectionScreen(
-    topics: List<Topic>,
+    topics: List<OwnTopic>,
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyListState()
-    LazyColumn(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        state = scrollableState
-    ) {
-        items(topics) { topic ->
-            CollectionCard(
-                text = topic.title,
-                isFavorite = topic.isFavorite,
-                onClick = {
-                    Timber.d("topicId = ${topic.id}")
-                },
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+
+    Column(modifier = modifier.statusBarsPadding()) {
+        TopicAppBar()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = scrollableState
+        ) {
+            items(topics) { topic ->
+                CollectionCard(
+                    text = topic.title,
+                    isFavorite = topic.isFavorite,
+                    onClick = {
+                        Timber.d("topicId = ${topic.topicId}")
+                    },
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
         }
     }
+
 }
 
-@Preview
+@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 private fun PreviewCollectionScreen() {
-    TopickerTheme {
-        val sample = listOf(
-            Topic(1,"sample 1", false),
-            Topic(2,"sample 2", true)
-        )
+    val sample = listOf(
+        OwnTopic(1, "sample 1", false),
+        OwnTopic(2, "sample 2", true)
+    )
+    TopickerTheme(darkTheme = false) {
         CollectionScreen(topics = sample)
     }
 }
@@ -77,7 +85,7 @@ private fun PreviewCollectionScreen() {
 private fun CollectionCard(
     text: String,
     isFavorite: Boolean,
-    onClick:() -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
