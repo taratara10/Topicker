@@ -1,12 +1,9 @@
 package com.kabos.topicker.core.data.extension
 
 import com.google.firebase.firestore.DocumentSnapshot
-import com.kabos.model.OwnTopic
-import com.kabos.model.Topic
+import com.kabos.topicker.core.model.OwnTopic
+import com.kabos.topicker.core.model.Topic
 import timber.log.Timber
-
-fun DocumentSnapshot.optString(field: String, defaultValue: String): String =
-    getString(field) ?: defaultValue
 
 fun DocumentSnapshot.getInt(field: String): Int? =
     getLong(field)?.toInt()
@@ -34,6 +31,7 @@ fun DocumentSnapshot.toOwnTopic(): OwnTopic? {
     return try {
         OwnTopic(
             topicId = getInt("topicId")!!,
+            title = getString("title")!!,
             isFavorite = getBoolean("isFavorite") == true
         )
     } catch (e: Exception) {

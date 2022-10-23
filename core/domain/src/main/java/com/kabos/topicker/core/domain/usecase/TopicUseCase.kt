@@ -1,8 +1,8 @@
-package com.kabos.domain.usecase
+package com.kabos.topicker.core.domain.usecase
 
 import com.kabos.topicker.core.domain.repository.TopicRepository
-import com.kabos.model.OwnTopic
-import com.kabos.model.Topic
+import com.kabos.topicker.core.model.OwnTopic
+import com.kabos.topicker.core.model.Topic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,7 +45,7 @@ class TopicUseCase(
     suspend fun addScreenTopics() {
         var topic = topicRepository.getTopicById(RANGE.random()) ?: return
         if (!isOwnTopicsContain(topic)) {
-            topicRepository.addOwnTopic(OwnTopic(topic.id, false))
+            topicRepository.addOwnTopic(OwnTopic(topic.id, topic.title, false))
         } else {
             val sameIdOwnTopic = ownTopics.value.find { it.topicId == topic.id } ?: return
             topic = topic.updateFavorite(sameIdOwnTopic.isFavorite)

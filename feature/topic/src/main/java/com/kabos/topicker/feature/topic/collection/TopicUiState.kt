@@ -1,7 +1,7 @@
 package com.kabos.topicker.feature.topic.collection
 
 import androidx.compose.ui.graphics.Color
-import com.kabos.model.Topic
+import com.kabos.topicker.core.model.Topic
 import com.kabos.topicker.core.design.theme.*
 
 // TODO pageStateでは？？？ これいらなくね？？？？

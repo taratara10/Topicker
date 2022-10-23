@@ -3,7 +3,7 @@ package com.kabos.topicker.feature.topic.collection
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kabos.domain.usecase.TopicUseCase
+import com.kabos.topicker.core.domain.usecase.TopicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

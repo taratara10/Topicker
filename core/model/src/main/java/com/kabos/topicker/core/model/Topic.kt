@@ -1,4 +1,4 @@
-package com.kabos.model
+package com.kabos.topicker.core.model
 
 data class Topic(
     val id: Int,

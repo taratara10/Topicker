@@ -1,7 +1,7 @@
 package com.kabos.topicker.core.domain.repository
 
-import com.kabos.model.OwnTopic
-import com.kabos.model.Topic
+import com.kabos.topicker.core.model.OwnTopic
+import com.kabos.topicker.core.model.Topic
 import kotlinx.coroutines.flow.Flow
 
 interface TopicRepository {

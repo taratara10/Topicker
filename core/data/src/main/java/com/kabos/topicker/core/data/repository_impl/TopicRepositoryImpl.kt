@@ -1,12 +1,12 @@
 package com.kabos.topicker.core.data.repository_impl
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kabos.datastore.UserDataStore
 import com.kabos.topicker.core.data.extension.toOwnTopic
 import com.kabos.topicker.core.data.extension.toTopic
-import com.kabos.datastore.UserDataStore
-import com.kabos.model.OwnTopic
-import com.kabos.model.Topic
 import com.kabos.topicker.core.domain.repository.TopicRepository
+import com.kabos.topicker.core.model.OwnTopic
+import com.kabos.topicker.core.model.Topic
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
