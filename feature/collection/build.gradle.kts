@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:design"))
 
+    debugImplementation(libs.bundles.debug.compose)
 
     implementation(libs.bundles.androidx.base)
     implementation(libs.bundles.androidx.compose)

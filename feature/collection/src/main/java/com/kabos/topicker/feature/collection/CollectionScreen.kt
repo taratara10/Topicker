@@ -9,36 +9,36 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.topicker.core.design.R
 import com.kabos.topicker.core.design.theme.TopickerTheme
-import com.kabos.topicker.core.model.Topic
+import com.kabos.topicker.core.model.OwnTopic
 import timber.log.Timber
 
 @Composable
 fun CollectionRoute(
     modifier: Modifier = Modifier,
-//    viewModel: TopicViewModel = hiltViewModel()
+    viewModel: CollectionViewModel = hiltViewModel()
 ) {
-    // todo 仮置き
-//    val topics by viewModel.topicUiState.collectAsState()
-    val topics = listOf<Topic>()
+    val uiState by viewModel.collectionUiState.collectAsState()
     CollectionScreen(
-        topics = topics.map { Topic(it.id, it.title, it.isFavorite) }
+        topics = uiState.ownTopics
     )
 }
 
 @Composable
 internal fun CollectionScreen(
-    topics: List<Topic>,
+    topics: List<OwnTopic>,
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyListState()
@@ -52,7 +52,7 @@ internal fun CollectionScreen(
                 text = topic.title,
                 isFavorite = topic.isFavorite,
                 onClick = {
-                    Timber.d("topicId = ${topic.id}")
+                    Timber.d("topicId = ${topic.topicId}")
                 },
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -65,8 +65,8 @@ internal fun CollectionScreen(
 private fun PreviewCollectionScreen() {
     TopickerTheme {
         val sample = listOf(
-            Topic(1,"sample 1", false),
-            Topic(2,"sample 2", true)
+            OwnTopic(1,"sample 1", false),
+            OwnTopic(2,"sample 2", true)
         )
         CollectionScreen(topics = sample)
     }
