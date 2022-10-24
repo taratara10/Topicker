@@ -25,6 +25,7 @@ import com.kabos.topicker.core.design.component.FavoriteButton
 import com.kabos.topicker.core.design.component.TopicAppBar
 import com.kabos.topicker.core.design.theme.*
 import com.kabos.topicker.core.model.OwnTopic
+import kotlinx.coroutines.delay
 import timber.log.Timber
 
 @ExperimentalPagerApi
@@ -43,7 +44,8 @@ fun TopicRoute(
         onLastPage = { viewModel.addTopic() },
         onClickFavorite = { id, isFavorite ->
             viewModel.updateConversationState(id, isFavorite)
-        }
+        },
+        onClickCollection = { navigateToCollection() }
     )
 
 }
@@ -54,7 +56,9 @@ fun TopicScreen(
     pagerState: PagerState,
     topics: List<OwnTopic>,
     onLastPage: () -> Unit,
-    onClickFavorite:(Int, Boolean) -> Unit,
+    onClickFavorite: (Int, Boolean) -> Unit,
+    onClickCollection: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     SideEffect {
         Timber.d("--ss TopicPagerScreen Recomposition")
@@ -74,13 +78,17 @@ fun TopicScreen(
             modifier = Modifier.fillMaxSize(),
             pagerColors = topics.map { toColor(it.topicId) },
             onLastPage = { onLastPage() }
-        ) { page ->
+        ) { eachPageState ->
             TopicContent(
-                ownTopic = topics[page],
-                isPageDisplaying = (pagerState.currentPage == page),
+                ownTopic = topics[eachPageState.index],
+                isCurrentPageDisplaying = eachPageState.isDisplaying,
+                shouldDisplayDial = eachPageState.shouldDisplayDial,
+                dialColor = eachPageState.dialColor,
                 onClickFavorite = { id, isFavorite ->
                     onClickFavorite(id, isFavorite)
-                })
+                },
+                onClickCollection = { onClickCollection() }
+            )
         }
     }
 }
@@ -105,36 +113,58 @@ private fun toColor(id: Int): Color {
 @Composable
 fun TopicContent(
     ownTopic: OwnTopic,
-    isPageDisplaying: Boolean,
+    isCurrentPageDisplaying: Boolean,
     onClickFavorite: (Int, Boolean) -> Unit,
+    onClickCollection: () -> Unit,
+    shouldDisplayDial: Boolean,
+    dialColor: Color,
     modifier: Modifier = Modifier,
 ) {
+
+    var startCardAnimation: Boolean by remember {
+        mutableStateOf(false)
+    }
+
+    var showSpeedDial by remember {
+        mutableStateOf(false)
+    }
+
+    var toggleSpeedDial by remember {
+        mutableStateOf(false)
+    }
+
+    if (isCurrentPageDisplaying) {
+        startCardAnimation = true
+    }
+
+    // animateOffsetAsStateもあるよ！
+    val positionX by animateDpAsState(
+        targetValue = if (startCardAnimation) 0.dp else 50.dp,
+        animationSpec = tween(1000)
+    )
+    val positionY by animateDpAsState(
+        targetValue = if (startCardAnimation) 0.dp else 400.dp,
+        animationSpec = tween(1000)
+    )
+    val rotate by animateFloatAsState(
+        targetValue = if (startCardAnimation) 0f else 20f,
+        animationSpec = tween(1000)
+    )
+
+    // dialがちらつくので、delayする
+    if (shouldDisplayDial) {
+        LaunchedEffect(Unit) {
+            delay(300)
+            showSpeedDial = true
+        }
+    } else {
+        showSpeedDial = false
+    }
+
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var isDisplayed: Boolean by remember {
-            mutableStateOf(false)
-        }
-
-        // ページが表示されたら、カードのアニメーションを発火させる
-        if (isPageDisplaying) {
-            isDisplayed = true
-        }
-
-        // animateOffsetAsStateもあるよ！
-        val positionX by animateDpAsState(
-            targetValue = if (isDisplayed) 0.dp else 50.dp,
-            animationSpec = tween(1000)
-        )
-        val positionY by animateDpAsState(
-            targetValue = if (isDisplayed) 0.dp else 400.dp,
-            animationSpec = tween(1000)
-        )
-        val rotate by animateFloatAsState(
-            targetValue = if (isDisplayed) 0f else 20f,
-            animationSpec = tween(1000)
-        )
 
         Spacer(modifier = Modifier.height(120.dp))
         TopicCard(
@@ -148,7 +178,24 @@ fun TopicContent(
             isFavorite = ownTopic.isFavorite,
             onClick = { isFavorite -> onClickFavorite(ownTopic.topicId, isFavorite) },
         )
+
+        // SpeedDialを下揃えにするため、fillMaxSizeの雰囲気でSpacerをいれる
+        Spacer(modifier = Modifier.weight(1f))
+        // pagerのanimationと被ってしまうので、animation(swipe)が終わったら表示する
+        if (showSpeedDial) {
+            SpeedDial(
+                toggleDial = toggleSpeedDial,
+                onClickSpeedDial = { toggleSpeedDial = !toggleSpeedDial },
+                onClickLeft = { onClickCollection() },
+                onClickCenter = {},
+                onClickRight = {},
+                color = dialColor,
+            )
+        } else {
+            toggleSpeedDial = false
+        }
     }
+
 }
 
 @Composable
@@ -178,7 +225,7 @@ fun TopicCard(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTopicCard() {
     TopickerTheme {
@@ -187,7 +234,7 @@ fun PreviewTopicCard() {
 }
 
 @ExperimentalPagerApi
-@Preview(showBackground = true)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTopicContent() {
     TopickerTheme {
@@ -198,8 +245,11 @@ fun PreviewTopicContent() {
         )
         TopicContent(
             ownTopic = sample,
-            isPageDisplaying = true,
-            onClickFavorite = { _, _ -> }
+            isCurrentPageDisplaying = true,
+            shouldDisplayDial = true,
+            dialColor = Color.Green,
+            onClickFavorite = { _, _ -> },
+            onClickCollection = {},
         )
     }
 }

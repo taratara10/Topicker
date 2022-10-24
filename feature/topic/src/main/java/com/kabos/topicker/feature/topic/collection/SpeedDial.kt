@@ -3,6 +3,7 @@ package com.kabos.topicker.feature.topic.collection
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -147,6 +148,7 @@ fun ParentDial(
         onClick = { onClick() },
         modifier = modifier.size(size),  //avoid the oval shape
         shape = CircleShape,
+        border = BorderStroke(0.dp, Color.Transparent),
         contentPadding = PaddingValues(0.dp),  //avoid the little icon
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor = color,

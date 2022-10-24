@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -47,10 +47,10 @@ fun TopicPager(
     circleMinRadius: Dp = 48.dp,
     circleMaxRadius: Dp = 12000.dp,
     circleBottomPadding: Dp = 175.dp,
-    vector: ImageVector = Icons.Default.ArrowForward,
+    vector: ImageVector = Icons.Default.Add,
     pagerColors: List<Color>,
     onLastPage: () -> Unit,
-    content: @Composable PagerScope.(Int, Boolean) -> Unit
+    content: @Composable PagerScope.(EachPageState) -> Unit
 ) {
     // circleWithIcon用のパラメーター
     val icon = rememberVectorPainter(vector)
@@ -93,9 +93,16 @@ fun TopicPager(
                     iconSize = circleWithIconSize
                 )
             }
-        ) { page ->
-            content(page, (circleWithIconRadius == circleMinRadius))
-            if ((page + 1) == pageCount) onLastPage()
+        ) { index ->
+            content(
+                EachPageState(
+                    index = index,
+                    isDisplaying = (pagerState.currentPage == index),
+                    dialColor = pagerState.getNextSwipeableCircleColor(pagerColors),
+                    shouldDisplayDial = (circleWithIconRadius == circleMinRadius)
+                )
+            )
+            if ((index + 1) == pageCount) onLastPage()
         }
     }
 }
@@ -140,7 +147,7 @@ fun DrawScope.drawCircleWithIcon(
             iconSize.toPx().let { iconSize ->
                 translate(
                     top = size.height - bottomPadding.toPx() - (iconSize / 2),
-                    left = -(iconSize / 2) + 8 // adding a magic number to optically center the icon
+                    left = -(iconSize / 2)
                 ) {
                     draw(size = Size(iconSize, iconSize))
                 }
@@ -238,8 +245,8 @@ fun PreviewTopicPager() {
             modifier = Modifier.fillMaxSize(),
             pagerColors = color,
             onLastPage = {}
-        ) { page, _ ->
-            Text(text = "page is $page", modifier = Modifier.fillMaxHeight())
+        ) { pagerState ->
+            Text(text = "page is ${pagerState.index}", modifier = Modifier.fillMaxHeight())
         }
     }
 }
