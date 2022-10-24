@@ -1,5 +1,6 @@
 package com.kabos.topicker.feature.topic.collection
 
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
@@ -26,12 +27,15 @@ import kotlin.math.sin
 
 @Composable
 fun SpeedDial(
+    isDisplayed: Boolean,
+    onClickSpeedDial: () -> Unit,
+    onClickLeft: () -> Unit,
+    onClickCenter: () -> Unit,
+    onClickRight: () -> Unit,
+    color: Color,
     distance: Int = 118,
     modifier: Modifier = Modifier,
 ) {
-    var isDisplayed by remember {
-        mutableStateOf(false)
-    }
 
     val leftRadius = 210
     val leftX by animateOuterCirclePositionXAsState(
@@ -71,39 +75,48 @@ fun SpeedDial(
 
     val backCircleSize by animateDpAsState(
         targetValue = if (isDisplayed) 240.dp else 0.dp,
-        tween(1000)
+        tween(500)
     )
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .height(350.dp)
     ) {
-        CenterDial(onClick = { isDisplayed = !isDisplayed }, color = Color.Cyan)
+        ParentDial(
+            onClick = { onClickSpeedDial() },
+            color = color
+        )
+
         SubDial(
-            onClick = { /*TODO*/ },
-            color = Color.Blue,
+            onClick = { onClickLeft() },
+            color = color,
             icon = Icons.Default.Lock,
             modifier = Modifier
                 .offset(x = leftX, y = leftY)
                 .zIndex(-1f)
         )
+
         SubDial(
-            onClick = { /*TODO*/ },
-            color = Color.Blue,
+            onClick = { onClickCenter() },
+            color = color,
             icon = Icons.Default.Lock,
             modifier = Modifier
                 .offset(x = centerX, y = centerY)
                 .zIndex(-1f)
         )
+
         SubDial(
-            onClick = { /*TODO*/ },
-            color = Color.Blue,
+            onClick = { onClickRight() },
+            color = color,
             icon = Icons.Default.Lock,
             modifier = Modifier
                 .offset(x = rightX, y = rightY)
                 .zIndex(-1f)
         )
+
+        // back circle
         Box(
             modifier = Modifier
                 .size(backCircleSize)
@@ -112,11 +125,10 @@ fun SpeedDial(
                 .zIndex(-5f)
         )
     }
-
 }
 
 @Composable
-fun CenterDial(
+fun ParentDial(
     onClick: () -> Unit,
     size: Dp = 96.dp,
     color: Color,
@@ -158,12 +170,6 @@ fun SubDial(
     }
 }
 
-@Preview
-@Composable
-fun PreviewLiquidDial() {
-    SpeedDial()
-}
-
 /**
  * 外円上のx座標をθからアニメーション付きで算出する
  * */
@@ -176,7 +182,7 @@ fun animateOuterCirclePositionXAsState(
     val positionX = distance * cos(Math.toRadians(radius.toDouble()))
     return animateDpAsState(
         targetValue = if (isDisplayed) positionX.dp else 0.dp,
-        animationSpec = tween(1000)
+        animationSpec = tween(1000, easing = CubicBezierEasing(.27f, 1.6f, .29f, 1f))
     )
 }
 
@@ -192,6 +198,22 @@ fun animateOuterCirclePositionYAsState(
     val positionX = distance * sin(Math.toRadians(radius.toDouble()))
     return animateDpAsState(
         targetValue = if (isDisplayed) positionX.dp else 0.dp,
-        animationSpec = tween(1000)
+        animationSpec = tween(1000, easing = CubicBezierEasing(.27f, 1.6f, .29f, 1f))
+    )
+}
+
+@Preview
+@Composable
+fun PreviewLiquidDial() {
+    var isDisplay by remember {
+        mutableStateOf(false)
+    }
+    SpeedDial(
+        isDisplayed = isDisplay,
+        onClickSpeedDial = { isDisplay = !isDisplay},
+        onClickLeft = {},
+        onClickCenter = {},
+        onClickRight = {},
+        color = Color.Green,
     )
 }
