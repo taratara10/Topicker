@@ -24,7 +24,7 @@ val Amber100 = Color(0XFFFFECB3)
 val Orange100 = Color(0XFFFFE0B2)
 val DeepOrange100 = Color(0XFFFFCCBC)
 val Brown100 = Color(0XFFD7CCC8)
-val BlueGray100 = Color(0XFFCFD8DC)
+val BlueGray200 = Color(0XFFB0BEC5)
 
 val colors = listOf(
     LightBlue100,
@@ -44,5 +44,5 @@ val colors = listOf(
     Amber100,
     Orange100,
     Brown100,
-    BlueGray100,
+    BlueGray200,
 )

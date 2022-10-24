@@ -154,7 +154,7 @@ fun TopicContent(
     // dialがちらつくので、delayする
     if (shouldDisplayDial) {
         LaunchedEffect(Unit) {
-            delay(300)
+            delay(100)
             showSpeedDial = true
         }
     } else {
@@ -220,7 +220,7 @@ fun TopicCard(
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
             maxLines = 1,
-            modifier = Modifier.padding(vertical = 48.dp)
+            modifier = Modifier.padding(vertical = 72.dp)
         )
     }
 }

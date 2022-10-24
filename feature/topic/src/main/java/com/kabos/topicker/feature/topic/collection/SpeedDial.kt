@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.kabos.topicker.core.design.theme.BlueGray200
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -130,7 +131,7 @@ fun SpeedDial(
             modifier = Modifier
                 .size(backCircleSize)
                 .clip(CircleShape)
-                .border(width = 2.dp, color = Color.LightGray, shape = CircleShape)
+                .border(width = 2.dp, color = BlueGray200, shape = CircleShape)
                 .zIndex(-10f)
         )
     }
