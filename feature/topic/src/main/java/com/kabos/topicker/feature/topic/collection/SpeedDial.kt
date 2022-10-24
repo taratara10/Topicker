@@ -2,6 +2,7 @@ package com.kabos.topicker.feature.topic.collection
 
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -17,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -92,11 +94,14 @@ fun SpeedDial(
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxWidth().height(height)
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height)
     ) {
         ParentDial(
             onClick = { onClickSpeedDial() },
-            color = color
+            color = color,
+            toggleDial = toggleDial,
         )
 
         SubDial(
@@ -140,24 +145,33 @@ fun SpeedDial(
 @Composable
 fun ParentDial(
     onClick: () -> Unit,
+    color: Color,
+    toggleDial: Boolean,
     size: Dp = 96.dp,
     vector: ImageVector = Icons.Default.Add,
-    color: Color,
     modifier: Modifier = Modifier,
 ) {
-    OutlinedButton(
-        onClick = { onClick() },
-        modifier = modifier.size(size),  //avoid the oval shape
-        shape = CircleShape,
-        border = BorderStroke(0.dp, Color.Transparent),
-        contentPadding = PaddingValues(0.dp),  //avoid the little icon
-        colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = color,
-            contentColor = Color.Black,
-        )
-    ) {
-        Icon(vector, contentDescription = "")
+    val rotateIcon by animateFloatAsState(
+        targetValue = if (toggleDial) 45f else 0f,
+        animationSpec = tween(400)
+    )
+
+    Box(modifier = modifier.rotate(rotateIcon)) {
+        OutlinedButton(
+            onClick = { onClick() },
+            modifier = modifier.size(size),  //avoid the oval shape
+            shape = CircleShape,
+            border = BorderStroke(0.dp, Color.Transparent),
+            contentPadding = PaddingValues(0.dp),  //avoid the little icon
+            colors = ButtonDefaults.outlinedButtonColors(
+                backgroundColor = color,
+                contentColor = Color.Black,
+            ),
+        ) {
+            Icon(vector, contentDescription = "",)
+        }
     }
+
 }
 
 @Composable
