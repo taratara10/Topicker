@@ -2,10 +2,8 @@ package com.kabos.topicker.feature.topic.collection
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -16,6 +14,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,35 +26,91 @@ import kotlin.math.sin
 
 @Composable
 fun SpeedDial(
-    distance: Int = 96,
+    distance: Int = 118,
     modifier: Modifier = Modifier,
 ) {
     var isDisplayed by remember {
         mutableStateOf(false)
     }
-    val positionX by animateDpAsState(
-        targetValue = if (isDisplayed) 0.dp else calcCircumferentialCoordinates(45, distance).first.dp,
-        animationSpec = tween(1000)
+
+    val leftRadius = 210
+    val leftX by animateOuterCirclePositionXAsState(
+        isDisplayed = isDisplayed,
+        radius = leftRadius,
+        distance = distance
     )
-    val positionY by animateDpAsState(
-        targetValue = if (isDisplayed) 0.dp else calcCircumferentialCoordinates(135, distance).first.dp,
-        animationSpec = tween(1000)
+    val leftY by animateOuterCirclePositionYAsState(
+        isDisplayed = isDisplayed,
+        radius = leftRadius,
+        distance = distance
     )
+
+    val centerRadius = 270
+    val centerX by animateOuterCirclePositionXAsState(
+        isDisplayed = isDisplayed,
+        radius = centerRadius,
+        distance = distance
+    )
+    val centerY by animateOuterCirclePositionYAsState(
+        isDisplayed = isDisplayed,
+        radius = centerRadius,
+        distance = distance
+    )
+
+    val rightRadius = 330
+    val rightX by animateOuterCirclePositionXAsState(
+        isDisplayed = isDisplayed,
+        radius = rightRadius,
+        distance = distance
+    )
+    val rightY by animateOuterCirclePositionYAsState(
+        isDisplayed = isDisplayed,
+        radius = rightRadius,
+        distance = distance
+    )
+
+    val backCircleSize by animateDpAsState(
+        targetValue = if (isDisplayed) 240.dp else 0.dp,
+        tween(1000)
+    )
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .size(300.dp)
+            .fillMaxSize()
     ) {
-        CenterDial(onClick = { isDisplayed = !isDisplayed}, color = Color.Cyan)
+        CenterDial(onClick = { isDisplayed = !isDisplayed }, color = Color.Cyan)
         SubDial(
             onClick = { /*TODO*/ },
             color = Color.Blue,
             icon = Icons.Default.Lock,
             modifier = Modifier
-                .offset(x = positionX, y = positionY)
+                .offset(x = leftX, y = leftY)
                 .zIndex(-1f)
         )
-
+        SubDial(
+            onClick = { /*TODO*/ },
+            color = Color.Blue,
+            icon = Icons.Default.Lock,
+            modifier = Modifier
+                .offset(x = centerX, y = centerY)
+                .zIndex(-1f)
+        )
+        SubDial(
+            onClick = { /*TODO*/ },
+            color = Color.Blue,
+            icon = Icons.Default.Lock,
+            modifier = Modifier
+                .offset(x = rightX, y = rightY)
+                .zIndex(-1f)
+        )
+        Box(
+            modifier = Modifier
+                .size(backCircleSize)
+                .clip(CircleShape)
+                .border(width = 2.dp, color = Color.LightGray, shape = CircleShape)
+                .zIndex(-5f)
+        )
     }
 
 }
@@ -69,15 +124,15 @@ fun CenterDial(
 ) {
     OutlinedButton(
         onClick = { onClick() },
-        modifier= modifier.size(size),  //avoid the oval shape
+        modifier = modifier.size(size),  //avoid the oval shape
         shape = CircleShape,
         contentPadding = PaddingValues(0.dp),  //avoid the little icon
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor = color,
-            contentColor =  Color.Black,
+            contentColor = Color.Black,
         )
     ) {
-        Icon(Icons.Default.Add, contentDescription = "content description")
+        Icon(Icons.Default.Add, contentDescription = "")
     }
 }
 
@@ -91,15 +146,15 @@ fun SubDial(
 ) {
     OutlinedButton(
         onClick = { onClick() },
-        modifier= modifier.size(size),  //avoid the oval shape
+        modifier = modifier.size(size),  //avoid the oval shape
         shape = CircleShape,
         contentPadding = PaddingValues(0.dp),  //avoid the little icon
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor = color,
-            contentColor =  Color.Black,
+            contentColor = Color.Black,
         )
     ) {
-        Icon(icon, contentDescription = "content description")
+        Icon(imageVector = icon, contentDescription = "")
     }
 }
 
@@ -110,15 +165,33 @@ fun PreviewLiquidDial() {
 }
 
 /**
- * 円周上の座標を計算する
- * @return Pair<x座標, y座標>
+ * 外円上のx座標をθからアニメーション付きで算出する
  * */
-fun calcCircumferentialCoordinates(
+@Composable
+fun animateOuterCirclePositionXAsState(
+    isDisplayed: Boolean,
     radius: Int,
     distance: Int,
-): Pair<Double, Double> {
-    val rad = Math.toRadians(radius.toDouble())
-    val x = distance * cos(rad)
-    val y = distance * sin(rad)
-    return Pair(x, y)
+): State<Dp> {
+    val positionX = distance * cos(Math.toRadians(radius.toDouble()))
+    return animateDpAsState(
+        targetValue = if (isDisplayed) positionX.dp else 0.dp,
+        animationSpec = tween(1000)
+    )
+}
+
+/**
+ * 外円上のy座標をθからアニメーション付きで算出する
+ * */
+@Composable
+fun animateOuterCirclePositionYAsState(
+    isDisplayed: Boolean,
+    radius: Int,
+    distance: Int,
+): State<Dp> {
+    val positionX = distance * sin(Math.toRadians(radius.toDouble()))
+    return animateDpAsState(
+        targetValue = if (isDisplayed) positionX.dp else 0.dp,
+        animationSpec = tween(1000)
+    )
 }
