@@ -100,7 +100,7 @@ fun SpeedDial(
         SubDial(
             onClick = { onClickLeft() },
             color = color,
-            icon = Icons.Default.Lock,
+            vector = Icons.Default.Lock,
             modifier = Modifier
                 .offset(x = leftX, y = leftY)
                 .zIndex(-1f)
@@ -109,7 +109,7 @@ fun SpeedDial(
         SubDial(
             onClick = { onClickCenter() },
             color = color,
-            icon = Icons.Default.Lock,
+            vector = Icons.Default.Lock,
             modifier = Modifier
                 .offset(x = centerX, y = centerY)
                 .zIndex(-1f)
@@ -118,7 +118,7 @@ fun SpeedDial(
         SubDial(
             onClick = { onClickRight() },
             color = color,
-            icon = Icons.Default.Lock,
+            vector = Icons.Default.Lock,
             modifier = Modifier
                 .offset(x = rightX, y = rightY)
                 .zIndex(-1f)
@@ -139,6 +139,7 @@ fun SpeedDial(
 fun ParentDial(
     onClick: () -> Unit,
     size: Dp = 96.dp,
+    vector: ImageVector = Icons.Default.Add,
     color: Color,
     modifier: Modifier = Modifier,
 ) {
@@ -152,7 +153,7 @@ fun ParentDial(
             contentColor = Color.Black,
         )
     ) {
-        Icon(Icons.Default.Add, contentDescription = "")
+        Icon(vector, contentDescription = "")
     }
 }
 
@@ -161,7 +162,7 @@ fun SubDial(
     onClick: () -> Unit,
     size: Dp = 72.dp,
     color: Color,
-    icon: ImageVector,
+    vector: ImageVector,
     modifier: Modifier = Modifier,
 ) {
     OutlinedButton(
@@ -174,7 +175,7 @@ fun SubDial(
             contentColor = Color.Black,
         )
     ) {
-        Icon(imageVector = icon, contentDescription = "")
+        Icon(imageVector = vector, contentDescription = "")
     }
 }
 
