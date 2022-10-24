@@ -32,25 +32,12 @@ import com.kabos.topicker.core.design.theme.TopickerTheme
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalPagerApi::class)
-@Preview
-@Composable
-fun PreviewTopicPager() {
-    val pagerState = rememberPagerState()
-    TopickerTheme() {
-        val color = listOf(Color.Blue, Color.Cyan, Color.Yellow, Color.Green)
-        TopicPager(
-            pagerState = pagerState,
-            pageCount = 10,
-            modifier = Modifier.fillMaxSize(),
-            pagerColors = color,
-            onLastPage = {}
-        ) { page ->
-            Text(text = "page is $page", modifier = Modifier.fillMaxHeight())
-        }
-    }
-}
-
+/**
+ * スワイプでBubble animationが起こるpager
+ * @param circleMinRadius 中心の小さな円の半径
+ * @param circleMaxRadius 背景(実際には巨大な円)の半径
+ * @param circleBottomPadding 中心の小さな円に対してのbottomPadding [SpeedDial]のheight/2にする
+ * */
 @ExperimentalPagerApi
 @Composable
 fun TopicPager(
@@ -59,11 +46,11 @@ fun TopicPager(
     modifier: Modifier,
     circleMinRadius: Dp = 48.dp,
     circleMaxRadius: Dp = 12000.dp,
-    circleBottomPadding: Dp = 140.dp,
-    pagerColors: List<Color>,
+    circleBottomPadding: Dp = 175.dp,
     vector: ImageVector = Icons.Default.ArrowForward,
+    pagerColors: List<Color>,
     onLastPage: () -> Unit,
-    content: @Composable PagerScope.(Int) -> Unit
+    content: @Composable PagerScope.(Int, Boolean) -> Unit
 ) {
     // circleWithIcon用のパラメーター
     val icon = rememberVectorPainter(vector)
@@ -107,7 +94,7 @@ fun TopicPager(
                 )
             }
         ) { page ->
-            content(page)
+            content(page, (circleWithIconRadius == circleMinRadius))
             if ((page + 1) == pageCount) onLastPage()
         }
     }
@@ -236,4 +223,23 @@ private val PagerState.nextSwipeablePageIndex
  * */
 fun lerp(start: Float, end: Float, fraction: Float): Float {
     return start + (end - start) * fraction
+}
+
+@ExperimentalPagerApi
+@Preview
+@Composable
+fun PreviewTopicPager() {
+    val pagerState = rememberPagerState()
+    TopickerTheme() {
+        val color = listOf(Color.Blue, Color.Cyan, Color.Yellow, Color.Green)
+        TopicPager(
+            pagerState = pagerState,
+            pageCount = 10,
+            modifier = Modifier.fillMaxSize(),
+            pagerColors = color,
+            onLastPage = {}
+        ) { page, _ ->
+            Text(text = "page is $page", modifier = Modifier.fillMaxHeight())
+        }
+    }
 }
