@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -32,25 +32,12 @@ import com.kabos.topicker.core.design.theme.TopickerTheme
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalPagerApi::class)
-@Preview
-@Composable
-fun PreviewTopicPager() {
-    val pagerState = rememberPagerState()
-    TopickerTheme() {
-        val color = listOf(Color.Blue, Color.Cyan, Color.Yellow, Color.Green)
-        TopicPager(
-            pagerState = pagerState,
-            pageCount = 10,
-            modifier = Modifier.fillMaxSize(),
-            pagerColors = color,
-            onLastPage = {}
-        ) { page ->
-            Text(text = "page is $page", modifier = Modifier.fillMaxHeight())
-        }
-    }
-}
-
+/**
+ * スワイプでBubble animationが起こるpager
+ * @param circleMinRadius 中心の小さな円の半径
+ * @param circleMaxRadius 背景(実際には巨大な円)の半径
+ * @param circleBottomPadding 中心の小さな円に対してのbottomPadding [SpeedDial]のheight/2にする
+ * */
 @ExperimentalPagerApi
 @Composable
 fun TopicPager(
@@ -59,11 +46,11 @@ fun TopicPager(
     modifier: Modifier,
     circleMinRadius: Dp = 48.dp,
     circleMaxRadius: Dp = 12000.dp,
-    circleBottomPadding: Dp = 140.dp,
+    circleBottomPadding: Dp = 175.dp,
+    vector: ImageVector = Icons.Default.Add,
     pagerColors: List<Color>,
-    vector: ImageVector = Icons.Default.ArrowForward,
     onLastPage: () -> Unit,
-    content: @Composable PagerScope.(Int) -> Unit
+    content: @Composable PagerScope.(EachPageState) -> Unit
 ) {
     // circleWithIcon用のパラメーター
     val icon = rememberVectorPainter(vector)
@@ -106,9 +93,16 @@ fun TopicPager(
                     iconSize = circleWithIconSize
                 )
             }
-        ) { page ->
-            content(page)
-            if ((page + 1) == pageCount) onLastPage()
+        ) { index ->
+            content(
+                EachPageState(
+                    index = index,
+                    isDisplaying = (pagerState.currentPage == index),
+                    dialColor = pagerState.getNextSwipeableCircleColor(pagerColors),
+                    shouldDisplayDial = (circleWithIconRadius == circleMinRadius)
+                )
+            )
+            if ((index + 1) == pageCount) onLastPage()
         }
     }
 }
@@ -153,7 +147,7 @@ fun DrawScope.drawCircleWithIcon(
             iconSize.toPx().let { iconSize ->
                 translate(
                     top = size.height - bottomPadding.toPx() - (iconSize / 2),
-                    left = -(iconSize / 2) + 8 // adding a magic number to optically center the icon
+                    left = -(iconSize / 2)
                 ) {
                     draw(size = Size(iconSize, iconSize))
                 }
@@ -236,4 +230,23 @@ private val PagerState.nextSwipeablePageIndex
  * */
 fun lerp(start: Float, end: Float, fraction: Float): Float {
     return start + (end - start) * fraction
+}
+
+@ExperimentalPagerApi
+@Preview
+@Composable
+fun PreviewTopicPager() {
+    val pagerState = rememberPagerState()
+    TopickerTheme() {
+        val color = listOf(Color.Blue, Color.Cyan, Color.Yellow, Color.Green)
+        TopicPager(
+            pagerState = pagerState,
+            pageCount = 10,
+            modifier = Modifier.fillMaxSize(),
+            pagerColors = color,
+            onLastPage = {}
+        ) { pagerState ->
+            Text(text = "page is ${pagerState.index}", modifier = Modifier.fillMaxHeight())
+        }
+    }
 }
