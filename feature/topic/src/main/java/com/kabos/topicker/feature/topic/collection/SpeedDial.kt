@@ -25,64 +25,72 @@ import androidx.compose.ui.zIndex
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * アニメーション付きのイカしたspeedDial
+ * @param toggleDial trueでdial展開、falseで閉じる
+ * @param onClickSpeedDial +ボタンの親Dial
+ * @param onClickLeft 左の子Dial
+ * @param onClickLeft 真上の子Dial
+ * @param onClickLeft 右の子Dial
+ * @param distance 展開時に広がる円の半径
+ * */
 @Composable
 fun SpeedDial(
-    isDisplayed: Boolean,
+    toggleDial: Boolean,
     onClickSpeedDial: () -> Unit,
     onClickLeft: () -> Unit,
     onClickCenter: () -> Unit,
     onClickRight: () -> Unit,
     color: Color,
-    distance: Int = 118,
+    distance: Int = 120,
+    height: Dp = 350.dp,
     modifier: Modifier = Modifier,
 ) {
 
     val leftRadius = 210
     val leftX by animateOuterCirclePositionXAsState(
-        isDisplayed = isDisplayed,
+        isDisplayed = toggleDial,
         radius = leftRadius,
         distance = distance
     )
     val leftY by animateOuterCirclePositionYAsState(
-        isDisplayed = isDisplayed,
+        isDisplayed = toggleDial,
         radius = leftRadius,
         distance = distance
     )
 
     val centerRadius = 270
     val centerX by animateOuterCirclePositionXAsState(
-        isDisplayed = isDisplayed,
+        isDisplayed = toggleDial,
         radius = centerRadius,
         distance = distance
     )
     val centerY by animateOuterCirclePositionYAsState(
-        isDisplayed = isDisplayed,
+        isDisplayed = toggleDial,
         radius = centerRadius,
         distance = distance
     )
 
     val rightRadius = 330
     val rightX by animateOuterCirclePositionXAsState(
-        isDisplayed = isDisplayed,
+        isDisplayed = toggleDial,
         radius = rightRadius,
         distance = distance
     )
     val rightY by animateOuterCirclePositionYAsState(
-        isDisplayed = isDisplayed,
+        isDisplayed = toggleDial,
         radius = rightRadius,
         distance = distance
     )
 
     val backCircleSize by animateDpAsState(
-        targetValue = if (isDisplayed) 240.dp else 0.dp,
+        targetValue = if (toggleDial) (distance * 2).dp else 0.dp,
         tween(500)
     )
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(350.dp)
+        modifier = modifier.fillMaxWidth().height(height)
     ) {
         ParentDial(
             onClick = { onClickSpeedDial() },
@@ -122,7 +130,7 @@ fun SpeedDial(
                 .size(backCircleSize)
                 .clip(CircleShape)
                 .border(width = 2.dp, color = Color.LightGray, shape = CircleShape)
-                .zIndex(-5f)
+                .zIndex(-10f)
         )
     }
 }
@@ -172,6 +180,11 @@ fun SubDial(
 
 /**
  * 外円上のx座標をθからアニメーション付きで算出する
+ * easingは↓のサイトで自作した
+ * https://cubic-bezier.com/#.27,1.16,.29,1.06
+ *
+ * @param radius 0~360の表示する位置の角度
+ * @param distance 展開後の移動距離
  * */
 @Composable
 fun animateOuterCirclePositionXAsState(
@@ -209,7 +222,7 @@ fun PreviewLiquidDial() {
         mutableStateOf(false)
     }
     SpeedDial(
-        isDisplayed = isDisplay,
+        toggleDial = isDisplay,
         onClickSpeedDial = { isDisplay = !isDisplay},
         onClickLeft = {},
         onClickCenter = {},
