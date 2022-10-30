@@ -66,14 +66,14 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:model"))
-    implementation(project(":core:data"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:datastore"))
-    implementation(project(":core:design"))
+    implementation(project(":core-model"))
+    implementation(project(":core-data"))
+    implementation(project(":core-domain"))
+    implementation(project(":core-datastore"))
+    implementation(project(":core-design"))
 
-    implementation(project(":feature:topic"))
-    implementation(project(":feature:collection"))
+    implementation(project(":feature-topic"))
+    implementation(project(":feature-collection"))
 
     testImplementation(libs.bundles.test.base)
     androidTestImplementation(libs.bundles.test.android)
