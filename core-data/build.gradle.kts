@@ -12,7 +12,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:model"))
+    implementation(project(":core-model"))
     implementation(project(":core-domain"))
     implementation(project(":core-datastore"))
 
