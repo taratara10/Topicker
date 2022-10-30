@@ -21,7 +21,7 @@ android {
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
-    implementation(project(":core:design"))
+    implementation(project(":core-design"))
 
     debugImplementation(libs.bundles.debug.compose)
 
