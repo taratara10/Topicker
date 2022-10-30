@@ -25,9 +25,9 @@ dependencies {
 
     debugImplementation(libs.bundles.debug.compose)
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.androidx.base)
     implementation(libs.bundles.androidx.compose)
-    implementation(libs.compose.lottie)
     implementation(libs.timber)
 
     implementation(libs.hilt.android)

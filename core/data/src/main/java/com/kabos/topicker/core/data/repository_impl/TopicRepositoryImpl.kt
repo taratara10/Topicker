@@ -1,7 +1,7 @@
 package com.kabos.topicker.core.data.repository_impl
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kabos.datastore.UserDataStore
+import com.kabos.topicker.core.datastore.UserDataStore
 import com.kabos.topicker.core.data.extension.toOwnTopic
 import com.kabos.topicker.core.data.extension.toTopic
 import com.kabos.topicker.core.domain.repository.TopicRepository

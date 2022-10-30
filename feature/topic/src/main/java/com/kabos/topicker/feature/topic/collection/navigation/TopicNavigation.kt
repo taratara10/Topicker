@@ -1,5 +1,6 @@
 package com.kabos.topicker.feature.topic.collection.navigation
 
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -11,6 +12,7 @@ object TopicNavigation: TopickerNavigationDestination {
     override val destination = "topic_destination"
 }
 
+@ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
 fun NavGraphBuilder.topicGraph(navigateToCollection: () -> Unit) {
     composable(route = TopicNavigation.route) {

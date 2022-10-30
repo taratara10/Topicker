@@ -30,8 +30,9 @@ dependencyResolutionManagement {
              * version
              * */
             version("compose", "1.2.1")
-            version("compose-material", "1.3.0-rc01")
+            version("compose-bom", "2022.10.00")
             version("compose-pager", "0.26.1-alpha")
+            version("compose-lifecycle", "2.6.0-alpha01")
 
             /** android core */
             alias("androidx-core").to("androidx.core:core-ktx:1.9.0")
@@ -39,21 +40,11 @@ dependencyResolutionManagement {
             bundle("androidx-base", listOf("androidx-core", "androidx-lifecycle"))
 
             /** compose */
-            alias("compose-ui")
-                .to("androidx.compose.ui", "ui")
-                .versionRef("compose")
-
-            alias("compose-ui-preview")
-                .to("androidx.compose.ui", "ui-tooling-preview")
-                .versionRef("compose")
-
-            alias("compose-livedata")
-                .to("androidx.compose.runtime", "runtime-livedata")
-                .versionRef("compose")
-
+            alias("compose-bom")
+                .to("androidx.compose", "compose-bom")
+                .versionRef("compose-bom")
             alias("compose-material")
-                .to("androidx.compose.material", "material")
-                .versionRef("compose-material")
+                .to("androidx.compose.material:material:1.3.0")
 
             alias("accompanist-pager")
                 .to("com.google.accompanist", "accompanist-pager")
@@ -62,19 +53,22 @@ dependencyResolutionManagement {
             alias("compose-activity").to("androidx.activity:activity-compose:1.6.0")
             alias("compose-navigation").to("androidx.navigation:navigation-compose:2.5.2")
             alias("compose-navigation-hilt").to("androidx.hilt:hilt-navigation-compose:1.0.0")
-            alias("compose-viewmodel").to("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-
+            alias("compose-viewmodel").to("androidx.lifecycle", "lifecycle-viewmodel-compose")
+                .versionRef("compose-lifecycle")
+            alias("compose-lifecycle").to("androidx.lifecycle", "lifecycle-runtime-compose")
+                .versionRef("compose-lifecycle")
+            alias("compose-lottie").to("com.airbnb.android:lottie-compose:5.2.0")
             bundle(
                 "androidx.compose",
                 listOf(
-                    "compose-ui",
-                    "compose-ui-preview",
                     "compose-material",
                     "compose-activity",
                     "compose-navigation",
                     "compose-navigation-hilt",
                     "compose-viewmodel",
+                    "compose-lifecycle",
                     "accompanist-pager",
+                    "compose-lottie",
                 )
             )
 
@@ -92,9 +86,6 @@ dependencyResolutionManagement {
             alias("firebase-bom").to("com.google.firebase:firebase-bom:30.3.1")
             alias("firebase-firestore").to("com.google.firebase:firebase-firestore-ktx:24.4.0")
             alias("firebase-await").to("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
-
-            /** lottie */
-            alias("compose-lottie").to("com.airbnb.android:lottie-compose:5.2.0")
 
             /** datastore */
             alias("datastore").to("androidx.datastore:datastore-preferences:1.0.0")

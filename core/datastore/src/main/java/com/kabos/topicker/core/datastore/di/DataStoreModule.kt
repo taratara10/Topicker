@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.kabos.datastore.UserDataStore
+import com.kabos.topicker.core.datastore.UserDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

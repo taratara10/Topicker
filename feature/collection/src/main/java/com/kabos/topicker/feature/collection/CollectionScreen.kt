@@ -17,6 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -26,12 +28,13 @@ import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.model.OwnTopic
 import timber.log.Timber
 
+@ExperimentalLifecycleComposeApi
 @Composable
 fun CollectionRoute(
     modifier: Modifier = Modifier,
     viewModel: CollectionViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.collectionUiState.collectAsState()
+    val uiState by viewModel.collectionUiState.collectAsStateWithLifecycle()
     CollectionScreen(
         topics = uiState.ownTopics
     )

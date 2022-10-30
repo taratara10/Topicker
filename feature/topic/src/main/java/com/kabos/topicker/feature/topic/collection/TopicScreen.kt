@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,16 +19,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.kabos.topicker.core.design.component.FavoriteButton
-import com.kabos.topicker.core.design.component.TopicAppBar
 import com.kabos.topicker.core.design.theme.*
 import com.kabos.topicker.core.model.OwnTopic
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
+@ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
 @Composable
 fun TopicRoute(
@@ -36,11 +39,11 @@ fun TopicRoute(
     navigateToCollection: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
-    val uiState by viewModel.topicUiState.collectAsState()
+    val uiState by viewModel.topicUiState.collectAsStateWithLifecycle()
 
     TopicScreen(
         pagerState = pagerState,
-        topics = uiState.screenTopics,
+        topicUiState = uiState,
         onLastPage = { viewModel.addTopic() },
         onClickFavorite = { id, isFavorite ->
             viewModel.updateFavoriteState(id, isFavorite)
@@ -54,7 +57,7 @@ fun TopicRoute(
 @Composable
 fun TopicScreen(
     pagerState: PagerState,
-    topics: List<OwnTopic>,
+    topicUiState: TopicUiState,
     onLastPage: () -> Unit,
     onClickFavorite: (Int, Boolean) -> Unit,
     onClickCollection: () -> Unit,
@@ -64,36 +67,45 @@ fun TopicScreen(
         Timber.d("--ss TopicPagerScreen Recomposition")
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        TopicAppBar(
-            modifier = Modifier
-                .wrapContentSize()
-                .statusBarsPadding()
-        )
-        TopicPager(
-            pagerState = pagerState,
-            pageCount = topics.size,
-            modifier = Modifier.fillMaxSize(),
-            pagerColors = topics.map { toColor(it.topicId) },
-            onLastPage = { onLastPage() }
-        ) { eachPageState ->
-            if (eachPageState.index == 0) {
-                TutorialContent(
-                    ownTopic = topics.first()
-                )
-            } else {
-                TopicContent(
-                    ownTopic = topics[eachPageState.index],
-                    isCurrentPageDisplaying = eachPageState.isDisplaying,
-                    shouldDisplayDial = eachPageState.shouldDisplayDial,
-                    dialColor = eachPageState.dialColor,
-                    onClickFavorite = { id, isFavorite ->
-                        onClickFavorite(id, isFavorite)
-                    },
-                    onClickCollection = { onClickCollection() }
-                )
+    when (topicUiState) {
+        TopicUiState.Loading -> {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        TopicUiState.Error -> {
+            Text(text = "Error")
+        }
+
+        is TopicUiState.Success -> {
+            val topics = topicUiState.screenTopics
+            TopicPager(
+                pagerState = pagerState,
+                pageCount = topics.size,
+                pagerColors = topics.map { toColor(it.topicId) },
+                onLastPage = { onLastPage() },
+                modifier = Modifier.fillMaxSize(),
+            ) { eachPageState ->
+                if (eachPageState.index == 0) {
+                    TutorialContent(
+                        ownTopic = topics.first()
+                    )
+                } else {
+                    TopicContent(
+                        ownTopic = topics[eachPageState.index],
+                        isCurrentPageDisplaying = eachPageState.isDisplaying,
+                        shouldDisplayDial = eachPageState.shouldDisplayDial,
+                        dialColor = eachPageState.dialColor,
+                        onClickFavorite = { id, isFavorite ->
+                            onClickFavorite(id, isFavorite)
+                        },
+                        onClickCollection = { onClickCollection() }
+                    )
+                }
             }
         }
     }
@@ -223,7 +235,7 @@ fun TopicCard(
     text: String,
     positionX: Dp = 0.dp,
     positionY: Dp = 0.dp,
-    rotate: Float = 0f
+    rotate: Float = 0f,
 ) {
     Card(
         elevation = 10.dp,
@@ -253,6 +265,28 @@ fun TopicCard(
 fun PreviewTopicCard() {
     TopickerTheme {
         TopicCard(text = "おもしろい話")
+    }
+}
+
+@ExperimentalPagerApi
+@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
+@Composable
+fun PreviewTopicScreen() {
+    val pagerState = rememberPagerState()
+    val uiStata = TopicUiState.Loading
+    val sample = OwnTopic(
+        topicId = 1,
+        title = "〇〇な話",
+        isFavorite = false,
+    )
+    TopickerTheme {
+        TopicScreen(
+            pagerState = pagerState,
+            topicUiState = uiStata,
+            onLastPage = {},
+            onClickFavorite = { _, _ -> },
+            onClickCollection = {},
+        )
     }
 }
 
