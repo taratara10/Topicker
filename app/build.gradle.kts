@@ -79,6 +79,7 @@ dependencies {
     androidTestImplementation(libs.bundles.test.android)
     debugImplementation(libs.bundles.debug.compose)
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.androidx.base)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.timber)
