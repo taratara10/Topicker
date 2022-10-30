@@ -27,7 +27,7 @@ class TopicViewModel @Inject constructor(
 
     private var _topicUiState: MutableStateFlow<TopicUiState> =
         MutableStateFlow(TopicUiState.Loading)
-    val topicUiState: StateFlow<TopicUiState> = _topicUiState
+    val topicUiState: StateFlow<TopicUiState> = _topicUiState.asStateFlow()
 
     /** topicScreenに表示しているtopic 1ページ目のtutorialは除く */
     private val screenTopicIds: MutableStateFlow<List<Int>> = MutableStateFlow(listOf())
@@ -62,7 +62,7 @@ class TopicViewModel @Inject constructor(
 
     fun addTopic() = viewModelScope.launch {
         val addTopicId = addScreenTopicId()
-        topicUseCase.addOwnTopicIfNeeded(addTopicId)
+        topicUseCase.addOwnTopicIfNeeded(addTopicId, )
     }
 
     fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {
