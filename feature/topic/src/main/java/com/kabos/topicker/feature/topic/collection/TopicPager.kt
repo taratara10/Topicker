@@ -43,12 +43,12 @@ import kotlin.math.absoluteValue
 fun TopicPager(
     pagerState: PagerState,
     pageCount: Int,
-    modifier: Modifier,
     circleMinRadius: Dp = 48.dp,
     circleMaxRadius: Dp = 12000.dp,
     circleBottomPadding: Dp = 175.dp,
     pagerColors: List<Color>,
     onLastPage: () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable PagerScope.(EachPageState) -> Unit
 ) {
     // circleWithIcon用のパラメーター
