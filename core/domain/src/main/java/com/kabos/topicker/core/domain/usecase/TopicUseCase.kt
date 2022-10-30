@@ -19,7 +19,7 @@ class TopicUseCase(
     }
 
     private val leadTopic = listOf(
-        OwnTopic(1, "sample1", false),
+        OwnTopic(10000, " Let's go! \uD83D\uDC49", false),
         OwnTopic(2, "sample2", false),
     )
 

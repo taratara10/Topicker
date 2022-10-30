@@ -80,7 +80,9 @@ fun TopicScreen(
             onLastPage = { onLastPage() }
         ) { eachPageState ->
             if (eachPageState.index == 0) {
-                TutorialContent()
+                TutorialContent(
+                    ownTopic = topics.first()
+                )
             } else {
                 TopicContent(
                     ownTopic = topics[eachPageState.index],
@@ -204,6 +206,7 @@ fun TopicContent(
 @Composable
 fun TutorialContent(
     modifier: Modifier = Modifier,
+    ownTopic: OwnTopic,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -211,9 +214,7 @@ fun TutorialContent(
     ) {
 
         Spacer(modifier = Modifier.height(120.dp))
-        TopicCard(
-            text = "Let's go! \uD83D\uDC49"
-        )
+        TopicCard(text = ownTopic.title)
     }
 }
 
@@ -282,11 +283,12 @@ fun PreviewTopicContent() {
 fun PreviewTutorialContent() {
     TopickerTheme {
         val sample = OwnTopic(
-            topicId = 1,
-            title = "〇〇な話",
-            isFavorite = false,
+            10000,
+            " Let's go! \uD83D\uDC49",
+            false
         )
         TutorialContent(
+            ownTopic = sample,
         )
     }
 }
