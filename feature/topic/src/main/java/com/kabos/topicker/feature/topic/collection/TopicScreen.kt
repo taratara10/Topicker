@@ -43,7 +43,7 @@ fun TopicRoute(
         topics = uiState.screenTopics,
         onLastPage = { viewModel.addTopic() },
         onClickFavorite = { id, isFavorite ->
-            viewModel.updateConversationState(id, isFavorite)
+            viewModel.updateFavoriteState(id, isFavorite)
         },
         onClickCollection = { navigateToCollection() }
     )
@@ -79,16 +79,22 @@ fun TopicScreen(
             pagerColors = topics.map { toColor(it.topicId) },
             onLastPage = { onLastPage() }
         ) { eachPageState ->
-            TopicContent(
-                ownTopic = topics[eachPageState.index],
-                isCurrentPageDisplaying = eachPageState.isDisplaying,
-                shouldDisplayDial = eachPageState.shouldDisplayDial,
-                dialColor = eachPageState.dialColor,
-                onClickFavorite = { id, isFavorite ->
-                    onClickFavorite(id, isFavorite)
-                },
-                onClickCollection = { onClickCollection() }
-            )
+            if (eachPageState.index == 0) {
+                TutorialContent(
+                    ownTopic = topics.first()
+                )
+            } else {
+                TopicContent(
+                    ownTopic = topics[eachPageState.index],
+                    isCurrentPageDisplaying = eachPageState.isDisplaying,
+                    shouldDisplayDial = eachPageState.shouldDisplayDial,
+                    dialColor = eachPageState.dialColor,
+                    onClickFavorite = { id, isFavorite ->
+                        onClickFavorite(id, isFavorite)
+                    },
+                    onClickCollection = { onClickCollection() }
+                )
+            }
         }
     }
 }
@@ -195,7 +201,21 @@ fun TopicContent(
             toggleSpeedDial = false
         }
     }
+}
 
+@Composable
+fun TutorialContent(
+    modifier: Modifier = Modifier,
+    ownTopic: OwnTopic,
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Spacer(modifier = Modifier.height(120.dp))
+        TopicCard(text = ownTopic.title)
+    }
 }
 
 @Composable
@@ -219,12 +239,15 @@ fun TopicCard(
             text = text,
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
-            maxLines = 1,
+            maxLines = 2,
             modifier = Modifier.padding(vertical = 72.dp)
         )
     }
 }
 
+/**
+ * Preview
+ * */
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTopicCard() {
@@ -250,6 +273,22 @@ fun PreviewTopicContent() {
             dialColor = Color.Green,
             onClickFavorite = { _, _ -> },
             onClickCollection = {},
+        )
+    }
+}
+
+@ExperimentalPagerApi
+@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
+@Composable
+fun PreviewTutorialContent() {
+    TopickerTheme {
+        val sample = OwnTopic(
+            10000,
+            " Let's go! \uD83D\uDC49",
+            false
+        )
+        TutorialContent(
+            ownTopic = sample,
         )
     }
 }

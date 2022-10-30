@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -20,7 +21,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,13 +47,15 @@ fun TopicPager(
     circleMinRadius: Dp = 48.dp,
     circleMaxRadius: Dp = 12000.dp,
     circleBottomPadding: Dp = 175.dp,
-    vector: ImageVector = Icons.Default.Add,
     pagerColors: List<Color>,
     onLastPage: () -> Unit,
     content: @Composable PagerScope.(EachPageState) -> Unit
 ) {
     // circleWithIcon用のパラメーター
+    // 1ページ目はtutorialなので「→」、それ以外は「+」
+    val vector = if (pagerState.currentPage == 1) Icons.Default.Add else Icons.Default.ArrowForward
     val icon = rememberVectorPainter(vector)
+
     val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
     val circleWithIconRadius by animateDpAsState(
         targetValue = if (pagerState.shouldHideBubble(isDragged)) 0.dp else circleMinRadius,

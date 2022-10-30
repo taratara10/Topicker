@@ -32,7 +32,7 @@ class TopicViewModel @Inject constructor(
         topicUseCase.addScreenTopics()
     }
 
-    fun updateConversationState(id: Int, isFavorite: Boolean) = viewModelScope.launch{
+    fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch{
         topicUseCase.updateFavoriteState(id, isFavorite)
     }
 }
