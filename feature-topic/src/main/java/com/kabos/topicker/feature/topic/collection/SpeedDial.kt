@@ -13,7 +13,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -107,25 +108,25 @@ fun SpeedDial(
         SubDial(
             onClick = { onClickLeft() },
             color = color,
-            vector = Icons.Default.Lock,
+            vector = Icons.Default.Menu,
             modifier = Modifier
                 .offset(x = leftX, y = leftY)
                 .zIndex(-1f)
         )
 
-        SubDial(
-            onClick = { onClickCenter() },
-            color = color,
-            vector = Icons.Default.Lock,
-            modifier = Modifier
-                .offset(x = centerX, y = centerY)
-                .zIndex(-1f)
-        )
+//        SubDial(
+//            onClick = { onClickCenter() },
+//            color = color,
+//            vector = Icons.Default.Lock,
+//            modifier = Modifier
+//                .offset(x = centerX, y = centerY)
+//                .zIndex(-1f)
+//        )
 
         SubDial(
             onClick = { onClickRight() },
             color = color,
-            vector = Icons.Default.Lock,
+            vector = Icons.Default.Settings,
             modifier = Modifier
                 .offset(x = rightX, y = rightY)
                 .zIndex(-1f)

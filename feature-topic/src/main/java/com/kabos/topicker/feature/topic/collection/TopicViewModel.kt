@@ -19,7 +19,7 @@ class TopicViewModel @Inject constructor(
 
     companion object {
         /** topicのid範囲 ver1.0では360個 */
-        val RANGE = 0..360
+        const val NUMBER_OF_TOPICS = 360
 
         /** 1ページ目に表示するトピック */
         val TUTORIAL = listOf(OwnTopic(9999, " Let's go! \uD83D\uDC49", false))
@@ -70,7 +70,8 @@ class TopicViewModel @Inject constructor(
     }
 
     private fun addScreenTopicId(): Int {
-        val randomId = RANGE.random()
+        /* (0..360).random()だと毎回固定値になってしまう */
+        val randomId = (System.currentTimeMillis() % NUMBER_OF_TOPICS).toInt()
         screenTopicIds.value += randomId
         return randomId
     }

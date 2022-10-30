@@ -27,4 +27,5 @@ dependencies {
     implementation(libs.bundles.androidx.base)
     implementation(libs.bundles.androidx.compose)
     debugImplementation(libs.bundles.debug.compose)
+    testImplementation(libs.bundles.test.base)
 }
