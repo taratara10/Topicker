@@ -43,7 +43,7 @@ fun TopicRoute(
         topics = uiState.screenTopics,
         onLastPage = { viewModel.addTopic() },
         onClickFavorite = { id, isFavorite ->
-            viewModel.updateConversationState(id, isFavorite)
+            viewModel.updateFavoriteState(id, isFavorite)
         },
         onClickCollection = { navigateToCollection() }
     )
