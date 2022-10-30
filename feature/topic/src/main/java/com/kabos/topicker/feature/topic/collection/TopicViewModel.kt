@@ -17,13 +17,13 @@ class TopicViewModel @Inject constructor(
     private val topicUseCase: TopicUseCase
 ) : ViewModel() {
 
-    private val _topicUiState: MutableStateFlow<TopicUiState> = MutableStateFlow(TopicUiState())
+    private val _topicUiState: MutableStateFlow<TopicUiState> = MutableStateFlow(TopicUiState.Loading)
     val topicUiState: StateFlow<TopicUiState> = _topicUiState
 
     init {
         viewModelScope.launch {
             topicUseCase.screenTopics.collect { topics ->
-                _topicUiState.emit(TopicUiState(topics))
+                _topicUiState.emit(TopicUiState.Success(topics))
             }
         }
     }
@@ -37,9 +37,8 @@ class TopicViewModel @Inject constructor(
     }
 }
 
-/**
- * @param screenTopics 画面に表示するトピック
- * */
-data class TopicUiState(
-    val screenTopics: List<OwnTopic> = listOf()
-)
+sealed interface TopicUiState {
+    data class Success(val screenTopics: List<OwnTopic>): TopicUiState
+    object Loading: TopicUiState
+    object Error: TopicUiState
+}

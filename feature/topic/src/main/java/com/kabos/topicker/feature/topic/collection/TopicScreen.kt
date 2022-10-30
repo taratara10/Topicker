@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -36,11 +37,12 @@ fun TopicRoute(
     navigateToCollection: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
+    // todo lifecycle
     val uiState by viewModel.topicUiState.collectAsState()
 
     TopicScreen(
         pagerState = pagerState,
-        topics = uiState.screenTopics,
+        topicUiState = uiState,
         onLastPage = { viewModel.addTopic() },
         onClickFavorite = { id, isFavorite ->
             viewModel.updateFavoriteState(id, isFavorite)
@@ -54,7 +56,7 @@ fun TopicRoute(
 @Composable
 fun TopicScreen(
     pagerState: PagerState,
-    topics: List<OwnTopic>,
+    topicUiState: TopicUiState,
     onLastPage: () -> Unit,
     onClickFavorite: (Int, Boolean) -> Unit,
     onClickCollection: () -> Unit,
@@ -72,28 +74,41 @@ fun TopicScreen(
                 .wrapContentSize()
                 .statusBarsPadding()
         )
-        TopicPager(
-            pagerState = pagerState,
-            pageCount = topics.size,
-            modifier = Modifier.fillMaxSize(),
-            pagerColors = topics.map { toColor(it.topicId) },
-            onLastPage = { onLastPage() }
-        ) { eachPageState ->
-            if (eachPageState.index == 0) {
-                TutorialContent(
-                    ownTopic = topics.first()
-                )
-            } else {
-                TopicContent(
-                    ownTopic = topics[eachPageState.index],
-                    isCurrentPageDisplaying = eachPageState.isDisplaying,
-                    shouldDisplayDial = eachPageState.shouldDisplayDial,
-                    dialColor = eachPageState.dialColor,
-                    onClickFavorite = { id, isFavorite ->
-                        onClickFavorite(id, isFavorite)
-                    },
-                    onClickCollection = { onClickCollection() }
-                )
+        when (topicUiState) {
+            TopicUiState.Loading -> {
+                CircularProgressIndicator()
+            }
+
+            TopicUiState.Error -> {
+                Text(text = "Error")
+            }
+
+            is TopicUiState.Success -> {
+                val topics = topicUiState.screenTopics
+                TopicPager(
+                    pagerState = pagerState,
+                    pageCount = topics.size,
+                    modifier = Modifier.fillMaxSize(),
+                    pagerColors = topics.map { toColor(it.topicId) },
+                    onLastPage = { onLastPage() }
+                ) { eachPageState ->
+                    if (eachPageState.index == 0) {
+                        TutorialContent(
+                            ownTopic = topics.first()
+                        )
+                    } else {
+                        TopicContent(
+                            ownTopic = topics[eachPageState.index],
+                            isCurrentPageDisplaying = eachPageState.isDisplaying,
+                            shouldDisplayDial = eachPageState.shouldDisplayDial,
+                            dialColor = eachPageState.dialColor,
+                            onClickFavorite = { id, isFavorite ->
+                                onClickFavorite(id, isFavorite)
+                            },
+                            onClickCollection = { onClickCollection() }
+                        )
+                    }
+                }
             }
         }
     }
