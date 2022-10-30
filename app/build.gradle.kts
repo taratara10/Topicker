@@ -68,7 +68,7 @@ android {
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":core-data"))
-    implementation(project(":core:domain"))
+    implementation(project(":core-domain"))
     implementation(project(":core-datastore"))
     implementation(project(":core-design"))
 

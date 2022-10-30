@@ -122,7 +122,7 @@ rootProject.name = "Topicker"
 include(":app")
 include(":core:model")
 include(":core-data")
-include(":core:domain")
+include(":core-domain")
 include(":core-datastore")
 include(":core-design")
 include(":feature:topic")
