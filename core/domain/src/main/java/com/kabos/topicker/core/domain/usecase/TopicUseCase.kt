@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class TopicUseCase(
     private val topicRepository: TopicRepository,
-    private val ioScope: CoroutineScope
+    private val ioScope: CoroutineScope,
 ) {
 
     private val _ownTopics: MutableStateFlow<List<OwnTopic>> = MutableStateFlow(listOf())
@@ -30,11 +30,8 @@ class TopicUseCase(
         return topicRepository.getOwnTopics()
     }
 
-    /**
-     * TODO
-     * */
+    // TODO ErrorHandling
     suspend fun addOwnTopicIfNeeded(topicId: Int) {
-        // TODO ErrorHandling
         val topic =
             topicRepository.getTopicById(topicId) ?: throw Exception("Cannot add topics")
 

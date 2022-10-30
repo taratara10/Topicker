@@ -8,6 +8,7 @@ import com.kabos.topicker.core.model.OwnTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @Stable
@@ -15,13 +16,13 @@ import javax.inject.Inject
 class TopicViewModel @Inject constructor(
     private val topicUseCase: TopicUseCase,
 ) : ViewModel() {
+
     companion object {
         /** topicのid範囲 ver1.0では360個 */
         val RANGE = 0..360
-        val TUTORIAL = listOf(
-            OwnTopic(10000, " Let's go! \uD83D\uDC49", false),
-            OwnTopic(100001, "sample2", false),
-        )
+
+        /** 1ページ目に表示するトピック */
+        val TUTORIAL = listOf(OwnTopic(9999, " Let's go! \uD83D\uDC49", false))
     }
 
     private var _topicUiState: MutableStateFlow<TopicUiState> =
@@ -32,22 +33,31 @@ class TopicViewModel @Inject constructor(
     private val screenTopicIds: MutableStateFlow<List<Int>> = MutableStateFlow(listOf())
 
     init {
-        viewModelScope.launch {
+        /* 初期表示時に[topicUiState.screenTopics]が2つないとOutOfIndexになるので最初にTopicを追加する */
+        addScreenTopicId()
+        initTopicUiState()
+    }
 
-            topicUseCase.getOwnTopics().combine(screenTopicIds) { ownTopics, screenTopicIds ->
-                TopicUiState.Success(
-                    TUTORIAL + ownTopics.filter { screenTopicIds.contains(it.topicId) }
-                )
-                // todo errorは？
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = TopicUiState.Loading,
-            ).collect {
-                _topicUiState.value = it
+    /**
+     * [screenTopicIds]の対象topicを[OwnTopic]に変換してUiStateにまとめる
+     * todo errorの通知はどうするか runCatchingするかどうか
+     * */
+    private fun initTopicUiState() = viewModelScope.launch {
+        screenTopicIds.combine(topicUseCase.getOwnTopics()) { screenTopicIds, ownTopics ->
+            val result = screenTopicIds.mapNotNull { id ->
+                ownTopics.find { it.topicId == id }
+            }
+            TopicUiState.Success(TUTORIAL + result)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = TopicUiState.Loading,
+        ).collect {
+            _topicUiState.value = it
+            if (it is TopicUiState.Success) {
+                Timber.d("-- ${it.screenTopics.map { it.title }}")
             }
         }
-        addScreenTopicId()
     }
 
     fun addTopic() = viewModelScope.launch {
