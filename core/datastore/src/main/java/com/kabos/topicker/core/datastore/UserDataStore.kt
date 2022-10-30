@@ -1,4 +1,4 @@
-package com.kabos.datastore
+package com.kabos.topicker.core.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
