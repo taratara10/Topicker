@@ -25,7 +25,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.kabos.topicker.core.design.component.FavoriteButton
-import com.kabos.topicker.core.design.theme.*
+import com.kabos.topicker.core.design.theme.TopickerTheme
+import com.kabos.topicker.core.design.theme.generatePagerColors
 import com.kabos.topicker.core.model.OwnTopic
 import kotlinx.coroutines.delay
 import timber.log.Timber
@@ -86,7 +87,7 @@ fun TopicScreen(
             TopicPager(
                 pagerState = pagerState,
                 pageCount = topics.size,
-                pagerColors = topics.map { toColor(it.topicId) },
+                pagerColors = generatePagerColors(topics.size, topics[1].topicId),
                 onLastPage = { onLastPage() },
                 modifier = Modifier.fillMaxSize(),
             ) { eachPageState ->
@@ -108,22 +109,6 @@ fun TopicScreen(
                 }
             }
         }
-    }
-}
-
-// TODO 仮置き
-private fun toColor(id: Int): Color {
-    return when (id % 10) {
-        1 -> LightBlue100
-        2 -> Blue100
-        3 -> Indigo100
-        4 -> DeepOrange100
-        5 -> DeepPurple100
-        6 -> Pink100
-        7 -> Red100
-        8 -> Cyan100
-        9 -> Green100
-        else -> Color.White
     }
 }
 
