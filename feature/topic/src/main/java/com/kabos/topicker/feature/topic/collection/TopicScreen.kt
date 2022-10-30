@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
@@ -28,6 +30,7 @@ import com.kabos.topicker.core.model.OwnTopic
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
+@ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
 @Composable
 fun TopicRoute(
@@ -36,8 +39,7 @@ fun TopicRoute(
     navigateToCollection: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
-    // todo lifecycle
-    val uiState by viewModel.topicUiState.collectAsState()
+    val uiState by viewModel.topicUiState.collectAsStateWithLifecycle()
 
     TopicScreen(
         pagerState = pagerState,

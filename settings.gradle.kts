@@ -31,8 +31,8 @@ dependencyResolutionManagement {
              * */
             version("compose", "1.2.1")
             version("compose-bom", "2022.10.00")
-            version("compose-material", "1.3.0-rc01")
             version("compose-pager", "0.26.1-alpha")
+            version("compose-lifecycle", "2.6.0-alpha01")
 
             /** android core */
             alias("androidx-core").to("androidx.core:core-ktx:1.9.0")
@@ -44,8 +44,7 @@ dependencyResolutionManagement {
                 .to("androidx.compose", "compose-bom")
                 .versionRef("compose-bom")
             alias("compose-material")
-                .to("androidx.compose.material", "material")
-                .versionRef("compose-material")
+                .to("androidx.compose.material:material:1.3.0")
 
             alias("accompanist-pager")
                 .to("com.google.accompanist", "accompanist-pager")
@@ -54,7 +53,10 @@ dependencyResolutionManagement {
             alias("compose-activity").to("androidx.activity:activity-compose:1.6.0")
             alias("compose-navigation").to("androidx.navigation:navigation-compose:2.5.2")
             alias("compose-navigation-hilt").to("androidx.hilt:hilt-navigation-compose:1.0.0")
-            alias("compose-viewmodel").to("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+            alias("compose-viewmodel").to("androidx.lifecycle", "lifecycle-viewmodel-compose")
+                .versionRef("compose-lifecycle")
+            alias("compose-lifecycle").to("androidx.lifecycle", "lifecycle-runtime-compose")
+                .versionRef("compose-lifecycle")
             alias("compose-lottie").to("com.airbnb.android:lottie-compose:5.2.0")
             bundle(
                 "androidx.compose",
@@ -64,6 +66,7 @@ dependencyResolutionManagement {
                     "compose-navigation",
                     "compose-navigation-hilt",
                     "compose-viewmodel",
+                    "compose-lifecycle",
                     "accompanist-pager",
                     "compose-lottie",
                 )

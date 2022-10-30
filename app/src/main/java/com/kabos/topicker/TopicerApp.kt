@@ -5,11 +5,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.kabos.topicker.navigation.TopicNavHost
 import com.kabos.topicker.core.design.theme.TopickerTheme
+import com.kabos.topicker.navigation.TopicNavHost
 
+@ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
 @Composable
 fun TopickerApp() {

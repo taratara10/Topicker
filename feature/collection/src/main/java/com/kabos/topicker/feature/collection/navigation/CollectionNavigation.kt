@@ -1,5 +1,6 @@
 package com.kabos.topicker.feature.collection.navigation
 
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.kabos.domain.navigation.TopickerNavigationDestination
@@ -10,6 +11,7 @@ object CollectionDestination: TopickerNavigationDestination {
     override val destination = "collection_destination"
 }
 
+@ExperimentalLifecycleComposeApi
 fun NavGraphBuilder.collectionGraph() {
     composable(route = CollectionDestination.route) {
         CollectionRoute()
