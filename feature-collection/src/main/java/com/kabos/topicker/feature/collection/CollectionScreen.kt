@@ -58,7 +58,6 @@ internal fun CollectionScreen(
     var clickedTopicId by remember {
         mutableStateOf(0)
     }
-
     Scaffold(
         backgroundColor = Lime100,
         topBar = {
@@ -72,7 +71,7 @@ internal fun CollectionScreen(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(innerPadding)
-                .padding(top = 16.dp),
+                .padding(top = 16.dp) ,
             horizontalAlignment = Alignment.CenterHorizontally,
             state = scrollableState
         ) {
