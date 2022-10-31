@@ -7,9 +7,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +24,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.topicker.core.design.R
 import com.kabos.topicker.core.design.component.TopicAppBar
+import com.kabos.topicker.core.design.theme.Lime100
 import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.model.OwnTopic
 import timber.log.Timber
@@ -31,28 +32,36 @@ import timber.log.Timber
 @ExperimentalLifecycleComposeApi
 @Composable
 fun CollectionRoute(
-    modifier: Modifier = Modifier,
-    viewModel: CollectionViewModel = hiltViewModel()
+    popBack: () -> Unit,
+    viewModel: CollectionViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.collectionUiState.collectAsStateWithLifecycle()
     CollectionScreen(
-        topics = uiState.ownTopics
+        topics = uiState.ownTopics,
+        popBack = { popBack() },
     )
 }
 
 @Composable
 internal fun CollectionScreen(
     topics: List<OwnTopic>,
-    modifier: Modifier = Modifier,
+    popBack: () -> Unit,
 ) {
     val scrollableState = rememberLazyListState()
-
-    Column(modifier = modifier.statusBarsPadding()) {
-        TopicAppBar()
+    Scaffold(
+        backgroundColor = Lime100,
+        topBar = {
+            TopicAppBar(
+                title = "集めた話題",
+                popBack = { popBack() }
+            )
+        },
+    ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(top = 16.dp),
+                .padding(innerPadding)
+                .padding(top = 16.dp) ,
             horizontalAlignment = Alignment.CenterHorizontally,
             state = scrollableState
         ) {
@@ -68,7 +77,6 @@ internal fun CollectionScreen(
             }
         }
     }
-
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
@@ -79,7 +87,10 @@ private fun PreviewCollectionScreen() {
         OwnTopic(2, "sample 2", true)
     )
     TopickerTheme(darkTheme = false) {
-        CollectionScreen(topics = sample)
+        CollectionScreen(
+            topics = sample,
+            popBack = {}
+        )
     }
 }
 
@@ -92,11 +103,11 @@ private fun CollectionCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        elevation = 10.dp,
+        elevation = 4.dp,
         shape = RoundedCornerShape(10.dp),
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable { onClick() }
     ) {
         Row(
@@ -105,13 +116,13 @@ private fun CollectionCard(
         ) {
             Text(
                 text = text,
-                fontSize = 16.sp,
+                fontSize = 20.sp,
                 maxLines = 1,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .wrapContentWidth(Alignment.Start)
-                    .padding(start = 8.dp)
-                    .padding(vertical = 8.dp),
+                    .padding(start = 16.dp)
+                    .padding(vertical = 16.dp),
             )
             FavoriteIcon(
                 isFavorite = isFavorite,
@@ -133,8 +144,8 @@ private fun FavoriteIcon(
         composition = composition,
         progress = { if (isFavorite) 1f else 0f },
         modifier = modifier
-            .height(32.dp)
-            .width(32.dp)
+            .height(48.dp)
+            .width(48.dp)
             .wrapContentWidth(Alignment.End)
     )
 }

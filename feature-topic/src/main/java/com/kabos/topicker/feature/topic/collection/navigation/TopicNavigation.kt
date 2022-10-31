@@ -1,5 +1,6 @@
 package com.kabos.topicker.feature.topic.collection.navigation
 
+import android.graphics.Color
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -14,8 +15,12 @@ object TopicNavigation: TopickerNavigationDestination {
 
 @ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
-fun NavGraphBuilder.topicGraph(navigateToCollection: () -> Unit) {
+fun NavGraphBuilder.topicGraph(
+    navigateToCollection: () -> Unit,
+    setStatusBarColor: (Int) -> Unit,
+) {
     composable(route = TopicNavigation.route) {
+        setStatusBarColor(Color.TRANSPARENT)
         TopicRoute(
             navigateToCollection = navigateToCollection
         )
