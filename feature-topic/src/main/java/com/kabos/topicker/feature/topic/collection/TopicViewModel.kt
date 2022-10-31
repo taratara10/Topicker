@@ -47,7 +47,11 @@ class TopicViewModel @Inject constructor(
             val result = screenTopicIds.mapNotNull { id ->
                 ownTopics.find { it.topicId == id }
             }
-            TopicUiState.Success(TUTORIAL + result)
+            if (result.isEmpty()) {
+                TopicUiState.Loading
+            } else {
+                TopicUiState.Success(TUTORIAL + result)
+            }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
