@@ -27,6 +27,8 @@ fun TopicNavHost(
         topicGraph(
             navigateToCollection = { navHostController.navigate(CollectionDestination.route)}
         )
-        collectionGraph()
+        collectionGraph(
+            popBack = {navHostController.popBackStack()}
+        )
     }
 }

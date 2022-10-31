@@ -12,8 +12,8 @@ object CollectionDestination: TopickerNavigationDestination {
 }
 
 @ExperimentalLifecycleComposeApi
-fun NavGraphBuilder.collectionGraph() {
+fun NavGraphBuilder.collectionGraph(popBack: () -> Unit) {
     composable(route = CollectionDestination.route) {
-        CollectionRoute()
+        CollectionRoute(popBack = { popBack() })
     }
 }
