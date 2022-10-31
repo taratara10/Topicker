@@ -1,6 +1,5 @@
 package com.kabos.topicker.feature.collection
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,13 +33,12 @@ import timber.log.Timber
 @Composable
 fun CollectionRoute(
     popBack: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: CollectionViewModel = hiltViewModel()
+    viewModel: CollectionViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.collectionUiState.collectAsStateWithLifecycle()
     CollectionScreen(
         topics = uiState.ownTopics,
-        popBack = { popBack() }
+        popBack = { popBack() },
     )
 }
 
@@ -47,19 +46,22 @@ fun CollectionRoute(
 internal fun CollectionScreen(
     topics: List<OwnTopic>,
     popBack: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyListState()
-
-    Column(modifier = modifier.background(Lime100)) {
-        TopicAppBar(
-            title = "集めた話題",
-            popBack = { popBack() }
-        )
+    Scaffold(
+        backgroundColor = Lime100,
+        topBar = {
+            TopicAppBar(
+                title = "集めた話題",
+                popBack = { popBack() }
+            )
+        },
+    ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(top = 16.dp),
+                .padding(innerPadding)
+                .padding(top = 16.dp) ,
             horizontalAlignment = Alignment.CenterHorizontally,
             state = scrollableState
         ) {
