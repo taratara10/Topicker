@@ -33,8 +33,6 @@ class TopicViewModel @Inject constructor(
     private val screenTopicIds: MutableStateFlow<List<Int>> = MutableStateFlow(listOf())
 
     init {
-        /* 初期表示時に[topicUiState.screenTopics]が2つないとOutOfIndexになるので最初にTopicを追加する */
-        addScreenTopicId()
         initTopicUiState()
     }
 
@@ -48,6 +46,7 @@ class TopicViewModel @Inject constructor(
                 ownTopics.find { it.topicId == id }
             }
             if (result.isEmpty()) {
+                addScreenTopicId()
                 TopicUiState.Loading
             } else {
                 TopicUiState.Success(TUTORIAL + result)

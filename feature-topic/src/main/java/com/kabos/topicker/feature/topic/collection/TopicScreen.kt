@@ -6,7 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,9 +20,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.airbnb.lottie.compose.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.kabos.topicker.core.design.R
 import com.kabos.topicker.core.design.component.FavoriteButton
 import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.design.theme.generatePagerColors
@@ -74,7 +75,7 @@ fun TopicScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                CircularProgressIndicator()
+                BubbleLoading()
             }
         }
 
@@ -198,6 +199,20 @@ fun TopicContent(
             toggleSpeedDial = false
         }
     }
+}
+
+@Composable
+fun BubbleLoading(modifier: Modifier = Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_bubbles))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+    )
+    LottieAnimation(
+        composition = composition,
+        progress = { progress },
+        modifier = modifier
+    )
 }
 
 @Composable
