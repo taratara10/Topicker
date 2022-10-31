@@ -9,13 +9,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,11 +24,12 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.topicker.core.design.R
+import com.kabos.topicker.core.design.component.FavoriteButton
 import com.kabos.topicker.core.design.component.TopicAppBar
 import com.kabos.topicker.core.design.theme.Lime100
 import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.model.OwnTopic
-import timber.log.Timber
+import com.kabos.topicker.core.model.previewOwnTopics
 
 @ExperimentalLifecycleComposeApi
 @Composable
@@ -39,6 +41,7 @@ fun CollectionRoute(
     CollectionScreen(
         topics = uiState.ownTopics,
         popBack = { popBack() },
+        onClickFavorite = { id, isFavotire -> viewModel.updateFavoriteState(id, isFavotire) }
     )
 }
 
@@ -46,8 +49,16 @@ fun CollectionRoute(
 internal fun CollectionScreen(
     topics: List<OwnTopic>,
     popBack: () -> Unit,
+    onClickFavorite: (Int, Boolean) -> Unit,
 ) {
     val scrollableState = rememberLazyListState()
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+    var clickedTopicId by remember {
+        mutableStateOf(0)
+    }
+
     Scaffold(
         backgroundColor = Lime100,
         topBar = {
@@ -61,7 +72,7 @@ internal fun CollectionScreen(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(innerPadding)
-                .padding(top = 16.dp) ,
+                .padding(top = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             state = scrollableState
         ) {
@@ -70,9 +81,22 @@ internal fun CollectionScreen(
                     text = topic.title,
                     isFavorite = topic.isFavorite,
                     onClick = {
-                        Timber.d("topicId = ${topic.topicId}")
+                        clickedTopicId = topic.topicId
+                        showDialog = true
                     },
                     modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+        }
+
+        if (showDialog) {
+            topics.find { it.topicId == clickedTopicId }?.let { selectedTopic ->
+                CardDialog(
+                    ownTopic = selectedTopic,
+                    onClickFavorite = { isFavorite ->
+                        onClickFavorite(selectedTopic.topicId, isFavorite)
+                    },
+                    onDismiss = { showDialog = false }
                 )
             }
         }
@@ -89,7 +113,8 @@ private fun PreviewCollectionScreen() {
     TopickerTheme(darkTheme = false) {
         CollectionScreen(
             topics = sample,
-            popBack = {}
+            popBack = {},
+            onClickFavorite = { _, _ -> }
         )
     }
 }
@@ -150,10 +175,57 @@ private fun FavoriteIcon(
     )
 }
 
+@Composable
+fun CardDialog(
+    ownTopic: OwnTopic,
+    onClickFavorite: (Boolean) -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Card(
+            elevation = 10.dp,
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .wrapContentHeight(Alignment.CenterVertically)
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = ownTopic.title,
+                    fontSize = 30.sp,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    modifier = Modifier.padding(vertical = 48.dp)
+                )
+                FavoriteButton(
+                    isFavorite = ownTopic.isFavorite,
+                    onClick = { isFavorite -> onClickFavorite(isFavorite) },
+                )
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun PreviewCollectionCard() {
     TopickerTheme {
         CollectionCard(text = "test test", isFavorite = true, onClick = {})
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewCardDialog() {
+    TopickerTheme {
+        CardDialog(
+            ownTopic = previewOwnTopics.first(),
+            onClickFavorite = { _ -> },
+            onDismiss = {},
+        )
     }
 }

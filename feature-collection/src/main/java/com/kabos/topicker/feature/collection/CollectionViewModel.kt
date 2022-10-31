@@ -27,6 +27,10 @@ class CollectionViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {
+        topicUseCase.updateFavoriteState(id, isFavorite)
+    }
 }
 
 data class CollectionUiState(
