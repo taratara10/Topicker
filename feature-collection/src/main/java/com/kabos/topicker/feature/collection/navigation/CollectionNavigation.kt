@@ -1,5 +1,6 @@
 package com.kabos.topicker.feature.collection.navigation
 
+import android.graphics.Color
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -12,8 +13,12 @@ object CollectionDestination: TopickerNavigationDestination {
 }
 
 @ExperimentalLifecycleComposeApi
-fun NavGraphBuilder.collectionGraph(popBack: () -> Unit) {
+fun NavGraphBuilder.collectionGraph(
+    popBack: () -> Unit,
+    setStatusBarColor: (Int) -> Unit,
+) {
     composable(route = CollectionDestination.route) {
+        setStatusBarColor(Color.WHITE)
         CollectionRoute(popBack = { popBack() })
     }
 }
