@@ -24,6 +24,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.topicker.core.design.R
+import com.kabos.topicker.core.design.component.BubbleLoading
 import com.kabos.topicker.core.design.component.FavoriteButton
 import com.kabos.topicker.core.design.component.TopicAppBar
 import com.kabos.topicker.core.design.theme.Lime100
@@ -39,15 +40,15 @@ fun CollectionRoute(
 ) {
     val uiState by viewModel.collectionUiState.collectAsStateWithLifecycle()
     CollectionScreen(
-        topics = uiState.ownTopics,
+        uiState = uiState,
         popBack = { popBack() },
-        onClickFavorite = { id, isFavotire -> viewModel.updateFavoriteState(id, isFavotire) }
+        onClickFavorite = { id, isFavorite -> viewModel.updateFavoriteState(id, isFavorite) }
     )
 }
 
 @Composable
 internal fun CollectionScreen(
-    topics: List<OwnTopic>,
+    uiState: CollectionUiState,
     popBack: () -> Unit,
     onClickFavorite: (Int, Boolean) -> Unit,
 ) {
@@ -58,6 +59,7 @@ internal fun CollectionScreen(
     var clickedTopicId by remember {
         mutableStateOf(0)
     }
+
     Scaffold(
         backgroundColor = Lime100,
         topBar = {
@@ -67,39 +69,55 @@ internal fun CollectionScreen(
             )
         },
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(innerPadding)
-                .padding(top = 16.dp) ,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            state = scrollableState
-        ) {
-            items(topics) { topic ->
-                CollectionCard(
-                    text = topic.title,
-                    isFavorite = topic.isFavorite,
-                    onClick = {
-                        clickedTopicId = topic.topicId
-                        showDialog = true
-                    },
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-            }
-        }
 
-        if (showDialog) {
-            topics.find { it.topicId == clickedTopicId }?.let { selectedTopic ->
-                CardDialog(
-                    ownTopic = selectedTopic,
-                    onClickFavorite = { isFavorite ->
-                        onClickFavorite(selectedTopic.topicId, isFavorite)
-                    },
-                    onDismiss = { showDialog = false }
-                )
+        when (uiState) {
+            is CollectionUiState.Success -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(innerPadding)
+                        .padding(top = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    state = scrollableState
+                ) {
+                    items(uiState.ownTopics) { topic ->
+                        CollectionCard(
+                            text = topic.title,
+                            isFavorite = topic.isFavorite,
+                            onClick = {
+                                clickedTopicId = topic.topicId
+                                showDialog = true
+                            },
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
+                }
+
+                if (showDialog) {
+                    uiState.ownTopics.find { it.topicId == clickedTopicId }?.let { selectedTopic ->
+                        CardDialog(
+                            ownTopic = selectedTopic,
+                            onClickFavorite = { isFavorite ->
+                                onClickFavorite(selectedTopic.topicId, isFavorite)
+                            },
+                            onDismiss = { showDialog = false }
+                        )
+                    }
+                }
+            }
+
+            else -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    BubbleLoading()
+                }
             }
         }
     }
+
+
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
@@ -111,7 +129,7 @@ private fun PreviewCollectionScreen() {
     )
     TopickerTheme(darkTheme = false) {
         CollectionScreen(
-            topics = sample,
+            uiState = CollectionUiState.Success(sample),
             popBack = {},
             onClickFavorite = { _, _ -> }
         )

@@ -20,11 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.airbnb.lottie.compose.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.kabos.topicker.core.design.R
+import com.kabos.topicker.core.design.component.BubbleLoading
 import com.kabos.topicker.core.design.component.FavoriteButton
 import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.design.theme.generatePagerColors
@@ -70,19 +69,6 @@ fun TopicScreen(
     }
 
     when (topicUiState) {
-        TopicUiState.Loading -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                BubbleLoading()
-            }
-        }
-
-        TopicUiState.Error -> {
-            Text(text = "Error")
-        }
-
         is TopicUiState.Success -> {
             val topics = topicUiState.screenTopics
             TopicPager(
@@ -108,6 +94,14 @@ fun TopicScreen(
                         onClickCollection = { onClickCollection() }
                     )
                 }
+            }
+        }
+        else -> {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                BubbleLoading()
             }
         }
     }
@@ -199,20 +193,6 @@ fun TopicContent(
             toggleSpeedDial = false
         }
     }
-}
-
-@Composable
-fun BubbleLoading(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_bubbles))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-        iterations = LottieConstants.IterateForever,
-    )
-    LottieAnimation(
-        composition = composition,
-        progress = { progress },
-        modifier = modifier
-    )
 }
 
 @Composable

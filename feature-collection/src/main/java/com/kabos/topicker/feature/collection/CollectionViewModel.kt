@@ -2,37 +2,44 @@ package com.kabos.topicker.feature.collection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kabos.topicker.core.domain.usecase.TopicUseCase
+import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.topicker.core.model.OwnTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CollectionViewModel @Inject constructor(
-    private val topicUseCase: TopicUseCase
+    private val topicRepository: TopicRepository,
 ): ViewModel() {
-    private val _collectionUiState: MutableStateFlow<CollectionUiState> =
-        MutableStateFlow(CollectionUiState(listOf()))
-    val collectionUiState: StateFlow<CollectionUiState> = _collectionUiState.asStateFlow()
 
+    private val _collectionUiState: MutableStateFlow<CollectionUiState> =
+        MutableStateFlow(CollectionUiState.Loading)
+    val collectionUiState: StateFlow<CollectionUiState> = _collectionUiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            topicUseCase.ownTopics.collect { ownTopics ->
-                _collectionUiState.value = CollectionUiState(ownTopics)
+            topicRepository.getOwnTopicsStream().map {
+                CollectionUiState.Success(it)
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = CollectionUiState.Loading,
+            ).collect {
+                _collectionUiState.value = it
             }
         }
     }
 
     fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {
-        topicUseCase.updateFavoriteState(id, isFavorite)
+        topicRepository.updateOwnTopicsFavoriteState(id, isFavorite)
     }
 }
 
-data class CollectionUiState(
-    val ownTopics: List<OwnTopic>,
-)
+sealed interface CollectionUiState {
+    data class Success(val ownTopics: List<OwnTopic>): CollectionUiState
+    object Loading : CollectionUiState
+    object Error : CollectionUiState
+}
+

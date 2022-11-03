@@ -1,12 +1,13 @@
 package com.kabos.topicker.core.data.repository_impl
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kabos.topicker.core.datastore.UserDataStore
 import com.kabos.topicker.core.data.extension.toOwnTopic
 import com.kabos.topicker.core.data.extension.toTopic
+import com.kabos.topicker.core.datastore.UserDataStore
 import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.topicker.core.model.OwnTopic
 import com.kabos.topicker.core.model.Topic
+import com.kabos.topicker.core.model.toOwnTopic
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -26,15 +27,7 @@ class TopicRepositoryImpl(
         const val OWN_TOPICS = "ownTopics"
     }
 
-    override suspend fun getTopicById(id: Int): Topic? {
-        return firestore.collection(TOPICS)
-            .document(id.toString())
-            .get()
-            .await()
-            .toTopic()
-    }
-
-    override suspend fun getOwnTopics(): Flow<List<OwnTopic>> = callbackFlow {
+    override suspend fun getOwnTopicsStream(): Flow<List<OwnTopic>> = callbackFlow {
         firestore.collection(USERS)
             .document(getUuid())
             .collection(OWN_TOPICS)
@@ -49,7 +42,38 @@ class TopicRepositoryImpl(
         awaitClose { channel.close() }
     }
 
-    override suspend fun addOwnTopic(ownTopic: OwnTopic) {
+    override suspend fun addOwnTopicIfNotRegistered(topicId: Int) {
+        if (getOwnTopicById(topicId) == null) {
+            val topic = getTopicById(topicId) ?: return
+            addOwnTopic(topic.toOwnTopic())
+        }
+    }
+
+    override suspend fun updateOwnTopicsFavoriteState(topicId: Int, isFavorite: Boolean) {
+        firestore.collection(USERS)
+            .document(getUuid())
+            .collection(OWN_TOPICS)
+            .document(topicId.toString())
+            .update("isFavorite", isFavorite)
+    }
+
+    private suspend fun getTopicById(id: Int): Topic? {
+        return firestore.collection(TOPICS)
+            .document(id.toString())
+            .get()
+            .await()
+            .toTopic()
+    }
+
+    private suspend fun getOwnTopicById(id: Int): OwnTopic? {
+        return firestore.collection(OWN_TOPICS)
+            .document(id.toString())
+            .get()
+            .await()
+            .toOwnTopic()
+    }
+
+    private suspend fun addOwnTopic(ownTopic: OwnTopic) {
         firestore.collection(USERS)
             .document(getUuid())
             .collection(OWN_TOPICS)
@@ -61,11 +85,4 @@ class TopicRepositoryImpl(
         return userDataStore.getUuid().first()
     }
 
-    override suspend fun updateOwnTopicsFavoriteState(topicId: Int, isFavorite: Boolean) {
-        firestore.collection(USERS)
-            .document(getUuid())
-            .collection(OWN_TOPICS)
-            .document(topicId.toString())
-            .update("isFavorite", isFavorite)
-    }
 }

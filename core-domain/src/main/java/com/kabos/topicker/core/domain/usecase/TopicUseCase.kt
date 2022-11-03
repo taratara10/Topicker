@@ -2,7 +2,6 @@ package com.kabos.topicker.core.domain.usecase
 
 import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.topicker.core.model.OwnTopic
-import com.kabos.topicker.core.model.Topic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,35 +19,18 @@ class TopicUseCase(
 
     init {
         ioScope.launch {
-            topicRepository.getOwnTopics().stateIn(ioScope).collect { ownTopics ->
+            topicRepository.getOwnTopicsStream().stateIn(ioScope).collect { ownTopics ->
                 _ownTopics.value = ownTopics
             }
         }
     }
 
     suspend fun getOwnTopics(): Flow<List<OwnTopic>> {
-        return topicRepository.getOwnTopics()
-    }
-
-    // TODO ErrorHandling
-    suspend fun addOwnTopicIfNeeded(topicId: Int) {
-        val topic =
-            topicRepository.getTopicById(topicId) ?: throw Exception("Cannot add topics")
-
-        val shouldRegisterAsOwnTopic = (ownTopics.value.find { it.topicId == topic.id } == null)
-        if (shouldRegisterAsOwnTopic) {
-            topicRepository.addOwnTopic(topic.toOwnTopic())
-        }
+        return topicRepository.getOwnTopicsStream()
     }
 
     suspend fun updateFavoriteState(topicId: Int, isFavorite: Boolean) {
         topicRepository.updateOwnTopicsFavoriteState(topicId, isFavorite)
     }
 
-    private fun Topic.toOwnTopic(): OwnTopic =
-        OwnTopic(
-            topicId = id,
-            title = title,
-            isFavorite = isFavorite
-        )
 }
