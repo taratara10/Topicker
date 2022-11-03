@@ -11,7 +11,7 @@ interface TopicRepository {
     /**
      * @return ユーザーが閲覧済みのトピックすべて
      * */
-    suspend fun getOwnTopics(): Flow<List<OwnTopic>>
+    suspend fun getOwnTopicsStream(): Flow<List<OwnTopic>>
 
     suspend fun addOwnTopic(ownTopic: OwnTopic)
 

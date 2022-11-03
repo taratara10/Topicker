@@ -1,6 +1,5 @@
 package com.kabos.topicker.feature.topic.collection
 
-import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kabos.topicker.core.domain.usecase.TopicUseCase
@@ -11,7 +10,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-@Stable
 @HiltViewModel
 class TopicViewModel @Inject constructor(
     private val topicUseCase: TopicUseCase,

@@ -1,9 +1,9 @@
 package com.kabos.topicker.core.data.repository_impl
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.kabos.topicker.core.datastore.UserDataStore
 import com.kabos.topicker.core.data.extension.toOwnTopic
 import com.kabos.topicker.core.data.extension.toTopic
+import com.kabos.topicker.core.datastore.UserDataStore
 import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.topicker.core.model.OwnTopic
 import com.kabos.topicker.core.model.Topic
@@ -34,7 +34,7 @@ class TopicRepositoryImpl(
             .toTopic()
     }
 
-    override suspend fun getOwnTopics(): Flow<List<OwnTopic>> = callbackFlow {
+    override suspend fun getOwnTopicsStream(): Flow<List<OwnTopic>> = callbackFlow {
         firestore.collection(USERS)
             .document(getUuid())
             .collection(OWN_TOPICS)

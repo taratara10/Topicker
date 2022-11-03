@@ -20,14 +20,14 @@ class TopicUseCase(
 
     init {
         ioScope.launch {
-            topicRepository.getOwnTopics().stateIn(ioScope).collect { ownTopics ->
+            topicRepository.getOwnTopicsStream().stateIn(ioScope).collect { ownTopics ->
                 _ownTopics.value = ownTopics
             }
         }
     }
 
     suspend fun getOwnTopics(): Flow<List<OwnTopic>> {
-        return topicRepository.getOwnTopics()
+        return topicRepository.getOwnTopicsStream()
     }
 
     // TODO ErrorHandling
