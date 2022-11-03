@@ -2,7 +2,7 @@ package com.kabos.topicker.feature.topic.collection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kabos.topicker.core.domain.usecase.TopicUseCase
+import com.kabos.topicker.core.domain.repository.TopicRepository
 import com.kabos.topicker.core.model.OwnTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopicViewModel @Inject constructor(
-    private val topicUseCase: TopicUseCase,
+    private val topicRepository: TopicRepository,
 ) : ViewModel() {
 
     companion object {
@@ -39,7 +39,7 @@ class TopicViewModel @Inject constructor(
      * todo errorの通知はどうするか runCatchingするかどうか
      * */
     private fun initTopicUiState() = viewModelScope.launch {
-        screenTopicIds.combine(topicUseCase.getOwnTopics()) { screenTopicIds, ownTopics ->
+        screenTopicIds.combine(topicRepository.getOwnTopicsStream()) { screenTopicIds, ownTopics ->
             val result = screenTopicIds.mapNotNull { id ->
                 ownTopics.find { it.topicId == id }
             }
@@ -63,11 +63,11 @@ class TopicViewModel @Inject constructor(
 
     fun addTopic() = viewModelScope.launch {
         val addTopicId = addScreenTopicId()
-        topicUseCase.addOwnTopicIfNeeded(addTopicId, )
+        topicRepository.addOwnTopicIfNotRegistered(addTopicId)
     }
 
     fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {
-        topicUseCase.updateFavoriteState(id, isFavorite)
+        topicRepository.updateOwnTopicsFavoriteState(id, isFavorite)
     }
 
     private fun addScreenTopicId(): Int {

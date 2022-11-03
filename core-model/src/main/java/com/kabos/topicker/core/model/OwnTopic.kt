@@ -15,6 +15,13 @@ data class OwnTopic(
     val isFavorite: Boolean,
 )
 
+fun Topic.toOwnTopic(): OwnTopic =
+    OwnTopic(
+        topicId = id,
+        title = title,
+        isFavorite = isFavorite
+    )
+
 val previewOwnTopics = listOf(
     OwnTopic(1, "sample1", false),
     OwnTopic(2, "sample2", false),
