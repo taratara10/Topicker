@@ -55,19 +55,26 @@ class TopicViewModel @Inject constructor(
             initialValue = TopicUiState.Loading,
         ).collect {
             _topicUiState.value = it
-            if (it is TopicUiState.Success) {
-                Timber.d("-- ${it.screenTopics.map { it.title }}")
-            }
         }
     }
 
     fun addTopic() = viewModelScope.launch {
         val addTopicId = addScreenTopicId()
-        topicRepository.addOwnTopicIfNotRegistered(addTopicId)
+        runCatching {
+            topicRepository.addOwnTopicIfNotExist(addTopicId)
+        }
     }
 
     fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {
-        topicRepository.updateOwnTopicsFavoriteState(id, isFavorite)
+        runCatching {
+            topicRepository.updateOwnTopicFavoriteState(id, isFavorite)
+        }
+    }
+
+    fun registerOwnTopic(id: Int) = viewModelScope.launch {
+        runCatching {
+            topicRepository.registerOwnTopic(id)
+        }
     }
 
     private fun addScreenTopicId(): Int {

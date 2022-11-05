@@ -29,7 +29,6 @@ import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.design.theme.generatePagerColors
 import com.kabos.topicker.core.model.OwnTopic
 import kotlinx.coroutines.delay
-import timber.log.Timber
 
 @ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
@@ -49,9 +48,9 @@ fun TopicRoute(
         onClickFavorite = { id, isFavorite ->
             viewModel.updateFavoriteState(id, isFavorite)
         },
-        onClickCollection = { navigateToCollection() }
+        onClickCollection = { navigateToCollection() },
+        registerOwnTopic = { id -> viewModel.registerOwnTopic(id) }
     )
-
 }
 
 @ExperimentalPagerApi
@@ -62,12 +61,9 @@ fun TopicScreen(
     onLastPage: () -> Unit,
     onClickFavorite: (Int, Boolean) -> Unit,
     onClickCollection: () -> Unit,
+    registerOwnTopic: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SideEffect {
-        Timber.d("--ss TopicPagerScreen Recomposition")
-    }
-
     when (topicUiState) {
         is TopicUiState.Success -> {
             val topics = topicUiState.screenTopics
@@ -91,7 +87,8 @@ fun TopicScreen(
                         onClickFavorite = { id, isFavorite ->
                             onClickFavorite(id, isFavorite)
                         },
-                        onClickCollection = { onClickCollection() }
+                        onClickCollection = { onClickCollection() },
+                        registerOwnTopic = { id -> registerOwnTopic(id) }
                     )
                 }
             }
@@ -112,6 +109,7 @@ fun TopicScreen(
 fun TopicContent(
     ownTopic: OwnTopic,
     isCurrentPageDisplaying: Boolean,
+    registerOwnTopic: (Int) -> Unit,
     onClickFavorite: (Int, Boolean) -> Unit,
     onClickCollection: () -> Unit,
     shouldDisplayDial: Boolean,
@@ -133,6 +131,7 @@ fun TopicContent(
 
     if (isCurrentPageDisplaying) {
         startCardAnimation = true
+        registerOwnTopic(ownTopic.topicId)
     }
 
     // animateOffsetAsStateもあるよ！
@@ -266,6 +265,7 @@ fun PreviewTopicScreen() {
             onLastPage = {},
             onClickFavorite = { _, _ -> },
             onClickCollection = {},
+            registerOwnTopic = {}
         )
     }
 }
@@ -287,6 +287,7 @@ fun PreviewTopicContent() {
             dialColor = Color.Green,
             onClickFavorite = { _, _ -> },
             onClickCollection = {},
+            registerOwnTopic = {},
         )
     }
 }

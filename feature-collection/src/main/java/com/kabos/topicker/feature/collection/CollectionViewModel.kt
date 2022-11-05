@@ -20,7 +20,7 @@ class CollectionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            topicRepository.getOwnTopicsStream().map {
+            topicRepository.getRegisteredOwnTopicStream().map {
                 CollectionUiState.Success(it)
             }.stateIn(
                 scope = viewModelScope,
@@ -33,7 +33,7 @@ class CollectionViewModel @Inject constructor(
     }
 
     fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {
-        topicRepository.updateOwnTopicsFavoriteState(id, isFavorite)
+        topicRepository.updateOwnTopicFavoriteState(id, isFavorite)
     }
 }
 

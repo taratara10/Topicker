@@ -19,7 +19,6 @@ fun DocumentSnapshot.toTopic(): Topic? {
         Topic(
             id = getInt("id")!!,
             title = "${getString("title")!!}話",
-            isFavorite = false,
         )
     } catch (e: Exception) {
         Timber.e("toTopic convert error. $data")
@@ -32,7 +31,8 @@ fun DocumentSnapshot.toOwnTopic(): OwnTopic? {
         OwnTopic(
             topicId = getInt("topicId")!!,
             title = getString("title")!!,
-            isFavorite = getBoolean("isFavorite") == true
+            isFavorite = getBoolean("isFavorite") == true,
+            isRegistered = getBoolean("isRegistered") == true
         )
     } catch (e: Exception) {
         Timber.e("toOwnTopic convert error. $data")
