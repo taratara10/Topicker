@@ -60,7 +60,7 @@ class TopicRepositoryImpl(
         awaitClose { channel.close() }
     }
 
-    override suspend fun addOwnTopicIfNotRegistered(topicId: Int) {
+    override suspend fun addOwnTopicIfNotExist(topicId: Int) {
         if (getOwnTopicById(topicId) == null) {
             val topic = getTopicById(topicId) ?: return
             addOwnTopic(topic.toOwnTopic())

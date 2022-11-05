@@ -59,7 +59,7 @@ class TopicViewModel @Inject constructor(
 
     fun addTopic() = viewModelScope.launch {
         val addTopicId = addScreenTopicId()
-        topicRepository.addOwnTopicIfNotRegistered(addTopicId)
+        topicRepository.addOwnTopicIfNotExist(addTopicId)
     }
 
     fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {

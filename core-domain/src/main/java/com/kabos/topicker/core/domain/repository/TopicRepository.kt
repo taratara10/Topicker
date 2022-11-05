@@ -21,7 +21,7 @@ interface TopicRepository {
      * topicScreenに表示するためにownTopicをUserコレクションに追加する
      * 画面に表示されるとは限らないので既読(isRegistered)ではない
      * */
-    suspend fun addOwnTopicIfNotRegistered(topicId: Int)
+    suspend fun addOwnTopicIfNotExist(topicId: Int)
 
     /**
      * 既読(isRegistered = true)にして、CollectionScreenで表示されるようにする
