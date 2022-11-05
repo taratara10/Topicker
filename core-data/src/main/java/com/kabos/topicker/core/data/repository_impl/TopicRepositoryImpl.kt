@@ -25,12 +25,29 @@ class TopicRepositoryImpl(
         const val TOPICS = "topics"
         const val USERS = "users"
         const val OWN_TOPICS = "ownTopics"
+        const val IS_REGISTERED = "isRegistered"
     }
 
     override suspend fun getOwnTopicsStream(): Flow<List<OwnTopic>> = callbackFlow {
         firestore.collection(USERS)
             .document(getUuid())
             .collection(OWN_TOPICS)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    cancel(CancellationException(error))
+                }
+
+                val result = snapshot?.documents?.mapNotNull { it.toOwnTopic() } ?: listOf()
+                trySend(result)
+            }
+        awaitClose { channel.close() }
+    }
+
+    override suspend fun getRegisteredOwnTopicStream(): Flow<List<OwnTopic>> = callbackFlow {
+        firestore.collection(USERS)
+            .document(getUuid())
+            .collection(OWN_TOPICS)
+            .whereEqualTo(IS_REGISTERED, true)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     cancel(CancellationException(error))

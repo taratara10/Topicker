@@ -20,7 +20,7 @@ class CollectionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            topicRepository.getOwnTopicsStream().map {
+            topicRepository.getRegisteredOwnTopicStream().map {
                 CollectionUiState.Success(it)
             }.stateIn(
                 scope = viewModelScope,
