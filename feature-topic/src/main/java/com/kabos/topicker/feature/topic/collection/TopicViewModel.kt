@@ -7,6 +7,7 @@ import com.kabos.topicker.core.model.OwnTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,11 +60,21 @@ class TopicViewModel @Inject constructor(
 
     fun addTopic() = viewModelScope.launch {
         val addTopicId = addScreenTopicId()
-        topicRepository.addOwnTopicIfNotExist(addTopicId)
+        runCatching {
+            topicRepository.addOwnTopicIfNotExist(addTopicId)
+        }
     }
 
     fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {
-        topicRepository.updateOwnTopicFavoriteState(id, isFavorite)
+        runCatching {
+            topicRepository.updateOwnTopicFavoriteState(id, isFavorite)
+        }
+    }
+
+    fun registerOwnTopic(id: Int) = viewModelScope.launch {
+        runCatching {
+            topicRepository.registerOwnTopic(id)
+        }
     }
 
     private fun addScreenTopicId(): Int {
