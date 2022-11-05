@@ -7,7 +7,6 @@ import com.kabos.topicker.core.model.OwnTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,9 +54,6 @@ class TopicViewModel @Inject constructor(
             initialValue = TopicUiState.Loading,
         ).collect {
             _topicUiState.value = it
-            if (it is TopicUiState.Success) {
-                Timber.d("-- ${it.screenTopics.map { it.title }}")
-            }
         }
     }
 
@@ -67,7 +63,7 @@ class TopicViewModel @Inject constructor(
     }
 
     fun updateFavoriteState(id: Int, isFavorite: Boolean) = viewModelScope.launch {
-        topicRepository.updateOwnTopicsFavoriteState(id, isFavorite)
+        topicRepository.updateOwnTopicFavoriteState(id, isFavorite)
     }
 
     private fun addScreenTopicId(): Int {

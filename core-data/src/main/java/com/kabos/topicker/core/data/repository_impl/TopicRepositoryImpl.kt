@@ -25,6 +25,7 @@ class TopicRepositoryImpl(
         const val TOPICS = "topics"
         const val USERS = "users"
         const val OWN_TOPICS = "ownTopics"
+        const val IS_FAVORITE = "isFavorite"
         const val IS_REGISTERED = "isRegistered"
     }
 
@@ -66,12 +67,20 @@ class TopicRepositoryImpl(
         }
     }
 
-    override suspend fun updateOwnTopicsFavoriteState(topicId: Int, isFavorite: Boolean) {
+    override suspend fun registerOwnTopic(topicId: Int) {
         firestore.collection(USERS)
             .document(getUuid())
             .collection(OWN_TOPICS)
             .document(topicId.toString())
-            .update("isFavorite", isFavorite)
+            .update(IS_REGISTERED, true)
+    }
+
+    override suspend fun updateOwnTopicFavoriteState(topicId: Int, isFavorite: Boolean) {
+        firestore.collection(USERS)
+            .document(getUuid())
+            .collection(OWN_TOPICS)
+            .document(topicId.toString())
+            .update(IS_FAVORITE, isFavorite)
     }
 
     private suspend fun getTopicById(id: Int): Topic? {
