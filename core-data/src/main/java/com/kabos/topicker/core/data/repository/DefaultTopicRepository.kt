@@ -1,4 +1,4 @@
-package com.kabos.topicker.core.data.repository_impl
+package com.kabos.topicker.core.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kabos.topicker.core.data.extension.toOwnTopic
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.cancellation.CancellationException
 
-class TopicRepositoryImpl(
+class DefaultTopicRepository(
     private val firestore: FirebaseFirestore,
     private val userDataStore: UserDataStore,
 ) : TopicRepository {
