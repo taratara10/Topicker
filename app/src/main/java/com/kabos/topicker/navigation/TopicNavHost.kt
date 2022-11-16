@@ -16,7 +16,6 @@ import com.kabos.topicker.feature.topic.collection.navigation.topicGraph
 @Composable
 fun TopicNavHost(
     navHostController: NavHostController,
-    setStatusBarColor: (Int) -> Unit,
     startDestination: String = TopicNavigation.route,
     modifier: Modifier = Modifier,
 ) {
@@ -27,11 +26,9 @@ fun TopicNavHost(
     ) {
         topicGraph(
             navigateToCollection = { navHostController.navigate(CollectionDestination.route)},
-            setStatusBarColor = { color -> setStatusBarColor(color) }
         )
         collectionGraph(
             popBack = {navHostController.popBackStack()},
-            setStatusBarColor = { color -> setStatusBarColor(color) }
         )
     }
 }

@@ -14,9 +14,7 @@ import com.kabos.topicker.navigation.TopicNavHost
 @ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
 @Composable
-fun TopickerApp(
-    setStatusBarColor: (Int) -> Unit,
-) {
+fun TopickerApp() {
     val navHostController = rememberNavController()
     TopickerTheme {
         // A surface container using the 'background' color from the theme
@@ -26,7 +24,6 @@ fun TopickerApp(
         ) {
             TopicNavHost(
                 navHostController = navHostController,
-                setStatusBarColor = { color ->  setStatusBarColor(color) }
             )
         }
     }

@@ -17,10 +17,8 @@ object TopicNavigation: TopickerNavigationDestination {
 @ExperimentalPagerApi
 fun NavGraphBuilder.topicGraph(
     navigateToCollection: () -> Unit,
-    setStatusBarColor: (Int) -> Unit,
 ) {
     composable(route = TopicNavigation.route) {
-        setStatusBarColor(Color.TRANSPARENT)
         TopicRoute(
             navigateToCollection = navigateToCollection
         )
