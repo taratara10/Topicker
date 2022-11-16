@@ -1,5 +1,7 @@
 package com.kabos.topicker.feature.collection
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -42,15 +44,17 @@ fun CollectionRoute(
     CollectionScreen(
         uiState = uiState,
         popBack = { popBack() },
-        onClickFavorite = { id, isFavorite -> viewModel.updateFavoriteState(id, isFavorite) }
+        onClickFavorite = { id, isFavorite -> viewModel.updateFavoriteState(id, isFavorite) },
     )
 }
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 internal fun CollectionScreen(
     uiState: CollectionUiState,
     popBack: () -> Unit,
     onClickFavorite: (Int, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyListState()
     var showDialog by remember {
@@ -61,22 +65,22 @@ internal fun CollectionScreen(
     }
 
     Scaffold(
-        backgroundColor = Lime100,
         topBar = {
             TopicAppBar(
                 title = "集めた話題",
                 popBack = { popBack() }
             )
         },
-    ) { innerPadding ->
+    ) { _ ->
 
         when (uiState) {
             is CollectionUiState.Success -> {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(innerPadding)
-                        .padding(top = 16.dp),
+                        .fillMaxSize()
+                        .background(Lime100)
+                        .navigationBarsPadding()
+                        .padding(top = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     state = scrollableState
                 ) {
@@ -120,16 +124,16 @@ internal fun CollectionScreen(
 
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFFFFF,
+    showSystemUi = true,
+)
 @Composable
 private fun PreviewCollectionScreen() {
-    val sample = listOf(
-        OwnTopic(1, "sample 1", false),
-        OwnTopic(2, "sample 2", true)
-    )
     TopickerTheme(darkTheme = false) {
         CollectionScreen(
-            uiState = CollectionUiState.Success(sample),
+            uiState = CollectionUiState.Success(previewOwnTopics),
             popBack = {},
             onClickFavorite = { _, _ -> }
         )

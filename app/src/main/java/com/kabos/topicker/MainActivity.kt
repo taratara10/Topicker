@@ -1,9 +1,9 @@
 package com.kabos.topicker
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.ColorInt
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -17,16 +17,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TopickerApp(
-                setStatusBarColor = { color -> setStatusBarColor(color)}
-            )
+            TopickerApp()
         }
+        setStatusBarTransparent()
     }
 
-    private fun setStatusBarColor(@ColorInt color: Int) {
+    private fun setStatusBarTransparent() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = color
-        window.navigationBarColor = color
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
     }
 }
 
