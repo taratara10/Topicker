@@ -18,7 +18,7 @@ fun DocumentSnapshot.toTopic(): Topic? {
     return try {
         Topic(
             id = getInt("id")!!,
-            title = "${getString("title")!!}話",
+            title = getString("title")!!,
         )
     } catch (e: Exception) {
         Timber.e("toTopic convert error. $data")

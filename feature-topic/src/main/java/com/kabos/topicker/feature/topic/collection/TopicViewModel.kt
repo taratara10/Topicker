@@ -7,7 +7,6 @@ import com.kabos.topicker.core.model.OwnTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,8 +15,8 @@ class TopicViewModel @Inject constructor(
 ) : ViewModel() {
 
     companion object {
-        /** topicのid範囲 ver1.0では360個 */
-        const val NUMBER_OF_TOPICS = 360
+        /** topicのid範囲 ver1.0では100個 */
+        const val NUMBER_OF_TOPICS = 99
 
         /** 1ページ目に表示するトピック */
         val TUTORIAL = listOf(OwnTopic(9999, " Let's go! \uD83D\uDC49", false))
@@ -43,11 +42,11 @@ class TopicViewModel @Inject constructor(
             val result = screenTopicIds.mapNotNull { id ->
                 ownTopics.find { it.topicId == id }
             }
-            if (result.isEmpty()) {
-                addScreenTopicId()
-                TopicUiState.Loading
-            } else {
+            if (result.size >= 2) {
                 TopicUiState.Success(TUTORIAL + result)
+            } else {
+                addTopic()
+                TopicUiState.Loading
             }
         }.stateIn(
             scope = viewModelScope,
