@@ -220,7 +220,7 @@ fun TutorialContent(
     if (shouldDisplayDial) {
         LaunchedEffect(Unit) {
             showSpeedDial = true
-            delay(1000)
+            delay(500)
             toggleSpeedDial = true
         }
     } else {

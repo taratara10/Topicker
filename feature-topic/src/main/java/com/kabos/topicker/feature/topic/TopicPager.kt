@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.google.accompanist.pager.*
 import com.kabos.topicker.core.design.theme.TopickerTheme
-import com.kabos.topicker.feature.topic.EachPageState
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import kotlin.math.absoluteValue
 
@@ -53,9 +51,8 @@ fun TopicPager(
     content: @Composable PagerScope.(EachPageState) -> Unit
 ) {
     // circleWithIcon用のパラメーター
-    // 1ページ目はtutorialなので「→」、それ以外は「+」
-    val vector = if (pagerState.currentPage == 1) Icons.Default.Add else Icons.Default.ArrowForward
-    val icon = rememberVectorPainter(vector)
+    val vector = Icons.Default.Add
+    val icon = rememberVectorPainter(Icons.Default.Add)
 
     val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
     val circleWithIconRadius by animateDpAsState(
