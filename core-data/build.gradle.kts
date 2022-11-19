@@ -1,8 +1,8 @@
 plugins {
     kotlin("android")
+    kotlin("kapt")
     id("com.android.library")
     id("dagger.hilt.android.plugin")
-    id("kotlin-kapt")
 }
 
 android {
@@ -18,9 +18,7 @@ dependencies {
 
     testImplementation(libs.bundles.test.base)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.await)
+    implementation(libs.bundles.firebase)
 
     implementation(libs.timber)
 

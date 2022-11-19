@@ -83,9 +83,19 @@ dependencyResolutionManagement {
 
 
             /** firebase */
-            alias("firebase-bom").to("com.google.firebase:firebase-bom:30.3.1")
+//            alias("firebase-bom").to("com.google.firebase:firebase-bom:30.3.1")
             alias("firebase-firestore").to("com.google.firebase:firebase-firestore-ktx:24.4.0")
+            alias("firebase-crashlytics").to("com.google.firebase:firebase-crashlytics-ktx:18.3.2")
+            alias("firebase-analytics").to("com.google.firebase:firebase-analytics:21.2.0")
             alias("firebase-await").to("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+            bundle(
+                "firebase", listOf(
+                    "firebase-firestore",
+                    "firebase-crashlytics",
+                    "firebase-analytics",
+                    "firebase-await",
+                )
+            )
 
             /** datastore */
             alias("datastore").to("androidx.datastore:datastore-preferences:1.0.0")
