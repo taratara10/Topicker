@@ -1,8 +1,8 @@
 plugins {
     kotlin("android")
+    kotlin("kapt")
     id("com.android.application")
     id("dagger.hilt.android.plugin")
-    id("kotlin-kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -87,4 +87,5 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.kapt)
 
+    implementation(libs.bundles.firebase)
 }

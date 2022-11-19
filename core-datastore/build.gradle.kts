@@ -1,8 +1,8 @@
 plugins {
     kotlin("android")
+    kotlin("kapt")
     id("com.android.library")
     id("dagger.hilt.android.plugin")
-    id("kotlin-kapt")
 }
 
 android {
