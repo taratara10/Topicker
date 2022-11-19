@@ -25,16 +25,15 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.kabos.topicker.core.design.component.BubbleLoading
 import com.kabos.topicker.core.design.component.FavoriteButton
-import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.design.theme.generatePagerColors
 import com.kabos.topicker.core.model.OwnTopic
+import com.kabos.topicker.core.model.previewOwnTopics
 import kotlinx.coroutines.delay
 
 @ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
 @Composable
 fun TopicRoute(
-    modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
     navigateToCollection: () -> Unit,
 ) {
@@ -72,7 +71,7 @@ fun TopicScreen(
                 pageCount = topics.size,
                 pagerColors = generatePagerColors(topics.size, topics[1].topicId),
                 onLastPage = { onLastPage() },
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize(),
             ) { eachPageState ->
                 if (eachPageState.index == 0) {
                     TutorialContent(
@@ -203,7 +202,6 @@ fun TutorialContent(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Spacer(modifier = Modifier.height(120.dp))
         TopicCard(text = ownTopic.title)
     }
@@ -242,9 +240,7 @@ fun TopicCard(
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTopicCard() {
-    TopickerTheme {
-        TopicCard(text = "おもしろい話")
-    }
+    TopicCard(text = "おもしろい話")
 }
 
 @ExperimentalPagerApi
@@ -253,57 +249,41 @@ fun PreviewTopicCard() {
 fun PreviewTopicScreen() {
     val pagerState = rememberPagerState()
     val uiStata = TopicUiState.Loading
-    val sample = OwnTopic(
-        topicId = 1,
-        title = "〇〇な話",
-        isFavorite = false,
+    TopicScreen(
+        pagerState = pagerState,
+        topicUiState = uiStata,
+        onLastPage = {},
+        onClickFavorite = { _, _ -> },
+        onClickCollection = {},
+        registerOwnTopic = {}
     )
-    TopickerTheme {
-        TopicScreen(
-            pagerState = pagerState,
-            topicUiState = uiStata,
-            onLastPage = {},
-            onClickFavorite = { _, _ -> },
-            onClickCollection = {},
-            registerOwnTopic = {}
-        )
-    }
 }
 
 @ExperimentalPagerApi
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTopicContent() {
-    TopickerTheme {
-        val sample = OwnTopic(
-            topicId = 1,
-            title = "〇〇な話",
-            isFavorite = false,
-        )
-        TopicContent(
-            ownTopic = sample,
-            isCurrentPageDisplaying = true,
-            shouldDisplayDial = true,
-            dialColor = Color.Green,
-            onClickFavorite = { _, _ -> },
-            onClickCollection = {},
-            registerOwnTopic = {},
-        )
-    }
+    TopicContent(
+        ownTopic = previewOwnTopics.first(),
+        isCurrentPageDisplaying = true,
+        shouldDisplayDial = true,
+        dialColor = Color.Green,
+        onClickFavorite = { _, _ -> },
+        onClickCollection = {},
+        registerOwnTopic = {},
+    )
 }
 
 @ExperimentalPagerApi
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTutorialContent() {
-    TopickerTheme {
-        val sample = OwnTopic(
-            10000,
-            " Let's go! \uD83D\uDC49",
-            false
-        )
-        TutorialContent(
-            ownTopic = sample,
-        )
-    }
+    val sample = OwnTopic(
+        10000,
+        " Let's go! \uD83D\uDC49",
+        false
+    )
+    TutorialContent(
+        ownTopic = sample,
+    )
 }
