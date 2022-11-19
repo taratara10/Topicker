@@ -1,4 +1,4 @@
-package com.kabos.topicker.feature.topic.collection
+package com.kabos.topicker.feature.topic
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -25,16 +25,15 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.kabos.topicker.core.design.component.BubbleLoading
 import com.kabos.topicker.core.design.component.FavoriteButton
-import com.kabos.topicker.core.design.theme.TopickerTheme
 import com.kabos.topicker.core.design.theme.generatePagerColors
 import com.kabos.topicker.core.model.OwnTopic
+import com.kabos.topicker.core.model.previewOwnTopics
 import kotlinx.coroutines.delay
 
 @ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi
 @Composable
 fun TopicRoute(
-    modifier: Modifier = Modifier,
     viewModel: TopicViewModel = hiltViewModel(),
     navigateToCollection: () -> Unit,
 ) {
@@ -67,16 +66,20 @@ fun TopicScreen(
     when (topicUiState) {
         is TopicUiState.Success -> {
             val topics = topicUiState.screenTopics
+            /* pager */
             TopicPager(
                 pagerState = pagerState,
                 pageCount = topics.size,
                 pagerColors = generatePagerColors(topics.size, topics[1].topicId),
                 onLastPage = { onLastPage() },
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize(),
             ) { eachPageState ->
                 if (eachPageState.index == 0) {
                     TutorialContent(
-                        ownTopic = topics.first()
+                        ownTopic = topics.first(),
+                        shouldDisplayDial = eachPageState.shouldDisplayDial,
+                        onClickCollection = { onClickCollection() },
+                        dialColor = eachPageState.dialColor,
                     )
                 } else {
                     TopicContent(
@@ -194,18 +197,55 @@ fun TopicContent(
     }
 }
 
+
+/**
+ * 1ページ目のtutorialでは、[SpeedDial]の機能を伝えるために展開しておく
+ * */
 @Composable
 fun TutorialContent(
     modifier: Modifier = Modifier,
     ownTopic: OwnTopic,
+    onClickCollection: () -> Unit,
+    shouldDisplayDial: Boolean,
+    dialColor: Color,
 ) {
+    var showSpeedDial by remember {
+        mutableStateOf(false)
+    }
+
+    var toggleSpeedDial by remember {
+        mutableStateOf(false)
+    }
+    // dialがちらつくので、delayする
+    if (shouldDisplayDial) {
+        LaunchedEffect(Unit) {
+            showSpeedDial = true
+            delay(500)
+            toggleSpeedDial = true
+        }
+    } else {
+        showSpeedDial = false
+    }
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Spacer(modifier = Modifier.height(120.dp))
         TopicCard(text = ownTopic.title)
+        Spacer(modifier = Modifier.weight(1f))
+        // pagerのanimationと被ってしまうので、animation(swipe)が終わったら表示する
+        if (showSpeedDial) {
+            SpeedDial(
+                toggleDial = toggleSpeedDial,
+                onClickSpeedDial = { toggleSpeedDial = !toggleSpeedDial },
+                onClickLeft = { onClickCollection() },
+                onClickCenter = {},
+                onClickRight = {},
+                color = dialColor,
+            )
+        } else {
+            toggleSpeedDial = false
+        }
     }
 }
 
@@ -230,8 +270,7 @@ fun TopicCard(
             text = text,
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
-            maxLines = 2,
-            modifier = Modifier.padding(vertical = 72.dp)
+            modifier = Modifier.padding(vertical = 72.dp, horizontal = 16.dp)
         )
     }
 }
@@ -242,68 +281,37 @@ fun TopicCard(
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTopicCard() {
-    TopickerTheme {
-        TopicCard(text = "おもしろい話")
-    }
-}
-
-@ExperimentalPagerApi
-@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
-@Composable
-fun PreviewTopicScreen() {
-    val pagerState = rememberPagerState()
-    val uiStata = TopicUiState.Loading
-    val sample = OwnTopic(
-        topicId = 1,
-        title = "〇〇な話",
-        isFavorite = false,
-    )
-    TopickerTheme {
-        TopicScreen(
-            pagerState = pagerState,
-            topicUiState = uiStata,
-            onLastPage = {},
-            onClickFavorite = { _, _ -> },
-            onClickCollection = {},
-            registerOwnTopic = {}
-        )
-    }
+    TopicCard(text = "おもしろい話")
 }
 
 @ExperimentalPagerApi
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTopicContent() {
-    TopickerTheme {
-        val sample = OwnTopic(
-            topicId = 1,
-            title = "〇〇な話",
-            isFavorite = false,
-        )
-        TopicContent(
-            ownTopic = sample,
-            isCurrentPageDisplaying = true,
-            shouldDisplayDial = true,
-            dialColor = Color.Green,
-            onClickFavorite = { _, _ -> },
-            onClickCollection = {},
-            registerOwnTopic = {},
-        )
-    }
+    TopicContent(
+        ownTopic = previewOwnTopics.first(),
+        isCurrentPageDisplaying = true,
+        shouldDisplayDial = true,
+        dialColor = Color.Green,
+        onClickFavorite = { _, _ -> },
+        onClickCollection = {},
+        registerOwnTopic = {},
+    )
 }
 
 @ExperimentalPagerApi
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun PreviewTutorialContent() {
-    TopickerTheme {
-        val sample = OwnTopic(
-            10000,
-            " Let's go! \uD83D\uDC49",
-            false
-        )
-        TutorialContent(
-            ownTopic = sample,
-        )
-    }
+    val sample = OwnTopic(
+        9999,
+        "各トピックについて自由に雑談しましょう！\n\uD83D\uDC49",
+        false
+    )
+    TutorialContent(
+        ownTopic = sample,
+        dialColor = Color.Cyan,
+        onClickCollection = {},
+        shouldDisplayDial = true
+    )
 }

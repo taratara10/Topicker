@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CollectionViewModel @Inject constructor(
     private val topicRepository: TopicRepository,
-): ViewModel() {
+) : ViewModel() {
 
     private val _collectionUiState: MutableStateFlow<CollectionUiState> =
         MutableStateFlow(CollectionUiState.Loading)
@@ -20,8 +20,13 @@ class CollectionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            topicRepository.getRegisteredOwnTopicStream().map {
-                CollectionUiState.Success(it)
+            val stream: Flow<CollectionUiState> =
+                topicRepository.getRegisteredOwnTopicStream().map {
+                    CollectionUiState.Success(it)
+                }
+            stream.retryWhen { _, _ ->
+                emit(CollectionUiState.Error)
+                true
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -38,7 +43,7 @@ class CollectionViewModel @Inject constructor(
 }
 
 sealed interface CollectionUiState {
-    data class Success(val ownTopics: List<OwnTopic>): CollectionUiState
+    data class Success(val ownTopics: List<OwnTopic>) : CollectionUiState
     object Loading : CollectionUiState
     object Error : CollectionUiState
 }

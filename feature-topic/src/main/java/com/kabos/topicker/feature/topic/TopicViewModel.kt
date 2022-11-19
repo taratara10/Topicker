@@ -1,4 +1,4 @@
-package com.kabos.topicker.feature.topic.collection
+package com.kabos.topicker.feature.topic
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +19,7 @@ class TopicViewModel @Inject constructor(
         const val NUMBER_OF_TOPICS = 99
 
         /** 1ページ目に表示するトピック */
-        val TUTORIAL = listOf(OwnTopic(9999, " Let's go! \uD83D\uDC49", false))
+        val TUTORIAL = listOf(OwnTopic(9999, "各トピックについて自由に雑談しましょう！\n\uD83D\uDC49", false))
     }
 
     private var _topicUiState: MutableStateFlow<TopicUiState> =
@@ -35,19 +35,23 @@ class TopicViewModel @Inject constructor(
 
     /**
      * [screenTopicIds]の対象topicを[OwnTopic]に変換してUiStateにまとめる
-     * todo errorの通知はどうするか runCatchingするかどうか
      * */
     private fun initTopicUiState() = viewModelScope.launch {
         screenTopicIds.combine(topicRepository.getOwnTopicsStream()) { screenTopicIds, ownTopics ->
             val result = screenTopicIds.mapNotNull { id ->
                 ownTopics.find { it.topicId == id }
             }
+            /* pagerのcircleIconは次のページの色を参照するため、2つ以上の要素がないとOutOfIndexException */
             if (result.size >= 2) {
                 TopicUiState.Success(TUTORIAL + result)
             } else {
                 addTopic()
                 TopicUiState.Loading
             }
+        }.retryWhen { _, _ ->
+            /* 処理に失敗したら自働でretryする */
+            emit(TopicUiState.Error)
+            true
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
