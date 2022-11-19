@@ -19,7 +19,7 @@ class TopicViewModel @Inject constructor(
         const val NUMBER_OF_TOPICS = 99
 
         /** 1ページ目に表示するトピック */
-        val TUTORIAL = listOf(OwnTopic(9999, " Let's go! \uD83D\uDC49", false))
+        val TUTORIAL = listOf(OwnTopic(9999, "各トピックについて自由に雑談しましょう！\n\uD83D\uDC49", false))
     }
 
     private var _topicUiState: MutableStateFlow<TopicUiState> =

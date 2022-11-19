@@ -66,6 +66,7 @@ fun TopicScreen(
     when (topicUiState) {
         is TopicUiState.Success -> {
             val topics = topicUiState.screenTopics
+            /* pager */
             TopicPager(
                 pagerState = pagerState,
                 pageCount = topics.size,
@@ -75,7 +76,10 @@ fun TopicScreen(
             ) { eachPageState ->
                 if (eachPageState.index == 0) {
                     TutorialContent(
-                        ownTopic = topics.first()
+                        ownTopic = topics.first(),
+                        shouldDisplayDial = eachPageState.shouldDisplayDial,
+                        onClickCollection = { onClickCollection() },
+                        dialColor = eachPageState.dialColor,
                     )
                 } else {
                     TopicContent(
@@ -193,17 +197,55 @@ fun TopicContent(
     }
 }
 
+
+/**
+ * 1ページ目のtutorialでは、[SpeedDial]の機能を伝えるために展開しておく
+ * */
 @Composable
 fun TutorialContent(
     modifier: Modifier = Modifier,
     ownTopic: OwnTopic,
+    onClickCollection: () -> Unit,
+    shouldDisplayDial: Boolean,
+    dialColor: Color,
 ) {
+    var showSpeedDial by remember {
+        mutableStateOf(false)
+    }
+
+    var toggleSpeedDial by remember {
+        mutableStateOf(false)
+    }
+    // dialがちらつくので、delayする
+    if (shouldDisplayDial) {
+        LaunchedEffect(Unit) {
+            showSpeedDial = true
+            delay(1000)
+            toggleSpeedDial = true
+        }
+    } else {
+        showSpeedDial = false
+    }
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(120.dp))
         TopicCard(text = ownTopic.title)
+        Spacer(modifier = Modifier.weight(1f))
+        // pagerのanimationと被ってしまうので、animation(swipe)が終わったら表示する
+        if (showSpeedDial) {
+            SpeedDial(
+                toggleDial = toggleSpeedDial,
+                onClickSpeedDial = { toggleSpeedDial = !toggleSpeedDial },
+                onClickLeft = { onClickCollection() },
+                onClickCenter = {},
+                onClickRight = {},
+                color = dialColor,
+            )
+        } else {
+            toggleSpeedDial = false
+        }
     }
 }
 
@@ -228,8 +270,7 @@ fun TopicCard(
             text = text,
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
-            maxLines = 2,
-            modifier = Modifier.padding(vertical = 72.dp)
+            modifier = Modifier.padding(vertical = 72.dp, horizontal = 16.dp)
         )
     }
 }
@@ -241,22 +282,6 @@ fun TopicCard(
 @Composable
 fun PreviewTopicCard() {
     TopicCard(text = "おもしろい話")
-}
-
-@ExperimentalPagerApi
-@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
-@Composable
-fun PreviewTopicScreen() {
-    val pagerState = rememberPagerState()
-    val uiStata = TopicUiState.Loading
-    TopicScreen(
-        pagerState = pagerState,
-        topicUiState = uiStata,
-        onLastPage = {},
-        onClickFavorite = { _, _ -> },
-        onClickCollection = {},
-        registerOwnTopic = {}
-    )
 }
 
 @ExperimentalPagerApi
@@ -279,11 +304,14 @@ fun PreviewTopicContent() {
 @Composable
 fun PreviewTutorialContent() {
     val sample = OwnTopic(
-        10000,
-        " Let's go! \uD83D\uDC49",
+        9999,
+        "各トピックについて自由に雑談しましょう！\n\uD83D\uDC49",
         false
     )
     TutorialContent(
         ownTopic = sample,
+        dialColor = Color.Cyan,
+        onClickCollection = {},
+        shouldDisplayDial = true
     )
 }
