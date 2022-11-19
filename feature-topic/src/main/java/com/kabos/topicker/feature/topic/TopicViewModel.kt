@@ -35,25 +35,29 @@ class TopicViewModel @Inject constructor(
 
     /**
      * [screenTopicIds]の対象topicを[OwnTopic]に変換してUiStateにまとめる
-     * todo errorの通知はどうするか runCatchingするかどうか
      * */
     private fun initTopicUiState() = viewModelScope.launch {
-        screenTopicIds.combine(topicRepository.getOwnTopicsStream()) { screenTopicIds, ownTopics ->
-            val result = screenTopicIds.mapNotNull { id ->
-                ownTopics.find { it.topicId == id }
+        runCatching {
+            screenTopicIds.combine(topicRepository.getOwnTopicsStream()) { screenTopicIds, ownTopics ->
+                val result = screenTopicIds.mapNotNull { id ->
+                    ownTopics.find { it.topicId == id }
+                }
+                /* pagerのcircleIconは次のページの色を参照するため、2つ以上の要素がないとOutOfIndexException */
+                if (result.size >= 2) {
+                    TopicUiState.Success(TUTORIAL + result)
+                } else {
+                    addTopic()
+                    TopicUiState.Loading
+                }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = TopicUiState.Loading,
+            ).collect {
+                _topicUiState.value = it
             }
-            if (result.size >= 2) {
-                TopicUiState.Success(TUTORIAL + result)
-            } else {
-                addTopic()
-                TopicUiState.Loading
-            }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = TopicUiState.Loading,
-        ).collect {
-            _topicUiState.value = it
+        }.onFailure {
+            // todo errorHandling
         }
     }
 
