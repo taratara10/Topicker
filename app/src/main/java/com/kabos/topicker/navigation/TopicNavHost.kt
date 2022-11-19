@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.kabos.topicker.feature.collection.navigation.CollectionDestination
 import com.kabos.topicker.feature.collection.navigation.collectionGraph
-import com.kabos.topicker.feature.topic.collection.navigation.TopicNavigation
-import com.kabos.topicker.feature.topic.collection.navigation.topicGraph
+import com.kabos.topicker.feature.topic.navigation.TopicNavigation
+import com.kabos.topicker.feature.topic.navigation.topicGraph
 
 @ExperimentalLifecycleComposeApi
 @ExperimentalPagerApi

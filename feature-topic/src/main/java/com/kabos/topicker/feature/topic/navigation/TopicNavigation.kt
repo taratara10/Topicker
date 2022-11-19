@@ -1,12 +1,11 @@
-package com.kabos.topicker.feature.topic.collection.navigation
+package com.kabos.topicker.feature.topic.navigation
 
-import android.graphics.Color
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.kabos.domain.navigation.TopickerNavigationDestination
-import com.kabos.topicker.feature.topic.collection.TopicRoute
+import com.kabos.topicker.feature.topic.TopicRoute
 
 object TopicNavigation: TopickerNavigationDestination {
     override val route = "topic_route"
