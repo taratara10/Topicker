@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.kabos.topicker.feature.collection.navigation.CollectionDestination
 import com.kabos.topicker.feature.collection.navigation.collectionGraph
+import com.kabos.topicker.feature.setting.navigation.SettingDestination
+import com.kabos.topicker.feature.setting.navigation.settingGraph
 import com.kabos.topicker.feature.topic.navigation.TopicNavigation
 import com.kabos.topicker.feature.topic.navigation.topicGraph
 
@@ -25,10 +27,14 @@ fun TopicNavHost(
         modifier = modifier,
     ) {
         topicGraph(
-            navigateToCollection = { navHostController.navigate(CollectionDestination.route)},
+            navigateToCollection = { navHostController.navigate(CollectionDestination.route) },
+            navigateToSetting = { navHostController.navigate(SettingDestination.route) }
         )
         collectionGraph(
-            popBack = {navHostController.popBackStack()},
+            popBack = { navHostController.popBackStack() },
+        )
+        settingGraph(
+            popBack = { navHostController.popBackStack() }
         )
     }
 }
