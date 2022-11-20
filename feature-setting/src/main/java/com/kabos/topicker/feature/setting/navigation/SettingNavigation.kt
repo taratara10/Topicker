@@ -12,8 +12,12 @@ object SettingDestination: TopickerNavigationDestination {
 
 fun NavGraphBuilder.settingGraph(
     popBack: () -> Unit,
+    versionName: String
 ) {
     composable(route = SettingDestination.route) {
-        SettingRoute(popBack = { popBack() })
+        SettingRoute(
+            popBack = { popBack() },
+            versionName = versionName,
+        )
     }
 }

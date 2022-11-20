@@ -6,6 +6,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.kabos.topicker.BuildConfig
 import com.kabos.topicker.feature.collection.navigation.CollectionDestination
 import com.kabos.topicker.feature.collection.navigation.collectionGraph
 import com.kabos.topicker.feature.setting.navigation.SettingDestination
@@ -34,7 +35,8 @@ fun TopicNavHost(
             popBack = { navHostController.popBackStack() },
         )
         settingGraph(
-            popBack = { navHostController.popBackStack() }
+            popBack = { navHostController.popBackStack() },
+            versionName = BuildConfig.VERSION_NAME
         )
     }
 }

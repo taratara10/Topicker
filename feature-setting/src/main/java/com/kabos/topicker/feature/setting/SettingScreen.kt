@@ -20,15 +20,18 @@ import com.kabos.topicker.core.design.theme.TopickerTheme
 @Composable
 fun SettingRoute(
     popBack: () -> Unit,
+    versionName: String,
 ) {
     SettingScreen (
-        popBack = { popBack() }
+        popBack = { popBack() },
+        versionName = versionName
     )
 }
 
 @Composable
 internal fun SettingScreen(
-    popBack: () -> Unit
+    popBack: () -> Unit,
+    versionName: String,
 ) {
     Scaffold(
         topBar = {
@@ -47,7 +50,7 @@ internal fun SettingScreen(
             SettingHeader(title = "詳細情報")
             SettingItem(
                 title = "アプリのバージョン",
-                body = "TODO"
+                body = versionName
             )
             Divider(modifier = Modifier.padding(top = 8.dp))
         }
@@ -86,6 +89,7 @@ fun PreviewSettingScreen() {
     TopickerTheme() {
         SettingScreen(
             popBack = {},
+            versionName = "1.0.0"
         )
     }
 }
