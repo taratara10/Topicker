@@ -1,14 +1,18 @@
 package com.kabos.topicker.feature.setting
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +26,7 @@ fun SettingRoute(
     popBack: () -> Unit,
     versionName: String,
 ) {
-    SettingScreen (
+    SettingScreen(
         popBack = { popBack() },
         versionName = versionName
     )
@@ -33,6 +37,7 @@ internal fun SettingScreen(
     popBack: () -> Unit,
     versionName: String,
 ) {
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopicAppBar(
@@ -52,6 +57,12 @@ internal fun SettingScreen(
                 title = "アプリのバージョン",
                 body = versionName
             )
+            SettingItem(
+                title = "Google Playページ",
+                body = "もし気に入ったら評価をお願いします！"
+            ) {
+                launchGooglePlay(context)
+            }
             Divider(modifier = Modifier.padding(top = 8.dp))
         }
     }
@@ -72,15 +83,42 @@ fun SettingHeader(title: String) {
 fun SettingItem(
     title: String,
     body: String,
+    onClick: () -> Unit = {},
 ) {
-    Spacer(Modifier.height(16.dp))
-    Text(
-        text = title,
-    )
-    Text(
-        text = body,
-        fontWeight = FontWeight.Light,
-    )
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .clickable { }
+    ) {
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = title,
+        )
+        Text(
+            text = body,
+            fontSize = 14.sp,
+            color = Color.Gray,
+            fontWeight = FontWeight.Light,
+        )
+    }
+}
+
+private fun launchGooglePlay(context: Context) {
+    val packageName = context.packageName
+    try {
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=$packageName")
+            )
+        )
+    } catch (e: ActivityNotFoundException) {
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+            )
+        )
+    }
 }
 
 @Preview
