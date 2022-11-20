@@ -36,6 +36,7 @@ import kotlinx.coroutines.delay
 fun TopicRoute(
     viewModel: TopicViewModel = hiltViewModel(),
     navigateToCollection: () -> Unit,
+    navigateToSetting: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
     val uiState by viewModel.topicUiState.collectAsStateWithLifecycle()
@@ -48,6 +49,7 @@ fun TopicRoute(
             viewModel.updateFavoriteState(id, isFavorite)
         },
         onClickCollection = { navigateToCollection() },
+        onClickSetting = { navigateToSetting() },
         registerOwnTopic = { id -> viewModel.registerOwnTopic(id) }
     )
 }
@@ -60,6 +62,7 @@ fun TopicScreen(
     onLastPage: () -> Unit,
     onClickFavorite: (Int, Boolean) -> Unit,
     onClickCollection: () -> Unit,
+    onClickSetting: () -> Unit,
     registerOwnTopic: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -79,6 +82,7 @@ fun TopicScreen(
                         ownTopic = topics.first(),
                         shouldDisplayDial = eachPageState.shouldDisplayDial,
                         onClickCollection = { onClickCollection() },
+                        onClickSetting = { onClickSetting() },
                         dialColor = eachPageState.dialColor,
                     )
                 } else {
@@ -91,6 +95,7 @@ fun TopicScreen(
                             onClickFavorite(id, isFavorite)
                         },
                         onClickCollection = { onClickCollection() },
+                        onClickSetting = { onClickSetting() },
                         registerOwnTopic = { id -> registerOwnTopic(id) }
                     )
                 }
@@ -115,6 +120,7 @@ fun TopicContent(
     registerOwnTopic: (Int) -> Unit,
     onClickFavorite: (Int, Boolean) -> Unit,
     onClickCollection: () -> Unit,
+    onClickSetting: () -> Unit,
     shouldDisplayDial: Boolean,
     dialColor: Color,
     modifier: Modifier = Modifier,
@@ -188,7 +194,7 @@ fun TopicContent(
                 onClickSpeedDial = { toggleSpeedDial = !toggleSpeedDial },
                 onClickLeft = { onClickCollection() },
                 onClickCenter = {},
-                onClickRight = {},
+                onClickRight = { onClickSetting() },
                 color = dialColor,
             )
         } else {
@@ -206,6 +212,7 @@ fun TutorialContent(
     modifier: Modifier = Modifier,
     ownTopic: OwnTopic,
     onClickCollection: () -> Unit,
+    onClickSetting: () -> Unit,
     shouldDisplayDial: Boolean,
     dialColor: Color,
 ) {
@@ -240,7 +247,7 @@ fun TutorialContent(
                 onClickSpeedDial = { toggleSpeedDial = !toggleSpeedDial },
                 onClickLeft = { onClickCollection() },
                 onClickCenter = {},
-                onClickRight = {},
+                onClickRight = { onClickSetting() },
                 color = dialColor,
             )
         } else {
@@ -295,6 +302,7 @@ fun PreviewTopicContent() {
         dialColor = Color.Green,
         onClickFavorite = { _, _ -> },
         onClickCollection = {},
+        onClickSetting ={} ,
         registerOwnTopic = {},
     )
 }
@@ -312,6 +320,7 @@ fun PreviewTutorialContent() {
         ownTopic = sample,
         dialColor = Color.Cyan,
         onClickCollection = {},
+        onClickSetting = {},
         shouldDisplayDial = true
     )
 }
