@@ -163,12 +163,10 @@ private fun CollectionCard(
             Text(
                 text = text,
                 fontSize = 20.sp,
-                maxLines = 1,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .wrapContentWidth(Alignment.Start)
-                    .padding(start = 16.dp)
-                    .padding(vertical = 16.dp),
+                    .padding(16.dp)
             )
             FavoriteIcon(
                 isFavorite = isFavorite,
@@ -217,10 +215,11 @@ fun CardDialog(
             ) {
                 Text(
                     text = ownTopic.title,
-                    fontSize = 30.sp,
+                    fontSize = 28.sp,
                     textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    modifier = Modifier.padding(vertical = 48.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 24.dp)
                 )
                 FavoriteButton(
                     isFavorite = ownTopic.isFavorite,
