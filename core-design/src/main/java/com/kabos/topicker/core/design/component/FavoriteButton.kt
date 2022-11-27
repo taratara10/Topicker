@@ -7,14 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.kabos.topicker.core.design.R
-import com.kabos.topicker.core.design.theme.TopickerTheme
 
 @Composable
 fun FavoriteButton(
@@ -39,12 +37,3 @@ fun FavoriteButton(
             ) { onClick(!isFavorite) }
     )
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewFavoriteButton() {
-    TopickerTheme {
-        FavoriteButton(onClick = {}, isFavorite = false)
-    }
-}
-

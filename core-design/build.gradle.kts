@@ -1,16 +1,13 @@
 plugins {
     kotlin("android")
+    kotlin("kapt")
     id("com.android.library")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
     namespace = "com.kabos.topicker.core.design"
     compileSdk = 33
-
-    defaultConfig {
-        minSdk = 26
-        targetSdk = 33
-    }
 
     buildFeatures {
         compose = true
@@ -23,9 +20,13 @@ android {
 
 dependencies {
 
+    debugImplementation(libs.bundles.debug.compose)
+
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.androidx.base)
     implementation(libs.bundles.androidx.compose)
-    debugImplementation(libs.bundles.debug.compose)
-    testImplementation(libs.bundles.test.base)
+    implementation(libs.timber)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.kapt)
 }
