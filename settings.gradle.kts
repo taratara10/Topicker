@@ -49,7 +49,8 @@ dependencyResolutionManagement {
             alias("accompanist-pager")
                 .to("com.google.accompanist", "accompanist-pager")
                 .versionRef("compose-pager")
-
+            alias("compose-ui").to("androidx.compose.ui", "ui-tooling-preview")
+                .versionRef("compose")
             alias("compose-activity").to("androidx.activity:activity-compose:1.6.0")
             alias("compose-navigation").to("androidx.navigation:navigation-compose:2.5.2")
             alias("compose-navigation-hilt").to("androidx.hilt:hilt-navigation-compose:1.0.0")
@@ -61,6 +62,7 @@ dependencyResolutionManagement {
             bundle(
                 "androidx.compose",
                 listOf(
+                    "compose-ui",
                     "compose-material",
                     "compose-activity",
                     "compose-navigation",
@@ -73,7 +75,7 @@ dependencyResolutionManagement {
             )
 
             /** DI */
-            version("hilt", "2.42")
+            version("hilt", "2.44.2")
             alias("hilt-android")
                 .to("com.google.dagger", "hilt-android")
                 .versionRef("hilt")

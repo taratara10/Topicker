@@ -64,6 +64,9 @@ android {
             dimension = "appType"
         }
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
