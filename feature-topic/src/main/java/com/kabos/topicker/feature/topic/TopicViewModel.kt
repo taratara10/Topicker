@@ -7,6 +7,7 @@ import com.kabos.topicker.core.model.OwnTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -82,7 +83,7 @@ class TopicViewModel @Inject constructor(
 
     private fun addScreenTopicId(): Int {
         /* (0..360).random()だと毎回固定値になってしまう */
-        val randomId = (System.currentTimeMillis() % NUMBER_OF_TOPICS).toInt()
+        val randomId = Random().nextInt(NUMBER_OF_TOPICS)
         screenTopicIds.value += randomId
         return randomId
     }
