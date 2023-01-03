@@ -51,7 +51,7 @@ dependencyResolutionManagement {
                 .versionRef("compose-pager")
             alias("compose-ui").to("androidx.compose.ui", "ui-tooling-preview")
                 .versionRef("compose")
-            alias("compose-activity").to("androidx.activity:activity-compose:1.6.0")
+            alias("compose-activity").to("androidx.activity:activity-compose:1.6.1")
             alias("compose-navigation").to("androidx.navigation:navigation-compose:2.5.2")
             alias("compose-navigation-hilt").to("androidx.hilt:hilt-navigation-compose:1.0.0")
             alias("compose-viewmodel").to("androidx.lifecycle", "lifecycle-viewmodel-compose")
