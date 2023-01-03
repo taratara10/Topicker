@@ -80,11 +80,14 @@ dependencies {
     implementation(project(":feature-collection"))
     implementation(project(":feature-setting"))
 
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    debugImplementation(composeBom)
+
     testImplementation(libs.bundles.test.base)
     androidTestImplementation(libs.bundles.test.android)
     debugImplementation(libs.bundles.debug.compose)
 
-    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.androidx.base)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.timber)
