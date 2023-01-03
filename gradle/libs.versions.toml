@@ -1,6 +1,6 @@
 [versions]
 
-compose = "1.2.1"
+compose = "1.3.2"
 compose-bom = "2022.12.00"
 compose-pager = "0.26.1-alpha"
 compose-lifecycle = "2.6.0-alpha01"
