@@ -18,6 +18,7 @@ dependencies {
 
     testImplementation(libs.bundles.test.base)
 
+    implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)
 
     implementation(libs.timber)

@@ -95,5 +95,6 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.kapt)
 
+    implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)
 }

@@ -28,10 +28,10 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-kapt = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 
 # firebase
-firebase-bom = "com.google.firebase:firebase-bom:30.3.1"
-firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx" , version = "24.4.0"}
-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx", version = "18.3.2" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics", version = "21.2.0" }
+firebase-bom = "com.google.firebase:firebase-bom:31.1.1"
+firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-await = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version = "1.6.4" }
 
 # datastore
