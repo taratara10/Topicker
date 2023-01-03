@@ -23,9 +23,12 @@ dependencies {
     implementation(project(":core-domain"))
     implementation(project(":core-design"))
 
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    debugImplementation(composeBom)
+
     debugImplementation(libs.bundles.debug.compose)
 
-    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.androidx.base)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.timber)
